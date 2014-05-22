@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4C0E39-B2BD-4561-8352-0F647C9A8F43}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
