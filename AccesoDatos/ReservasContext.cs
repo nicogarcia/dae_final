@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace AccesoDatos
         {
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ReservasContext>()); 
         }
+
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }

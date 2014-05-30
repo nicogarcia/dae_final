@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    class pruebaJulio
+    public enum TipodeUsuario
     {
+        Administrado,
+        Miembro
     }
 }
