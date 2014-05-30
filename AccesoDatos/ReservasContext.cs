@@ -11,7 +11,8 @@ namespace AccesoDatos
     {
         public ReservasContext()
             : base("Name=ReservasDB")
-        { 
+        {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ReservasContext>()); 
         }
     }
 }
