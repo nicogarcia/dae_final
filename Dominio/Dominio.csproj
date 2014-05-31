@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,6 +45,9 @@
     <Compile Include="Recurso.cs" />
     <Compile Include="TipoCaracteristica.cs" />
     <Compile Include="TipoRecurso.cs" />
+    <Compile Include="TipodeUsuario.cs" />
+    <Compile Include="TiposPredefinidos.cs" />
+    <Compile Include="Usuario.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

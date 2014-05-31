@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Dominio
 {
@@ -25,16 +21,12 @@ namespace Dominio
 
         public override string ToString()
         {
-            string result = "";
+            var result = "{ " + Nombre + ", {";
 
-            result += "{ " + Nombre + ", ";
-
-            result += "{ ";
-
-            string separador = "";
+            var separador = "";
             foreach (var caracteristica in Caracteristicas)
             {
-                result += caracteristica.ToString() + separador;
+                result += separador + caracteristica.ToString();
                 separador = ", ";
             }
 
