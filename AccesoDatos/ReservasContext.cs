@@ -1,6 +1,4 @@
 ﻿using Dominio;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 
 namespace AccesoDatos
