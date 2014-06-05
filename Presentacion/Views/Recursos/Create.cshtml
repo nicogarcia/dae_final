@@ -1,0 +1,115 @@
+﻿@model Presentacion.Models.RecursoVM
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Recurso</legend>
+
+        <!-- Codigo -->
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Codigo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Codigo)
+            @Html.ValidationMessageFor(model => model.Codigo)
+        </div>
+
+        <!-- Nombre -->
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Nombre)
+            @Html.ValidationMessageFor(model => model.Nombre)
+        </div>
+
+        <!-- Tipo -->
+        <div class="editor-label">
+            @Html.Label("Tipo")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
+        </div>
+
+        <!-- Descripcion -->
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Descripcion)
+            @Html.ValidationMessageFor(model => model.Descripcion)
+        </div>
+
+        <!-- Caracteristicas -->
+        <div class="editor-label">
+            @Html.Label("Caracteristicas")
+        </div>
+
+        <div id="characteristics-container">
+
+        </div>
+        <button type="button" onclick='javascript: AddNewCharacteristic();'>Agregar caracteristica</button>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        /* TODO DUPLICATED CODE FROM EDIT */
+
+        // Registrar evento para el cambio de tipo de recurso
+        $(document).ready(
+            function () {
+                $('#TipoId').on('change', function () { CambiarTiposDeRecursos(); });
+            }
+        );
+
+        function CambiarTiposDeRecursos() {
+            $("div[class='tiposDeCaracteristica'").html(ObtenerTiposDeRecursos());
+        }
+
+        function ObtenerTiposDeRecursos() {
+            var toReturn = null;
+            $.ajax({
+                url: '/Recursos/ObtenerTiposPartial',
+                async: false,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                data: { tipoId: $('#TipoId').val() },
+                dataType: 'html'
+            }
+            ).success(function (result) {
+                toReturn = result;
+            });
+            return toReturn;
+        };
+
+        function AddNewCharacteristic() {
+            $('#characteristics-container').append(
+                "<div class='editor-field'>" +
+                "   <div class='tiposDeCaracteristica' >" +
+                ObtenerTiposDeRecursos() +
+                "   </div>" +
+                "   <input type=\"text\" name='CaracteristicasValor' />" +
+                "</div>"
+            );
+        }
+    </script>
+}

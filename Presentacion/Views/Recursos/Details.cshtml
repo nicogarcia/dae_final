@@ -1,0 +1,58 @@
+﻿@model Dominio.Recurso
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Recurso</legend>
+
+    <!-- Codigo -->
+    <div class="editor-label">
+        @Html.DisplayNameFor(model => model.Codigo)
+    </div>
+    <div class="editor-field">
+        @Html.DisplayFor(model => model.Codigo)
+    </div>
+
+    <!-- Nombre -->
+    <div class="editor-label">
+        @Html.DisplayNameFor(model => model.Nombre)
+    </div>
+    <div class="editor-field">
+        @Html.DisplayFor(model => model.Nombre)
+    </div>
+
+    <!-- Tipo -->
+    <div class="editor-label">
+        @Html.DisplayNameFor(model => model.Tipo)
+    </div>
+    <div class="editor-field">
+        @Html.DisplayFor(model => model.Tipo.Nombre)
+    </div>
+
+    <!-- Descripcion -->
+    <div class="editor-label">
+        @Html.DisplayNameFor(model => model.Descripcion)
+    </div>
+    <div class="editor-field">
+        @Html.DisplayFor(model => model.Descripcion)
+    </div>
+
+    <!-- Caracteristicas -->
+    @foreach (var caracteristica in Model.Caracteristicas)
+    {
+        <div class="display-label">
+             @Html.DisplayFor(model => caracteristica.Tipo.Nombre)
+        </div>
+        <div class="display-field">
+            @Html.DisplayFor(model => caracteristica.Valor)
+        </div>
+    }
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

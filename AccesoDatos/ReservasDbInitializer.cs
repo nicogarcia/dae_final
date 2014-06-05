@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using Dominio;
 
 namespace AccesoDatos
@@ -18,12 +19,17 @@ namespace AccesoDatos
 
         private static void InitializeResources(ReservasContext context)
         {
-            var tipos = TiposPredefinidos.ObtenerTiposPredefinidos();
+            var tipos = TiposPredefinidos.PoblarTiposPredefinidos();
 
             foreach (var tipo in tipos)
+            {
                 context.TiposDeRecursos.Add(tipo);
+                foreach (var caracteristica in tipo.TiposDeCaracteristicas)
+                    context.TiposDeCaracteristicas.Add(caracteristica);
+            }
 
             context.SaveChanges();
+            context.Recursos.ToList();
         }
     }
 }

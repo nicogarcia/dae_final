@@ -1,0 +1,58 @@
+﻿@model Presentacion.Models.ListadoRecursosVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm())
+{
+    <p>
+        Buscar por Código: @Html.TextBox("filtroCodigo")
+    </p>
+    <p>
+        Buscar por Tipo: @Html.DropDownList("filtroTipo", Model.SelectTiposDeRecursos)
+    </p>
+    <p>
+        Buscar por Nombre: @Html.TextBox("filtroNombre")
+    </p>
+    <input type="submit" value="Buscar" />
+}
+<table>
+    <tr>
+        <th>
+            @Html.ActionLink("Codigo", "Index", new { orden = ViewBag.OrdenCodigo })
+        </th>
+        <th>
+            @Html.ActionLink("Tipo", "Index", new { orden = ViewBag.OrdenTipo })
+        </th>
+        <th>
+            @Html.ActionLink("Nombre", "Index", new { orden = ViewBag.OrdenNombre })
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Recursos) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tipo.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

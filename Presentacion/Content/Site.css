@@ -1,4 +1,11 @@
-﻿html {
+﻿/************/
+.editor-label {
+    font-weight: bold;
+}
+
+/************/
+
+html {
     background-color: #e2e2e2;
     margin: 0;
     padding: 0;
@@ -539,6 +546,7 @@ th {
     text-align: left;
     border: none 0px;
     padding-left: 0;
+    font-weight: bold;
 }
 
     th a {

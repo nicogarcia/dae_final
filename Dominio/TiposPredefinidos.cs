@@ -4,14 +4,14 @@ namespace Dominio
 {
     public class TiposPredefinidos
     {
-        public static IEnumerable<TipoRecurso> ObtenerTiposPredefinidos()
+        public static IEnumerable<TipoRecurso> PoblarTiposPredefinidos()
         {
             var coleccion = new List<TipoRecurso>();
 
             // Tipos de Recursos predefinidos
-            var aula = new TipoRecurso();
-            var laboratorio = new TipoRecurso();
-            var proyector = new TipoRecurso();
+            var aula = new TipoRecurso("Aula");
+            var laboratorio = new TipoRecurso("Laboratorio");
+            var proyector = new TipoRecurso("Proyector");
 
             // Tipos de caracteristicas comunes a Aulas y Laboratorios
             var capacidad = new TipoCaracteristica("Capacidad");
@@ -21,6 +21,7 @@ namespace Dominio
 
             // Tipos de caracteristicas de dispositivos
 
+            /* TODO Aula pierde sus caracteristicas, ¿por ser compartidas?
             //      Aula
             aula.TiposDeCaracteristicas.Add(capacidad);
             aula.TiposDeCaracteristicas.Add(edificio);

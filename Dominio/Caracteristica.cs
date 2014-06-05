@@ -3,7 +3,7 @@
     public class Caracteristica
     {
         public int Id { get; set; }
-        public TipoCaracteristica Tipo { get; set; }
+        public virtual TipoCaracteristica Tipo { get; set; }
         public string Valor { get; set; }
 
         public Caracteristica() { }

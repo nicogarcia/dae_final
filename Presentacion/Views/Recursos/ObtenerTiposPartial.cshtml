@@ -1,0 +1,5 @@
+﻿@model Dominio.TipoRecurso
+
+@Html.DropDownList("CaracteristicasTipo",
+    Model.TiposDeCaracteristicas.Select(
+        caract => new SelectListItem {Text = caract.Nombre, Value = caract.Id.ToString()}))
