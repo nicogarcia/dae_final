@@ -21,7 +21,7 @@ namespace Dominio
 
             // Tipos de caracteristicas de dispositivos
 
-            /* TODO Aula pierde sus caracteristicas, ¿por ser compartidas?
+            // TODO Aula pierde sus caracteristicas, ¿por ser compartidas?
             //      Aula
             aula.TiposDeCaracteristicas.Add(capacidad);
             aula.TiposDeCaracteristicas.Add(edificio);

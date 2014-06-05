@@ -75,8 +75,8 @@ namespace Presentacion.Controllers
             /* TODO Removed ModelState.IsValid, is that correct? */
             if (recursoVM == null) return View();
 
-            bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Recurso.Codigo);
-            bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Recurso.Nombre);
+            bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
+            bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
 
             if (mismoCodigo) ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
             if (mismoNombre) ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
@@ -101,6 +101,7 @@ namespace Presentacion.Controllers
             };
 
             // TODO Ask for TiposDeCaracteristicas repo
+            // TODO Dangerous list sizes and not checking null
             // Cargar caracteristicas
             List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
                 .Select(tipo => db.TiposDeCaracteristicas.Find(int.Parse(tipo))).Where(t => t != null).ToList();
