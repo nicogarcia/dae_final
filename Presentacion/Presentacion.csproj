@@ -304,12 +304,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Recursos\Details.cshtml" />
-    <Content Include="Views\Recursos\Create.cshtml" />
-    <Content Include="Views\Recursos\Edit.cshtml" />
-    <Content Include="Views\Recursos\Delete.cshtml" />
-    <Content Include="Views\Recursos\Index.cshtml" />
-    <Content Include="Views\Recursos\ObtenerTiposPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
