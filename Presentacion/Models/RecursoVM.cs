@@ -2,6 +2,7 @@
 using Dominio;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Presentacion.Models
 {
@@ -19,16 +20,22 @@ namespace Presentacion.Models
 
         /* TODO Lacks validation */
         public string Id { get; set; }
+        [Required]
         public string Codigo { get; set; }
+        [Required]
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public List<string> CaracteristicasValor { get; set; }
         public List<string> CaracteristicasTipo { get; set; }
         public string TipoId { get; set; }
 
-        public RecursoVM() { }
+        public RecursoVM() 
+        {
+            CaracteristicasTipo = new List<string>();
+            CaracteristicasValor = new List<string>();
+        }
 
-        public RecursoVM(IEnumerable<TipoRecurso> tiposDeRecursos)
+        public RecursoVM(IEnumerable<TipoRecurso> tiposDeRecursos) : this()
         {
             TiposDeRecursos = tiposDeRecursos.ToArray();
 
@@ -40,10 +47,6 @@ namespace Presentacion.Models
             TiposDeCaracteristicas = TiposDeRecursos.First().TiposDeCaracteristicas.Select(
                 caracteristica => new SelectListItem
                     { Text = caracteristica.Nombre, Value = caracteristica.Id.ToString() });
-
-            CaracteristicasTipo = new List<string>();
-            CaracteristicasValor = new List<string>();
-
         }
 
         public RecursoVM(Recurso recurso, IEnumerable<TipoRecurso> tiposDeRecursos)

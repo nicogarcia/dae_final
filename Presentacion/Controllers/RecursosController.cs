@@ -33,7 +33,7 @@ namespace Presentacion.Controllers
             ViewBag.OrdenNombre = string.IsNullOrEmpty(orden) ? "nombre_desc" : "";
             ViewBag.OrdenCodigo = orden == "codigo" ? "codigo_desc" : "codigo";
             ViewBag.OrdenTipo = orden == "tipo" ? "tipo_desc" : "tipo";
-            
+
             var recursos = recursosRepo.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
 
             IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
@@ -74,46 +74,56 @@ namespace Presentacion.Controllers
         {
             /* TODO Removed ModelState.IsValid, is that correct? */
             if (recursoVM == null) return View();
-
-            bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
-            bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
-
-            if (mismoCodigo) ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
-            if (mismoNombre) ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
-
-            if (mismoCodigo || mismoNombre)
+            if (!ModelState.IsValid)
             {
                 IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
-             
+
                 recursoVM.SelectTiposDeRecursos = tiposDeRecursos.Select(
                     tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
-                
+
                 return View(recursoVM);
             }
+                bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
+                bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
 
-            // Construir objeto de dominio y cargar propiedades
-            var recurso = new Recurso
-            {
-                Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
-                Codigo = recursoVM.Codigo,
-                Descripcion = recursoVM.Descripcion,
-                Nombre = recursoVM.Nombre
-            };
+                if (mismoCodigo)
+                    ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
+                if (mismoNombre)
+                    ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
 
-            // TODO Ask for TiposDeCaracteristicas repo
-            // TODO Dangerous list sizes and not checking null
-            // Cargar caracteristicas
-            List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                .Select(tipo => db.TiposDeCaracteristicas.Find(int.Parse(tipo))).Where(t => t != null).ToList();
+                if (mismoCodigo || mismoNombre)
+                {
+                    IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
 
-            List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
-            recurso.Caracteristicas.AddRange(caracteristicas);
+                    recursoVM.SelectTiposDeRecursos = tiposDeRecursos.Select(
+                        tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
 
-            // Marcar Recurso como Activo
-            recurso.EstadoActual = Recurso.Estado.Activo;
+                    return View(recursoVM);
+                }
 
-            recursosRepo.Agregar(recursoVM.Recurso);
+                // Construir objeto de dominio y cargar propiedades
+                var recurso = new Recurso
+                {
+                    Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
+                    Codigo = recursoVM.Codigo,
+                    Descripcion = recursoVM.Descripcion,
+                    Nombre = recursoVM.Nombre
+                };
+
+                // TODO Ask for TiposDeCaracteristicas repo
+                // TODO Dangerous list sizes and not checking null
+                // Cargar caracteristicas
+                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
+                    .Select(tipo => db.TiposDeCaracteristicas.Find(int.Parse(tipo))).Where(t => t != null).ToList();
+
+                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
+                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
+                recurso.Caracteristicas.AddRange(caracteristicas);
+
+                // Marcar Recurso como Activo
+                recurso.EstadoActual = Recurso.Estado.Activo;
+
+                recursosRepo.Agregar(recurso);
 
             return RedirectToAction("Index");
         }
@@ -183,7 +193,7 @@ namespace Presentacion.Controllers
 
             recurso.Caracteristicas.Clear();
             recurso.Caracteristicas.AddRange(caracteristicas);
-            
+
             recursosRepo.Actualizar(recurso);
 
             return RedirectToAction("Index");

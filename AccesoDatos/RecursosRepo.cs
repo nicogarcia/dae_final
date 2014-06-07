@@ -45,7 +45,7 @@ namespace AccesoDatos
         public IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)
         {
             // Query de recursos
-            var recursos = Ctx.Recursos.AsQueryable();
+            IQueryable<Recurso> recursos = Ctx.Recursos;
 
             // Aplicar filtros
             if (!string.IsNullOrEmpty(filtroCodigo))

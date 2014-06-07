@@ -30,7 +30,9 @@ namespace AccesoDatos
 
             // Mapeo de la entidad TipoRecurso
             builder.Entity<TipoRecurso>().ToTable("TiposDeRecursos");
-            builder.Entity<TipoRecurso>().HasMany<TipoCaracteristica>(x => x.TiposDeCaracteristicas);
+            builder.Entity<TipoRecurso>()
+                .HasMany<TipoCaracteristica>(x => x.TiposDeCaracteristicas)
+                .WithMany();
 
             // Mapeo de la entidad Caracteristica
             builder.Entity<Caracteristica>().HasRequired<TipoCaracteristica>(x => x.Tipo);
