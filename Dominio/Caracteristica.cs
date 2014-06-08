@@ -2,11 +2,14 @@
 {
     public class Caracteristica
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public virtual TipoCaracteristica Tipo { get; set; }
         public string Valor { get; set; }
 
-        public Caracteristica() { }
+        public Caracteristica()
+        {
+        }
+
         public Caracteristica(TipoCaracteristica tipo, string valor)
         {
             Tipo = tipo;

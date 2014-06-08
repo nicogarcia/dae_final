@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Ninject.Infrastructure.Language;
 
 namespace Dominio
 {
     public class Recurso
     {
-        public int Id { get; set; }
+        public int Id { get; private set; }
 
         [Required]
         [MaxLength(10)]
         public string Codigo { get; set; }
-
+        
         [Required]
         [MaxLength(50)]
         public string Nombre { get; set; }
@@ -21,8 +22,9 @@ namespace Dominio
 
         [Required]
         public virtual TipoRecurso Tipo { get; set; }
-        
-        public virtual ISet<Caracteristica> Caracteristicas { get; set; }/*TODO validate on setter*/
+
+        // TODO How to hide this? both getter and setter from user but not to EF
+        public virtual ISet<Caracteristica> Caracteristicas { get; set; }
 
         public enum Estado { Activo, Inactivo };
 
@@ -37,6 +39,32 @@ namespace Dominio
         {
             Nombre = nombre;
             Tipo = tipo;
+        }
+
+        public Recurso(string codigo, TipoRecurso tipo, string nombre, string descripcion) : this(nombre, tipo)
+        {
+            Codigo = codigo;
+            Descripcion = descripcion;
+        }
+
+        public void AgregarCaracteristica(Caracteristica caracteristica)
+        {
+            Caracteristicas.Add(caracteristica);
+        }
+
+        public void AgregarCaracteristicas(IEnumerable<Caracteristica> caracteristicas)
+        {
+            Caracteristicas.UnionWith(caracteristicas);
+        }
+
+        public IEnumerable<Caracteristica> ObtenerCaracteristicas()
+        {
+            return Caracteristicas.ToEnumerable();
+        }
+
+        public void EliminarTodasCaracteristicas()
+        {
+            Caracteristicas.Clear();
         }
 
         public override string ToString()

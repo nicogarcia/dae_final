@@ -1,45 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Dominio;
 
-namespace AccesoDatos
+namespace AccesoDatos.Repos
 {
-    public class RecursosRepo
+    public class RecursosRepo : RepoBase<Recurso>
     {
-        public ReservasContext Ctx { get; set; }
-
-        public RecursosRepo(ReservasContext ctx)
+        public RecursosRepo(ReservasContext ctx) : base(ctx)
         {
-            Ctx = ctx;
-        }
-
-        public IList<Recurso> Todos()
-        {
-            return Ctx.Recursos.ToList();
-        }
-
-        public Recurso ObtenerPorId(int id)
-        {
-            return Ctx.Recursos.Find(id);
-        }
-
-        public void Agregar(Recurso recurso)
-        {
-            Ctx.Recursos.Add(recurso);
-            Ctx.SaveChanges();
-        }
-
-        public void Actualizar(Recurso recurso)
-        {
-            Ctx.Entry(recurso).State = EntityState.Modified;
-            Ctx.SaveChanges();
-        }
-
-        public void Eliminar(Recurso recurso)
-        {
-            Ctx.Recursos.Remove(recurso);
-            Ctx.SaveChanges();
         }
 
         public IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)

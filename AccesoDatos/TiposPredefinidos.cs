@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Dominio;
 
-namespace Dominio
+namespace AccesoDatos
 {
     public class TiposPredefinidos
     {
@@ -21,7 +22,6 @@ namespace Dominio
 
             // Tipos de caracteristicas de dispositivos
 
-            // TODO Aula pierde sus caracteristicas, ¿por ser compartidas?
             //      Aula
             aula.TiposDeCaracteristicas.Add(capacidad);
             aula.TiposDeCaracteristicas.Add(edificio);

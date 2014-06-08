@@ -1,27 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Web.Helpers;
 using System.Web.Mvc;
+using AccesoDatos.Repos;
 using Dominio;
 using AccesoDatos;
-using DotNetOpenAuth.Messaging;
 using Presentacion.Models;
 
 namespace Presentacion.Controllers
 {
     public class RecursosController : Controller
     {
-        /* TODO: Use Repository pattern */
         private ReservasContext db;
         private RecursosRepo recursosRepo;
         private TiposDeRecursosRepo tiposDeRecursosRepo;
+        private TiposDeCaracteristicasRepo tiposDeCaracteristicasRepo;
 
         public RecursosController()
         {
             db = new ReservasContext();
             recursosRepo = new RecursosRepo(db);
             tiposDeRecursosRepo = new TiposDeRecursosRepo(db);
+            tiposDeCaracteristicasRepo = new TiposDeCaracteristicasRepo(db);
         }
 
         //
@@ -36,9 +35,7 @@ namespace Presentacion.Controllers
 
             var recursos = recursosRepo.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
 
-            IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
-
-            return View(new ListadoRecursosVM(recursos, tiposDeRecursos));
+            return View(new ListadoRecursosVM(recursos, tiposDeRecursosRepo.Todos()));
         }
 
         //
@@ -59,10 +56,7 @@ namespace Presentacion.Controllers
 
         public ActionResult Create()
         {
-            // Se cargan los tipos de recursos desde el contexto.
-            IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
-
-            return View(new RecursoVM(tiposDeRecursos));
+            return View(new RecursoVM(tiposDeRecursosRepo.Todos()));
         }
 
         //
@@ -72,58 +66,52 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecursoVM recursoVM)
         {
-            /* TODO Removed ModelState.IsValid, is that correct? */
-            if (recursoVM == null) return View();
             if (!ModelState.IsValid)
             {
-                IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
+                // Repoblar tipos de recursos
+                recursoVM.SelectTiposDeRecursos = tiposDeRecursosRepo.Todos()
+                    .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
 
-                recursoVM.SelectTiposDeRecursos = tiposDeRecursos.Select(
+                return View(recursoVM);
+            }
+
+            bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
+            bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
+
+            if (mismoCodigo)
+                ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
+            if (mismoNombre)
+                ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
+
+            if (mismoCodigo || mismoNombre)
+            {
+                recursoVM.SelectTiposDeRecursos = tiposDeRecursosRepo.Todos().Select(
                     tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
 
                 return View(recursoVM);
             }
-                bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
-                bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
 
-                if (mismoCodigo)
-                    ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
-                if (mismoNombre)
-                    ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
+            // Construir objeto de dominio y cargar propiedades
+            var recurso = new Recurso(
+                recursoVM.Codigo,
+                tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
+                recursoVM.Nombre,
+                recursoVM.Descripcion
+            );
 
-                if (mismoCodigo || mismoNombre)
-                {
-                    IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
+            // TODO Dangerous list sizes and not checking null
+            // Cargar caracteristicas
+            List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
+                .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
 
-                    recursoVM.SelectTiposDeRecursos = tiposDeRecursos.Select(
-                        tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
+            List<Caracteristica> caracteristicas = tiposDeCaracteristicas
+                .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
+            recurso.AgregarCaracteristicas(caracteristicas);
 
-                    return View(recursoVM);
-                }
+            // Marcar Recurso como Activo
+            recurso.EstadoActual = Recurso.Estado.Activo;
 
-                // Construir objeto de dominio y cargar propiedades
-                var recurso = new Recurso
-                {
-                    Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
-                    Codigo = recursoVM.Codigo,
-                    Descripcion = recursoVM.Descripcion,
-                    Nombre = recursoVM.Nombre
-                };
-
-                // TODO Ask for TiposDeCaracteristicas repo
-                // TODO Dangerous list sizes and not checking null
-                // Cargar caracteristicas
-                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                    .Select(tipo => db.TiposDeCaracteristicas.Find(int.Parse(tipo))).Where(t => t != null).ToList();
-
-                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
-                recurso.Caracteristicas.AddRange(caracteristicas);
-
-                // Marcar Recurso como Activo
-                recurso.EstadoActual = Recurso.Estado.Activo;
-
-                recursosRepo.Agregar(recurso);
+            recursosRepo.Agregar(recurso);
 
             return RedirectToAction("Index");
         }
@@ -139,8 +127,7 @@ namespace Presentacion.Controllers
                 return HttpNotFound();
             }
 
-            IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
-            var recursoVM = new RecursoVM(recurso, tiposDeRecursos) { TipoId = recurso.Tipo.Id.ToString() };
+            var recursoVM = new RecursoVM(recurso, tiposDeRecursosRepo.Todos());
 
             return View(recursoVM);
         }
@@ -184,15 +171,15 @@ namespace Presentacion.Controllers
             recurso.Descripcion = recursoVM.Descripcion;
             recurso.Nombre = recursoVM.Nombre;
 
-            // TODO Ask for TiposDeCaracteristicas repo
+            // TODO Dangerous list sizes and not checking null
             List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                .Select(tipo => db.TiposDeCaracteristicas.Find(int.Parse(tipo))).Where(t => t != null).ToList();
+                .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
 
             List<Caracteristica> caracteristicas = tiposDeCaracteristicas
                 .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
 
-            recurso.Caracteristicas.Clear();
-            recurso.Caracteristicas.AddRange(caracteristicas);
+            recurso.EliminarTodasCaracteristicas();
+            recurso.AgregarCaracteristicas(caracteristicas);
 
             recursosRepo.Actualizar(recurso);
 
@@ -230,7 +217,7 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Recursos/ObtenerTiposPartial/5
-
+        // TODO: Change result to JSON, parse in JS, Remove Partial view
         public ActionResult ObtenerTiposPartial(int tipoId = 0)
         {
             var tipo = tiposDeRecursosRepo.ObtenerPorId(tipoId);
@@ -247,5 +234,6 @@ namespace Presentacion.Controllers
             db.Dispose();
             base.Dispose(disposing);
         }
+
     }
 }
