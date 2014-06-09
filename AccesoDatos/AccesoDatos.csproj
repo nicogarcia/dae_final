@@ -55,6 +55,7 @@
     <Compile Include="Repos\RecursosRepo.cs" />
     <Compile Include="Repos\RepoBase.cs" />
     <Compile Include="Repos\TiposDeCaracteristicasRepo.cs" />
+    <Compile Include="Repos\UsuariosRepo.cs" />
     <Compile Include="ReservasContext.cs" />
     <Compile Include="ReservasDbInitializer.cs" />
     <Compile Include="Repos\TiposDeRecursosRepo.cs" />
