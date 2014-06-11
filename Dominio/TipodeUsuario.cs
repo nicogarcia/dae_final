@@ -1,8 +1,8 @@
 ﻿namespace Dominio
 {
-    public enum TipodeUsuario
+    public enum TipoDeUsuario
     {
-        Administrado,
+        Administrador,
         Miembro
     }
 }

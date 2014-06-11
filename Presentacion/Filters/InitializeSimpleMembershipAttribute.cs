@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using Presentacion.Models;
+using AccesoDatos;
 
 namespace Presentacion.Filters
 {
@@ -25,11 +26,11 @@ namespace Presentacion.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<SecurityContext>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new SecurityContext())
                     {
                         if (!context.Database.Exists())
                         {

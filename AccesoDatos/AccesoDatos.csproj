@@ -59,6 +59,7 @@
     <Compile Include="ReservasContext.cs" />
     <Compile Include="ReservasDbInitializer.cs" />
     <Compile Include="Repos\TiposDeRecursosRepo.cs" />
+    <Compile Include="SecurityContext.cs" />
     <Compile Include="TiposPredefinidos.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ namespace Dominio
         public int Id { get; private set; }
        
         [Required]
-        public TipodeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
+        public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
         [Required]
         [MaxLength(20)]
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".
