@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using AccesoDatos;
 using Dominio;
-using AccesoDatos;
+using Presentacion.Filters;
+using System.Data;
+using System.Web.Mvc;
+using System.Web.Security;
 using WebMatrix.WebData;
 
 namespace Presentacion.Controllers
 {
+    [Autorizar(TipoDeUsuario.Administrador)]
     public class UsuariosController : Controller
     {
         private ReservasContext db;
@@ -47,7 +45,6 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Usuario/Create
-        [Authorize]
         public ActionResult Create()
         {
 
@@ -59,13 +56,21 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-       
         public ActionResult Create(Usuario usuario)
         {
             if (ModelState.IsValid)
             {
                 WebSecurity.CreateUserAndAccount(usuario.NombreUsuario, usuario.Password);
                 this.ur.AgregarUsuario(usuario);
+
+                // Creo el usuario en el mecanismo de seguridad 
+                var membership = (SimpleMembershipProvider)Membership.Provider;
+                membership.CreateUserAndAccount(usuario.NombreUsuario, "123");
+                
+                // Le asocio el rol correspondiente.
+                var roles = (SimpleRoleProvider)Roles.Provider;
+                roles.AddUsersToRoles(new[] { usuario.NombreUsuario }, new[] { usuario.Tipo.ToString() });
+                
                 return RedirectToAction("Index");
             }
 
