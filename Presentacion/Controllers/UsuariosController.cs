@@ -1,5 +1,6 @@
 ﻿using AccesoDatos;
 using Dominio;
+using Presentacion.Models;
 using Presentacion.Filters;
 using System.Data;
 using System.Web.Mvc;
@@ -56,12 +57,13 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Usuario usuario)
+        public ActionResult Create(UsuarioVM usuario)
         {
             if (ModelState.IsValid)
             {
                 WebSecurity.CreateUserAndAccount(usuario.NombreUsuario, usuario.Password);
-                this.ur.AgregarUsuario(usuario);
+                Usuario usuarioauxiliar = new Usuario(usuario.NombreUsuario, usuario.Nombre, usuario.Apellido, usuario.DNI, usuario.Legajo, usuario.Email, usuario.Telefono);
+                this.ur.AgregarUsuario(usuarioauxiliar);
 
                 // Creo el usuario en el mecanismo de seguridad 
                 var membership = (SimpleMembershipProvider)Membership.Provider;

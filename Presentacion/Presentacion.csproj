@@ -207,6 +207,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ListadoRecursoVM.cs" />
     <Compile Include="Models\RecursoVM.cs" />
+    <Compile Include="Models\UsuarioVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

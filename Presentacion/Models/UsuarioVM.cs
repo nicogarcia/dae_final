@@ -1,11 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Dominio;
+using System.ComponentModel.DataAnnotations;
 
-namespace Dominio
+namespace Presentacion.Models
 {
-    public class Usuario
+    public class UsuarioVM
     {
         public int Id { get; private set; }
-       
+
         [Required]
         public TipoCaracteristica Tipo { get; set; } //Tipo de usuario Administrador/Miembro
 
@@ -14,12 +19,17 @@ namespace Dominio
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".
 
         [Required]
-        [MaxLength(50)]
-        public string  Nombre { get; set; }//Nombre*: 50 caracteres
+        [MinLength(6)]
+        [MaxLength(18)]
+        public  string Password { get; set; }
 
         [Required]
         [MaxLength(50)]
-        public string Apellido { get; set;}//Apellido*: 50 caracteres
+        public string Nombre { get; set; }//Nombre*: 50 caracteres
+
+        [Required]
+        [MaxLength(50)]
+        public string Apellido { get; set; }//Apellido*: 50 caracteres
 
         [MaxLength(9)]
         public string DNI { get; set; }//DNI*: 9 dígitos
@@ -35,20 +45,9 @@ namespace Dominio
         [MaxLength(20)]
         public string Telefono { get; set; }//Teléfono: 20 caracteres
 
-        public Usuario()
-        { }
 
-        
-        public Usuario (string nombreusuario, string nombre, string apellido, string dni, string legajo, string email, string telefono  )
-        {
-            this.NombreUsuario = nombreusuario;
-            this.Nombre = nombre;
-            this.Apellido = apellido;
-            this.DNI = dni;
-            this.Legajo = legajo;
-            this.Email = email;
-            this.Telefono = telefono;
-        }
- 
+
+        public IEnumerable<TipoDeUsuario> SelectoTipoDeUsuario { get; private set; }
+
     }
 }
