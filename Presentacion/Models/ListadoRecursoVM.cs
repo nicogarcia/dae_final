@@ -2,6 +2,7 @@
 using System.Linq;
 using Dominio;
 using System.Web.Mvc;
+using DotNetOpenAuth.Messaging;
 
 namespace Presentacion.Models
 {
@@ -10,7 +11,7 @@ namespace Presentacion.Models
         public IEnumerable<Recurso> Recursos { get; set; }
         public string TipoId { get; set; }
         public IEnumerable<TipoRecurso> TiposDeRecursos { get; private set; }
-        public IEnumerable<SelectListItem> SelectTiposDeRecursos { get; set; }
+        public IList<SelectListItem> SelectTiposDeRecursos { get; set; }
         public IEnumerable<SelectListItem> TiposDeCaracteristicas { get; set; }
 
         public ListadoRecursosVM() { }
@@ -21,8 +22,10 @@ namespace Presentacion.Models
 
             Recursos = recursos;
 
-            SelectTiposDeRecursos = TiposDeRecursos.Select(
-                tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
+            SelectTiposDeRecursos = new List<SelectListItem>();
+            SelectTiposDeRecursos.Add(new SelectListItem() { Text = "", Value = "", Selected = true});
+            SelectTiposDeRecursos.AddRange(TiposDeRecursos.Select(
+                tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() }));
         }
     }
 }

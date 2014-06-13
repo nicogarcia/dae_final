@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using AccesoDatos.Repos;
 using Dominio;
 using AccesoDatos;
+using Presentacion.Filters;
 using Presentacion.Models;
 
 namespace Presentacion.Controllers
@@ -26,6 +27,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Recursos/
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Index(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)
         {
             // Obtener orden
@@ -41,6 +43,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Recursos/Details/5
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Details(int id = 0)
         {
             Recurso recurso = recursosRepo.ObtenerPorId(id);
@@ -54,6 +57,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Recursos/Create
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Create()
         {
             return View(new RecursoVM(tiposDeRecursosRepo.Todos()));
@@ -62,6 +66,7 @@ namespace Presentacion.Controllers
         //
         // POST: /Recursos/Create
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecursoVM recursoVM)
@@ -109,7 +114,7 @@ namespace Presentacion.Controllers
             recurso.AgregarCaracteristicas(caracteristicas);
 
             // Marcar Recurso como Activo
-            recurso.EstadoActual = Recurso.Estado.Activo;
+            recurso.Activar();
 
             recursosRepo.Agregar(recurso);
 
@@ -119,6 +124,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Recursos/Edit/5
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Edit(int id = 0)
         {
             Recurso recurso = recursosRepo.ObtenerPorId(id);
@@ -135,6 +141,7 @@ namespace Presentacion.Controllers
         //
         // POST: /Recursos/Edit/5
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(RecursoVM recursoVM)
@@ -189,6 +196,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Recursos/Delete/5
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Delete(int id = 0)
         {
             Recurso recurso = recursosRepo.ObtenerPorId(id);
@@ -202,13 +210,14 @@ namespace Presentacion.Controllers
         //
         // POST: /Recursos/Delete/5
 
+        [Autorizar(TipoDeUsuario.Administrador)]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Recurso recurso = recursosRepo.ObtenerPorId(id);
 
-            recurso.EstadoActual = Recurso.Estado.Inactivo;
+            recurso.Desactivar();
 
             recursosRepo.Actualizar(recurso);
 

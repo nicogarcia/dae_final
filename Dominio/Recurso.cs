@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Ninject.Infrastructure.Language;
+using System.Collections;
 
 namespace Dominio
 {
+    public enum EstadoRecurso { Activo, Inactivo };
+
     public class Recurso
     {
         public int Id { get; private set; }
@@ -20,19 +24,16 @@ namespace Dominio
         [MaxLength(250)]
         public string Descripcion { get; set; }
 
-        [Required]
         public virtual TipoRecurso Tipo { get; set; }
 
-        // TODO How to hide this? both getter and setter from user but not to EF
         public virtual ISet<Caracteristica> Caracteristicas { get; set; }
 
-        public enum Estado { Activo, Inactivo };
+        public EstadoRecurso EstadoActual { get; set; }
 
-        public Estado EstadoActual { get; set; }
-
-        public Recurso() {
+        public Recurso()
+        {
             Caracteristicas = new HashSet<Caracteristica>();
-            EstadoActual = Estado.Inactivo;
+            EstadoActual = EstadoRecurso.Inactivo;
         }
 
         public Recurso(string nombre, TipoRecurso tipo) : this()
@@ -49,12 +50,18 @@ namespace Dominio
 
         public void AgregarCaracteristica(Caracteristica caracteristica)
         {
+            var caracteristicaMismoTipo = Caracteristicas.SingleOrDefault(c => c.Tipo == caracteristica.Tipo);
+
+            if (caracteristicaMismoTipo != null)
+                Caracteristicas.Remove(caracteristicaMismoTipo);
+
             Caracteristicas.Add(caracteristica);
         }
 
         public void AgregarCaracteristicas(IEnumerable<Caracteristica> caracteristicas)
         {
-            Caracteristicas.UnionWith(caracteristicas);
+            foreach (var caracteristica in caracteristicas)
+                AgregarCaracteristica(caracteristica);
         }
 
         public IEnumerable<Caracteristica> ObtenerCaracteristicas()
@@ -65,6 +72,16 @@ namespace Dominio
         public void EliminarTodasCaracteristicas()
         {
             Caracteristicas.Clear();
+        }
+
+        public void Activar()
+        {
+            EstadoActual = EstadoRecurso.Activo;
+        }
+
+        public void Desactivar()
+        {
+            EstadoActual = EstadoRecurso.Inactivo;
         }
 
         public override string ToString()
@@ -83,4 +100,6 @@ namespace Dominio
             return result;
         }
     }
+
+
 }

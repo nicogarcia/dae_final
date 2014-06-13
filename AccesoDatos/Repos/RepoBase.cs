@@ -13,7 +13,6 @@ namespace AccesoDatos.Repos
             Ctx = ctx;
         }
 
-        // TODO: Is return type correct?
         public IList<TTipo> Todos()
         {
             return Ctx.Set<TTipo>().ToList();

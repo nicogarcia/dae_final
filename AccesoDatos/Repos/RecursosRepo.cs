@@ -15,6 +15,9 @@ namespace AccesoDatos.Repos
             // Query de recursos
             IQueryable<Recurso> recursos = Ctx.Recursos;
 
+            // No mostrar los recursos inactivos
+            recursos = recursos.Where(recurso => recurso.EstadoActual == EstadoRecurso.Activo);
+
             // Aplicar filtros
             if (!string.IsNullOrEmpty(filtroCodigo))
                 recursos = recursos.Where(r => r.Codigo.ToUpper().Contains(filtroCodigo.ToUpper()));

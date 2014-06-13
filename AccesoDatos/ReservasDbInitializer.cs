@@ -24,7 +24,6 @@ namespace AccesoDatos
             foreach (var tipo in tipos)
             {
                 context.TiposDeRecursos.Add(tipo);
-                // TODO Is it ok to persist this way?
                 foreach (var caracteristica in tipo.TiposDeCaracteristicas)
                     context.TiposDeCaracteristicas.Add(caracteristica);
             }
