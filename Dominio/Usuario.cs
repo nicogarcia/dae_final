@@ -8,6 +8,7 @@ namespace Dominio
        
         [Required]
         public TipodeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
+
         [Required]
         [MaxLength(20)]
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".
@@ -23,6 +24,7 @@ namespace Dominio
         public string Legajo { get; set; }//Legajo: 4 dígitos
         [Required]
         [MaxLength(50)]
+        [EmailAddress]
         public string Email { get; set; }//Email*: 50 caracters
         [MaxLength(20)]
         public string Telefono { get; set; }//Teléfono: 20 caracteres

@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Dominio;
 using AccesoDatos;
+using WebMatrix.WebData;
 
 namespace Presentacion.Controllers
 {
@@ -63,6 +64,7 @@ namespace Presentacion.Controllers
         {
             if (ModelState.IsValid)
             {
+                WebSecurity.CreateUserAndAccount(usuario.NombreUsuario, usuario.Password);
                 this.ur.AgregarUsuario(usuario);
                 return RedirectToAction("Index");
             }
