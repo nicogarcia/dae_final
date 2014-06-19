@@ -13,7 +13,8 @@ namespace Presentacion.Models
 
         [Required]
         public TipoCaracteristica Tipo { get; set; } //Tipo de usuario Administrador/Miembro
-
+        [Required]
+        public TipoCaracteristica EstadoUsuario { get; set; } //Estado de usuario
         [Required]
         [MaxLength(20)]
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".

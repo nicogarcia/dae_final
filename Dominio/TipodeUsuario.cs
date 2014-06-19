@@ -5,4 +5,10 @@
         Administrador,
         Miembro
     }
+    public enum EstadoUsuario
+    {
+        Activo,
+        Inactivo,
+        Bloqueado
+    }
 }

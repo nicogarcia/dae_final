@@ -61,7 +61,15 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) |
+            @if(item.EstadoUsuario.Nombre.Equals("Activo"))
+	            {
+		             @Html.ActionLink("Lock", "Lock", new { id=item.Id })
+	            }
+            @if(item.EstadoUsuario.Nombre.Equals("Bloqueado"))
+                { 
+                    @Html.ActionLink("Unlock", "Unlock", new { id=item.Id })
+                }
         </td>
     </tr>
 }

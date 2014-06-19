@@ -24,14 +24,18 @@ namespace AccesoDatos
 
         public IList<Usuario> Todos ()
         {
-            return reservasContext.Usuarios.ToList();
+            IList<Usuario> listadoUsuariosActivos = new List<Usuario>();
+            IList<Usuario> listadoUsuarios = reservasContext.Usuarios.ToList();
+            foreach(Usuario usuario in listadoUsuarios)
+                if(!usuario.EstadoUsuario.Nombre.Equals("Inactivo"))
+                    listadoUsuariosActivos.Add(usuario);
+            return listadoUsuariosActivos;
         }
 
         public void AgregarUsuario(Usuario usuario)
         {
             reservasContext.Usuarios.Add(usuario);
             reservasContext.SaveChanges();
-
         }
     }
 }
