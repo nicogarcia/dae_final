@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using Dominio.Repos;
+using Ninject.Modules;
 using Ninject.Web.Common;
 
 namespace AccesoDatos
@@ -7,7 +8,8 @@ namespace AccesoDatos
     {
         public override void Load()
         {
-            //Bind<IWeapon>().To<Sword>();
+            Bind<IUsuariosRepo>().To<UsuariosRepo>().InRequestScope(); 
+            Bind<ReservasContext>().ToSelf().InRequestScope();
         }
     }
 }

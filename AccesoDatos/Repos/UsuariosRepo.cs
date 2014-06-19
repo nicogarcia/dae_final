@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AccesoDatos
 {
-    public class UsuariosRepo
+    public class UsuariosRepo : IUsuariosRepo
     {
         private ReservasContext reservasContext;
 
@@ -32,6 +33,43 @@ namespace AccesoDatos
             reservasContext.Usuarios.Add(usuario);
             reservasContext.SaveChanges();
 
+        }
+
+        public bool ExisteNombreUsuario(string nombreUsuario)
+        {
+            
+            if (reservasContext.Usuarios.Where(x=>x.NombreUsuario==nombreUsuario).Count()==0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ExisteEmail(string email)
+        {
+            if (reservasContext.Usuarios.Where(x => x.Email == email).Count() == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ExisteDNI(string dni)
+        {
+            if (reservasContext.Usuarios.Where(x => x.DNI == dni).Count() == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ExisteLegajo(string legajo)
+        {
+            if (reservasContext.Usuarios.Where(x => x.Legajo == legajo).Count() == 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

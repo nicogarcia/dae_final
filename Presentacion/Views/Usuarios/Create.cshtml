@@ -31,20 +31,13 @@
         </div>
 
         <div class="editor-label">
-            @Html.Label("Tipo")
-        </div>
-        <div class="editor-field">
-            //@Html.DropDownListFor(model => model.Tipo, Model.TiposDeUsuarios)
-        </div>
-
-        <div class="editor-label">
             @Html.LabelFor(model => model.Nombre)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.Nombre)
             @Html.ValidationMessageFor(model => model.Nombre)
         </div>
-
+        
         <div class="editor-label">
             @Html.LabelFor(model => model.Apellido)
         </div>
@@ -84,6 +77,15 @@
             @Html.EditorFor(model => model.Telefono)
             @Html.ValidationMessageFor(model => model.Telefono)
         </div>
+
+     <div class="editor-label">
+        @Html.Label("Tipo")
+    </div>
+    <div class="editor-field">
+        @Html.DropDownListFor(model => model.Tipo, Model.SelectoTipoDeUsuario)
+    </div>
+   
+
 
         <p>
             <input type="submit" value="Create" />
