@@ -4,17 +4,17 @@ using System.Linq;
 using System.Web;
 using Dominio;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace Presentacion.Models
 {
     public class UsuarioVM
     {
-        public int Id { get; private set; }
+        public int id { get; private set; }
 
         [Required]
-        public TipoCaracteristica Tipo { get; set; } //Tipo de usuario Administrador/Miembro
-        [Required]
-        public TipoCaracteristica EstadoUsuario { get; set; } //Estado de usuario
+        public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
+
         [Required]
         [MaxLength(20)]
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".
@@ -33,9 +33,11 @@ namespace Presentacion.Models
         public string Apellido { get; set; }//Apellido*: 50 caracteres
 
         [MaxLength(9)]
+        [Phone]
         public string DNI { get; set; }//DNI*: 9 dígitos
 
         [MaxLength(4)]
+        [Phone]
         public string Legajo { get; set; }//Legajo: 4 dígitos
 
         [Required]
@@ -44,11 +46,27 @@ namespace Presentacion.Models
         public string Email { get; set; }//Email*: 50 caracters
 
         [MaxLength(20)]
+        [Phone]
         public string Telefono { get; set; }//Teléfono: 20 caracteres
 
 
 
-        public IEnumerable<TipoDeUsuario> SelectoTipoDeUsuario { get; private set; }
+        public IEnumerable<SelectListItem> SelectoTipoDeUsuario
+        {
+            get
+            {
+                var items = new List<SelectListItem>();
+                var valores = Enum.GetValues(typeof(TipoDeUsuario));
+                foreach (var tu in valores)
+                {
+                    items.Add(new SelectListItem() { Text = tu.ToString(), Value = tu.GetHashCode().ToString() });
+                }
+
+                return items;
+            }
+            set { }
+        }
+         
 
     }
 }

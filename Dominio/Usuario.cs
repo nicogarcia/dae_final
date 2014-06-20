@@ -7,10 +7,10 @@ namespace Dominio
         public int Id { get; private set; }
        
         [Required]
-        public TipoCaracteristica Tipo { get; set; } //Tipo de usuario Administrador/Miembro
+        public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
 
         [Required]
-        public TipoCaracteristica EstadoUsuario { get; set; } //Estado de usuario
+        public EstadoUsuario EstadoUsuario { get; set; } //Estado de usuario
 
         [Required]
         [MaxLength(20)]
@@ -42,7 +42,7 @@ namespace Dominio
         { }
 
         
-        public Usuario (string nombreusuario, string nombre, string apellido, string dni, string legajo, string email, string telefono  )
+        public Usuario (string nombreusuario, string nombre, string apellido, string dni, string legajo, string email, string telefono, TipoDeUsuario tipo)
         {
             this.NombreUsuario = nombreusuario;
             this.Nombre = nombre;
@@ -51,7 +51,8 @@ namespace Dominio
             this.Legajo = legajo;
             this.Email = email;
             this.Telefono = telefono;
-            this.EstadoUsuario = new TipoCaracteristica("Activo");
+            this.Tipo = tipo;
+            this.EstadoUsuario = EstadoUsuario.Activo;
         }
  
     }
