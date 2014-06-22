@@ -10,6 +10,9 @@ namespace Dominio
         public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
 
         [Required]
+        public EstadoUsuario EstadoUsuario { get; set; } //Estado de usuario
+
+        [Required]
         [MaxLength(20)]
         public string NombreUsuario { get; set; } //Es el enlace con el sistema de autentificacion de "Presentación".
 
@@ -49,6 +52,7 @@ namespace Dominio
             this.Email = email;
             this.Telefono = telefono;
             this.Tipo = tipo;
+            this.EstadoUsuario = EstadoUsuario.Activo;
         }
  
     }

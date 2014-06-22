@@ -112,7 +112,10 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(usuario);
+            if (usuario.EstadoUsuario ==EstadoUsuario.Activo)
+                return View(usuario);
+            else
+                return RedirectToAction("Edit");
         }
 
         //
@@ -131,6 +134,37 @@ namespace Presentacion.Controllers
             return View(usuario);
         }
 
+        //bloquear usuario
+        public ActionResult Lock(int id = 0)
+        {
+            Usuario usuario = db.Usuarios.Find(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+            if (usuario.EstadoUsuario.Equals("Activo")){
+                usuario.EstadoUsuario = EstadoUsuario.Bloqueado;
+                db.Entry(usuario).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return View(ur.Todos());
+        }
+        //bloquear usuario
+        public ActionResult UnLock(int id = 0)
+        {
+            Usuario usuario = db.Usuarios.Find(id);
+            if (usuario == null)
+            {
+                return HttpNotFound();
+            }
+            if (usuario.EstadoUsuario == EstadoUsuario.Bloqueado)
+            {
+                usuario.EstadoUsuario = EstadoUsuario.Activo;
+                db.Entry(usuario).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return View(ur.Todos());
+        }
         //
         // GET: /Usuario/Delete/5
 
@@ -152,7 +186,9 @@ namespace Presentacion.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Usuario usuario = db.Usuarios.Find(id);
-            db.Usuarios.Remove(usuario);
+            usuario.EstadoUsuario = EstadoUsuario.Inactivo;
+            db.Entry(usuario).State = EntityState.Modified;
+            //db.Usuarios.Remove(usuario);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

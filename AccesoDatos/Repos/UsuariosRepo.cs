@@ -25,7 +25,12 @@ namespace AccesoDatos
 
         public IList<Usuario> Todos ()
         {
-            return reservasContext.Usuarios.ToList();
+            IList<Usuario> listadoUsuariosActivos = new List<Usuario>();
+            IList<Usuario> listadoUsuarios = reservasContext.Usuarios.ToList();
+            foreach(Usuario usuario in listadoUsuarios)
+                if(! (usuario.EstadoUsuario == EstadoUsuario.Inactivo))
+                    listadoUsuariosActivos.Add(usuario);
+            return listadoUsuariosActivos;
         }
 
         public IList<Usuario> ListarUsuarios(string key, string filtro)
@@ -46,7 +51,6 @@ namespace AccesoDatos
         {
             reservasContext.Usuarios.Add(usuario);
             reservasContext.SaveChanges();
-
         }
 
         public bool ExisteNombreUsuario(string nombreUsuario)
