@@ -15,5 +15,9 @@ namespace Dominio.Repos
         bool ExisteDNI(string dni);
 
         bool ExisteLegajo(string legajo);
+
+        IList<Usuario> ListarUsuarios(string key, string filtro);
+
+        void AgregarUsuario(Usuario usuario);
     }
 }

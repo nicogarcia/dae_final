@@ -28,6 +28,20 @@ namespace AccesoDatos
             return reservasContext.Usuarios.ToList();
         }
 
+        public IList<Usuario> ListarUsuarios(string key, string filtro)
+        {
+            if (filtro.Equals("Todos"))
+            {
+                return reservasContext.Usuarios.ToList();
+            }
+            else
+            {
+                return null;
+            }
+            
+           
+        }
+
         public void AgregarUsuario(Usuario usuario)
         {
             reservasContext.Usuarios.Add(usuario);
@@ -71,5 +85,7 @@ namespace AccesoDatos
             }
             return true;
         }
+
+       
     }
 }

@@ -15,7 +15,7 @@ namespace Presentacion.Controllers
     public class UsuariosController : Controller
     {
         private ReservasContext db;
-        private UsuariosRepo ur;
+        private IUsuariosRepo ur;
 
         //
         // GET: /Usuario/
@@ -30,7 +30,7 @@ namespace Presentacion.Controllers
         public ActionResult Index()
         {
 
-            return View(ur.Todos());
+            return View(ur.ListarUsuarios("","Todos"));
         }
 
         //
@@ -48,6 +48,7 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Usuario/Create
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Create()
         {
 
