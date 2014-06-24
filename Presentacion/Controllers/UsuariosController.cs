@@ -11,26 +11,28 @@ using System.Collections.Generic;
 
 namespace Presentacion.Controllers
 {
-    //[Autorizar(TipoDeUsuario.Administrador)]
+    [Autorizar(TipoDeUsuario.Administrador)]
     public class UsuariosController : Controller
     {
         private ReservasContext db;
         private IUsuariosRepo ur;
+        private ValidadorDeUsuarios validador;
 
         //
         // GET: /Usuario/
 
-        public UsuariosController()
+        public UsuariosController(ReservasContext db, IUsuariosRepo ur)
         {
-            db = new ReservasContext();
-            ur = new UsuariosRepo(this.db);
+            this.db = db;
+            this.ur = ur;
 
         }
 
-        public ActionResult Index()
+        public ActionResult Index(ListaUsuariosVM busquedaVM)
         {
-
-            return View(ur.ListarUsuarios("","Todos"));
+            var listado = ur.ListarUsuarios(busquedaVM.Nombre, busquedaVM.Apellido, busquedaVM.Legajo);
+            busquedaVM.ListaUsuario = listado;
+            return View(busquedaVM);
         }
 
         //
@@ -48,7 +50,6 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Usuario/Create
-        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Create()
         {
 
@@ -60,46 +61,41 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Autorizar(TipoDeUsuario.Administrador)]
-        
         public ActionResult Create(UsuarioVM usuarioVM)
         {
-            ValidadorDeUsuarios validador = new ValidadorDeUsuarios(ur);
-
-            if (ModelState.IsValid)
+            validador = new ValidadorDeUsuarios(ur);
+            if (ModelState.IsValid && CrearUsuarioController(usuarioVM))
             {
-                Usuario usuario = new Usuario(usuarioVM.NombreUsuario, usuarioVM.Nombre, usuarioVM.Apellido, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Email, usuarioVM.Telefono, usuarioVM.Tipo);
-                if (validador.Validar(usuario))
-                {
-                    WebSecurity.CreateUserAndAccount(usuarioVM.NombreUsuario, usuarioVM.Password);
-                    
-                    this.ur.AgregarUsuario(usuario);
-
-                    // Creo el usuario en el mecanismo de seguridad 
-                    //var membership = (SimpleMembershipProvider)Membership.Provider;
-                    //membership.CreateUserAndAccount(usuarioVM.NombreUsuario, "123");
-
-                    // Le asocio el rol correspondiente.
-                    var roles = (SimpleRoleProvider)Roles.Provider;
-                    roles.AddUsersToRoles(new[] { usuarioVM.NombreUsuario }, new[] { usuarioVM.Tipo.ToString() });
-                  }
-                else
-                {
-                    IDictionary<string, string> errores = validador.Errores;
-                    ICollection<string> keys = errores.Keys;
-                    string mensajedeerror;
-                    foreach(string key in keys)
-                    {
-                        errores.TryGetValue(key, out mensajedeerror);
-                        ModelState.AddModelError(key, mensajedeerror);
-                    }
-                    return View(usuarioVM);
-                }
-                
                 return RedirectToAction("Index");
             }
+            else
+            {
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                return View(usuarioVM);
+            }
 
-            return View(usuarioVM);
+           
+        } 
+
+            
+   
+        //Valida y crea un usuario.
+        private bool CrearUsuarioController (UsuarioVM usuarioVM)
+        {
+            Usuario usuario = new Usuario(usuarioVM.NombreUsuario, usuarioVM.Nombre, usuarioVM.Apellido, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Email, usuarioVM.Telefono, usuarioVM.Tipo);
+            if (validador.Validar(usuario))
+            {
+                WebSecurity.CreateUserAndAccount(usuarioVM.NombreUsuario, usuarioVM.Password);
+                this.ur.Agregar(usuario);
+                // Le asocio el rol correspondiente.
+                var roles = (SimpleRoleProvider)Roles.Provider;
+                roles.AddUsersToRoles(new[] { usuarioVM.NombreUsuario }, new[] { usuarioVM.Tipo.ToString() });
+                return true;
+            }
+
+            return false;
+
+
         }
 
         //
@@ -142,12 +138,13 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            if (usuario.EstadoUsuario.Equals("Activo")){
+            if (usuario.EstadoUsuario == EstadoUsuario.Activo){
                 usuario.EstadoUsuario = EstadoUsuario.Bloqueado;
                 db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return View(ur.Todos());
+            return RedirectToAction("Index");
+            //return View(ur.Todos());
         }
         //bloquear usuario
         public ActionResult UnLock(int id = 0)
@@ -163,7 +160,7 @@ namespace Presentacion.Controllers
                 db.Entry(usuario).State = EntityState.Modified;
                 db.SaveChanges();
             }
-            return View(ur.Todos());
+            return RedirectToAction("Index");
         }
         //
         // GET: /Usuario/Delete/5

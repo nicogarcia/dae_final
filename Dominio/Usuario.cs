@@ -54,6 +54,7 @@ namespace Dominio
             this.Tipo = tipo;
             this.EstadoUsuario = EstadoUsuario.Activo;
         }
+
  
     }
 }

@@ -16,8 +16,10 @@ namespace Dominio.Repos
 
         bool ExisteLegajo(string legajo);
 
-        IList<Usuario> ListarUsuarios(string key, string filtro);
+        IList<Usuario> ListarUsuarios(string filtronombre, string filtroapellido, string filtrolegajo);
 
-        void AgregarUsuario(Usuario usuario);
+        IList<Usuario> Todos();
+
+        void Agregar(Usuario usuario);
     }
 }

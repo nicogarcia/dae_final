@@ -66,22 +66,5 @@ namespace Presentacion.Models
             }
             set { }
         }
-
-        public IEnumerable<SelectListItem> Filtros
-        {
-            get
-            {
-                var items = new List<SelectListItem>();
-                SelectListItem filtro = new SelectListItem() { Text = "Nombre", Value = "Nombre".GetHashCode().ToString() };
-                items.Add(filtro);
-                filtro = new SelectListItem() { Text = "Apellido", Value = "Apellido".GetHashCode().ToString() };
-                items.Add(filtro);
-                filtro = new SelectListItem() { Text = "Legajo", Value = "Legajo".GetHashCode().ToString() };
-                items.Add(filtro);
-                return items;
-            }
-            set { }
-        }
-
     }
 }
