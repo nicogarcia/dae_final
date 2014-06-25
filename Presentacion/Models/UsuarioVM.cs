@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using Presentacion.Soporte;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Dominio;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -55,16 +53,10 @@ namespace Presentacion.Models
         {
             get
             {
-                var items = new List<SelectListItem>();
-                var valores = Enum.GetValues(typeof(TipoDeUsuario));
-                foreach (var tu in valores)
-                {
-                    items.Add(new SelectListItem() { Text = tu.ToString(), Value = tu.GetHashCode().ToString() });
-                }
-
-                return items;
+                return typeof(TipoDeUsuario).ToSelectList();
             }
-            set { }
+
+            private set { }
         }
     }
 }

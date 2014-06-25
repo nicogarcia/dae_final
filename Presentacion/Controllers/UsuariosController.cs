@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using WebMatrix.WebData;
 using System.Collections.Generic;
+using Presentacion.Soporte;
 
 namespace Presentacion.Controllers
 {
