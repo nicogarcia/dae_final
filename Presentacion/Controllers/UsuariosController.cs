@@ -16,7 +16,7 @@ namespace Presentacion.Controllers
     {
         private ReservasContext db;
         private IUsuariosRepo ur;
-        private ValidadorDeUsuarios validador;
+
 
         //
         // GET: /Usuario/
@@ -63,8 +63,8 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(UsuarioVM usuarioVM)
         {
-            validador = new ValidadorDeUsuarios(ur);
-            if (ModelState.IsValid && CrearUsuarioController(usuarioVM))
+            var validador = new ValidadorDeUsuarios(ur);
+            if (ModelState.IsValid && CrearUsuarioController(usuarioVM, validador))
             {
                 return RedirectToAction("Index");
             }
@@ -80,7 +80,7 @@ namespace Presentacion.Controllers
             
    
         //Valida y crea un usuario.
-        private bool CrearUsuarioController (UsuarioVM usuarioVM)
+        private bool CrearUsuarioController (UsuarioVM usuarioVM, ValidadorDeUsuarios validador)
         {
             Usuario usuario = new Usuario(usuarioVM.NombreUsuario, usuarioVM.Nombre, usuarioVM.Apellido, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Email, usuarioVM.Telefono, usuarioVM.Tipo);
             if (validador.Validar(usuario))
