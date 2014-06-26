@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace Presentacion.Controllers
 {
-    [Autorizar(TipoDeUsuario.Administrador)]
+    [Autorizar(TipoDeUsuario.Administrador, EstadoUsuario.Activo)]
     public class UsuariosController : Controller
     {
         private ReservasContext db;
@@ -185,6 +185,14 @@ namespace Presentacion.Controllers
             Usuario usuario = db.Usuarios.Find(id);
             usuario.EstadoUsuario = EstadoUsuario.Inactivo;
             db.Entry(usuario).State = EntityState.Modified;
+            //codigo sacado de http://stackoverflow.com/questions/13391166/how-to-delete-a-simplemembership-user
+            if (Roles.GetRolesForUser(usuario.NombreUsuario).Length > 0)
+            {
+                Roles.RemoveUserFromRoles(usuario.NombreUsuario, Roles.GetRolesForUser(usuario.NombreUsuario));
+            }
+            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(usuario.NombreUsuario); // deletes record from webpages_Membership table
+            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(usuario.NombreUsuario, true); // deletes record from UserProfile table
+
             //db.Usuarios.Remove(usuario);
             db.SaveChanges();
             return RedirectToAction("Index");
