@@ -13,13 +13,13 @@ using Dominio.UnitOfWork;
 
 namespace Presentacion.Controllers
 {
-    [Autorizar(TipoDeUsuario.Administrador)]
+    [Autorizar(TipoDeUsuario.Administrador, EstadoUsuario.Activo)]
     public class UsuariosController : Controller
     {
         private ReservasContext db;
         private IUsuariosRepo ur;
-        private ValidadorDeUsuarios validador;
         private IUnitOfWorkFactory uowFactory;
+
 
         //
         // GET: /Usuario/
@@ -68,24 +68,24 @@ namespace Presentacion.Controllers
         {
             using (var uow = this.uowFactory.Actual)
             { 
-                validador = new ValidadorDeUsuarios(ur);
-                if (ModelState.IsValid && CrearUsuarioController(usuarioVM))
-                {
+                var validador = new ValidadorDeUsuarios(ur);
+                if (ModelState.IsValid && CrearUsuarioController(usuarioVM, validador))
+            {
                     uow.Commit();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ModelStateHelper.CopyErrors(validador.Errores, ModelState);
-                    return View(usuarioVM);
-                }
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                return View(usuarioVM);
+            }
             }
         } 
 
             
    
         //Valida y crea un usuario.
-        private bool CrearUsuarioController (UsuarioVM usuarioVM)
+        private bool CrearUsuarioController (UsuarioVM usuarioVM, ValidadorDeUsuarios validador)
         {
             Usuario usuario = new Usuario(usuarioVM.NombreUsuario, usuarioVM.Nombre, usuarioVM.Apellido, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Email, usuarioVM.Telefono, usuarioVM.Tipo);
             if (validador.Validar(usuario))
@@ -190,6 +190,14 @@ namespace Presentacion.Controllers
             Usuario usuario = db.Usuarios.Find(id);
             usuario.EstadoUsuario = EstadoUsuario.Inactivo;
             db.Entry(usuario).State = EntityState.Modified;
+            //codigo sacado de http://stackoverflow.com/questions/13391166/how-to-delete-a-simplemembership-user
+            if (Roles.GetRolesForUser(usuario.NombreUsuario).Length > 0)
+            {
+                Roles.RemoveUserFromRoles(usuario.NombreUsuario, Roles.GetRolesForUser(usuario.NombreUsuario));
+            }
+            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(usuario.NombreUsuario); // deletes record from webpages_Membership table
+            ((SimpleMembershipProvider)Membership.Provider).DeleteUser(usuario.NombreUsuario, true); // deletes record from UserProfile table
+
             //db.Usuarios.Remove(usuario);
             db.SaveChanges();
             return RedirectToAction("Index");
