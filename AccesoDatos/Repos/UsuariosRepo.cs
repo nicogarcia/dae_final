@@ -39,12 +39,6 @@ namespace AccesoDatos
             return recursos.ToList();                       
         }
 
-        public void AgregarUsuario(Usuario usuario)
-        {
-            Ctx.Usuarios.Add(usuario);
-            Ctx.SaveChanges();
-        }
-
         public bool ExisteNombreUsuario(string nombreUsuario)
         {
             

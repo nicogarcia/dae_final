@@ -9,6 +9,7 @@ using System.Web.Security;
 using WebMatrix.WebData;
 using System.Collections.Generic;
 using Presentacion.Soporte;
+using Dominio.UnitOfWork;
 
 namespace Presentacion.Controllers
 {
@@ -18,15 +19,16 @@ namespace Presentacion.Controllers
         private ReservasContext db;
         private IUsuariosRepo ur;
         private ValidadorDeUsuarios validador;
+        private IUnitOfWorkFactory uowFactory;
 
         //
         // GET: /Usuario/
 
-        public UsuariosController(ReservasContext db, IUsuariosRepo ur)
+        public UsuariosController(ReservasContext db, IUsuariosRepo ur, IUnitOfWorkFactory uowFactory)
         {
             this.db = db;
             this.ur = ur;
-
+            this.uowFactory = uowFactory;
         }
 
         public ActionResult Index(ListaUsuariosVM busquedaVM)
@@ -64,18 +66,20 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(UsuarioVM usuarioVM)
         {
-            validador = new ValidadorDeUsuarios(ur);
-            if (ModelState.IsValid && CrearUsuarioController(usuarioVM))
-            {
-                return RedirectToAction("Index");
+            using (var uow = this.uowFactory.Actual)
+            { 
+                validador = new ValidadorDeUsuarios(ur);
+                if (ModelState.IsValid && CrearUsuarioController(usuarioVM))
+                {
+                    uow.Commit();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                    return View(usuarioVM);
+                }
             }
-            else
-            {
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
-                return View(usuarioVM);
-            }
-
-           
         } 
 
             

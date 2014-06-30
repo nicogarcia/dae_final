@@ -61,6 +61,7 @@
     <Compile Include="Repos\TiposDeRecursosRepo.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="TiposPredefinidos.cs" />
+    <Compile Include="UnitOfWork\EFUnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

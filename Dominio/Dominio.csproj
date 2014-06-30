@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommonServiceLocator.NinjectAdapter.Unofficial">
+      <HintPath>..\packages\CommonServiceLocator.NinjectAdapter.Unofficial.3.0.1.12\lib\Net40\CommonServiceLocator.NinjectAdapter.Unofficial.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
@@ -55,6 +61,9 @@
     <Compile Include="TipoCaracteristica.cs" />
     <Compile Include="TipoRecurso.cs" />
     <Compile Include="TipodeUsuario.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="Usuario.cs" />
     <Compile Include="ValidadorDeUsuarios.cs" />
   </ItemGroup>
