@@ -55,6 +55,31 @@ namespace Dominio
             this.EstadoUsuario = EstadoUsuario.Activo;
         }
 
- 
+
+
+        public bool isActive()
+        {
+            return this.EstadoUsuario == EstadoUsuario.Activo;
+        }
+        public bool isLocked()
+        {
+            return this.EstadoUsuario == EstadoUsuario.Bloqueado;
+        }
+        public bool isInactive()
+        {
+            return this.EstadoUsuario == EstadoUsuario.Inactivo;
+        }
+        public void setStateActive()
+        {
+            this.EstadoUsuario = EstadoUsuario.Activo;
+        }
+        public void setStateInactive()
+        {
+            this.EstadoUsuario = EstadoUsuario.Inactivo;
+        }
+        public void setStateLocked()
+        {
+            this.EstadoUsuario = EstadoUsuario.Bloqueado;
+        }
     }
 }

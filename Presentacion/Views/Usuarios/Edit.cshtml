@@ -1,4 +1,4 @@
-﻿@model Dominio.Usuario
+﻿@model Presentacion.Models.UsuarioVM
 
 @{
     ViewBag.Title = "Edit";
@@ -13,15 +13,7 @@
     <fieldset>
         <legend>Usuario</legend>
 
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.NombreUsuario)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.NombreUsuario)
-            @Html.ValidationMessageFor(model => model.NombreUsuario)
-        </div>
+        @Html.HiddenFor(model => model.id)
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Nombre)

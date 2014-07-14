@@ -16,8 +16,15 @@ namespace AccesoDatos
         {
 
         }
-
-
+        public Usuario getUsuario(int id = 0)
+        {
+            IQueryable<Usuario> consulta = Ctx.Usuarios;
+            IList<Usuario> listado = consulta.Where(r => r.Id == id).ToList();
+            if (listado.Count != 0)
+                return listado.First();
+            else
+                return null;
+        }
         public IList<Usuario> ListarUsuarios(string filtronombre, string filtroapellido, string filtrolegajo)
         {
             // Query de recursos

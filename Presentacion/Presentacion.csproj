@@ -203,6 +203,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\Conversor.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
     <Compile Include="Soporte\ModelStateHelper.cs" />
     <Compile Include="Controllers\RecursosController.cs" />

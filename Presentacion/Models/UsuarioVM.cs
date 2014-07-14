@@ -8,7 +8,7 @@ namespace Presentacion.Models
 {
     public class UsuarioVM
     {
-        public int id { get; private set; }
+        public int id { get;  set; }
 
         [Required]
         public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
@@ -47,8 +47,16 @@ namespace Presentacion.Models
         [Phone]
         public string Telefono { get; set; }//Teléfono: 20 caracteres
 
+        public string EstadoUsuario { get; set; }
+        public UsuarioVM(int id)
+        {
+            this.id = id;
+        }
 
-
+        public UsuarioVM()
+        {
+            // TODO: Complete member initialization
+        }
         public IEnumerable<SelectListItem> SelectoTipoDeUsuario
         {
             get

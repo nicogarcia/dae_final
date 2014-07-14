@@ -49,7 +49,10 @@ namespace Dominio
 
             return valido;
         }
-
+        public bool validarUsuario(Usuario usr)
+        {
+            return true;
+        }
         
     }
 }

@@ -10,10 +10,10 @@ namespace Presentacion.Filters
         { 
         }
 
-        public Autorizar(TipoDeUsuario rol, EstadoUsuario estado)
+        public Autorizar(TipoDeUsuario rol)
             : this()
         {
-            this.Roles= rol.ToString()+","+estado.ToString();
+            this.Roles= rol.ToString();
         }
     }
 }

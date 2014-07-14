@@ -9,6 +9,7 @@ namespace Dominio.Repos
     public interface IUsuariosRepo
     {
         bool ExisteNombreUsuario(string nombreUsuario);
+        Usuario getUsuario(int id);
 
         bool ExisteEmail(string email);
 
@@ -21,5 +22,7 @@ namespace Dominio.Repos
         IList<Usuario> Todos();
 
         void Agregar(Usuario usuario);
+
+        void Actualizar(Usuario usuario);
     }
 }
