@@ -15,6 +15,7 @@ namespace AccesoDatos
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Reserva> Reservas { get; set; }
 
         public DbSet<Recurso> Recursos { get; set; }
         public DbSet<TipoRecurso> TiposDeRecursos { get; set; }

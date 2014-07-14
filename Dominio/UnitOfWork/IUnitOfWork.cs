@@ -11,5 +11,7 @@ namespace Dominio.UnitOfWork
         /// Ejecuta la transacción.
         /// </summary>
         void Commit();
+
+        //void Dispose();
     }
 }
