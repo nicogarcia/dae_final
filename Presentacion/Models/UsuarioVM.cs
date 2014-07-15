@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using Presentacion.Soporte;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Dominio;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
@@ -10,7 +8,7 @@ namespace Presentacion.Models
 {
     public class UsuarioVM
     {
-        public int id { get; private set; }
+        public int id { get;  set; }
 
         [Required]
         public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
@@ -49,22 +47,24 @@ namespace Presentacion.Models
         [Phone]
         public string Telefono { get; set; }//Teléfono: 20 caracteres
 
+        public string EstadoUsuario { get; set; }
+        public UsuarioVM(int id)
+        {
+            this.id = id;
+        }
 
-
+        public UsuarioVM()
+        {
+            // TODO: Complete member initialization
+        }
         public IEnumerable<SelectListItem> SelectoTipoDeUsuario
         {
             get
             {
-                var items = new List<SelectListItem>();
-                var valores = Enum.GetValues(typeof(TipoDeUsuario));
-                foreach (var tu in valores)
-                {
-                    items.Add(new SelectListItem() { Text = tu.ToString(), Value = tu.GetHashCode().ToString() });
-                }
-
-                return items;
+                return typeof(TipoDeUsuario).ToSelectList();
             }
-            set { }
+
+            private set { }
         }
     }
 }

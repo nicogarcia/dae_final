@@ -1,5 +1,7 @@
-﻿using AccesoDatos.Repos;
+﻿using AccesoDatos.UnitOfWork;
 using Dominio.Repos;
+using AccesoDatos.Repos;
+using Dominio.UnitOfWork;
 using Ninject.Modules;
 using Ninject.Web.Common;
 
@@ -16,6 +18,8 @@ namespace AccesoDatos
             Bind<ITiposDeCaracteriscasRepo>().To<TiposDeCaracteristicasRepo>().InRequestScope();
             Bind<ITiposDeRecursosRepo>().To<TiposDeRecursosRepo>().InRequestScope();
 
+            Bind<IUnitOfWork>().To<EFUnitOfWork>().InRequestScope();
+            Bind<IReservaRepo>().To<ReservaRepo>().InRequestScope();
         }
     }
 }

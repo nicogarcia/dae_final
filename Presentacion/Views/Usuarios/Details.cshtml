@@ -1,4 +1,4 @@
-﻿@model Dominio.Usuario
+﻿@model Presentacion.Models.UsuarioVM
 
 @{
     ViewBag.Title = "Details";
@@ -59,6 +59,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id}) |
     @Html.ActionLink("Back to List", "Index")
 </p>

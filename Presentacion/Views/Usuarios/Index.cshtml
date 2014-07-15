@@ -67,12 +67,13 @@
             @Html.DisplayFor(modelItem => item.Email)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id }) |
-            @if (item.EstadoUsuario != Dominio.EstadoUsuario.Inactivo)
+            
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) 
+            @if (!item.isInactive())
             {
-                string accion = Model.ObtenerAccionBloquear(item.Id);
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) 
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id }) 
+                string accion = Model.ObtenerAccionBloquear(item.Id); 
                 @Html.ActionLink(accion, accion, new { id = item.Id })
             }
 

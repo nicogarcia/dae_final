@@ -1,5 +1,5 @@
-﻿using Ninject.Modules;
-using Ninject.Web.Common;
+﻿using Dominio.UnitOfWork;
+using Ninject.Modules;
 
 namespace Dominio
 {
@@ -7,7 +7,7 @@ namespace Dominio
     {
         public override void Load()
         {
-            //Bind<IWeapon>().To<Sword>();
+            Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
         }
     }
 }

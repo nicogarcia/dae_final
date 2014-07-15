@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using AccesoDatos;
 using AccesoDatos.Repos;
 using Dominio;
-using AccesoDatos;
+using Dominio.UnitOfWork;
+using Microsoft.Practices.ServiceLocation;
 using Presentacion.Filters;
 using Presentacion.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace Presentacion.Controllers
 {
@@ -15,13 +17,15 @@ namespace Presentacion.Controllers
         private RecursosRepo recursosRepo;
         private TiposDeRecursosRepo tiposDeRecursosRepo;
         private TiposDeCaracteristicasRepo tiposDeCaracteristicasRepo;
+        private IUnitOfWorkFactory uowFactory;
 
-        public RecursosController()
+        public RecursosController(IUnitOfWorkFactory uowFactory)
         {
-            db = new ReservasContext();
+            db = ServiceLocator.Current.GetInstance<ReservasContext>();
             recursosRepo = new RecursosRepo(db);
             tiposDeRecursosRepo = new TiposDeRecursosRepo(db);
             tiposDeCaracteristicasRepo = new TiposDeCaracteristicasRepo(db);
+            this.uowFactory = uowFactory;
         }
 
         //
@@ -96,28 +100,32 @@ namespace Presentacion.Controllers
                 return View(recursoVM);
             }
 
-            // Construir objeto de dominio y cargar propiedades
-            var recurso = new Recurso(
-                recursoVM.Codigo,
-                tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
-                recursoVM.Nombre,
-                recursoVM.Descripcion
-            );
+            using (var uow = this.uowFactory.Actual)
+            {
+                // Construir objeto de dominio y cargar propiedades
+                var recurso = new Recurso(
+                    recursoVM.Codigo,
+                    tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
+                    recursoVM.Nombre,
+                    recursoVM.Descripcion
+                );
 
-            // TODO Dangerous list sizes and not checking null
-            // Cargar caracteristicas
-            List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
+                // TODO Dangerous list sizes and not checking null
+                // Cargar caracteristicas
+                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
+                    .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
 
-            List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
-            recurso.AgregarCaracteristicas(caracteristicas);
+                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
+                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
+                recurso.AgregarCaracteristicas(caracteristicas);
 
-            // Marcar Recurso como Activo
-            recurso.Activar();
+                // Marcar Recurso como Activo
+                recurso.Activar();
 
-            recursosRepo.Agregar(recurso);
+                recursosRepo.Agregar(recurso);
 
+                uow.Commit();
+            }
             return RedirectToAction("Index");
         }
 
@@ -170,26 +178,30 @@ namespace Presentacion.Controllers
                 return View(recursoVM);
             }
 
-            var recurso = recursosRepo.ObtenerPorId(int.Parse(recursoVM.Id));
+            using (var uow = this.uowFactory.Actual)
+            {
+                var recurso = recursosRepo.ObtenerPorId(int.Parse(recursoVM.Id));
 
-            // Construir objeto de dominio y persistir
-            recurso.Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId));
-            recurso.Codigo = recursoVM.Codigo;
-            recurso.Descripcion = recursoVM.Descripcion;
-            recurso.Nombre = recursoVM.Nombre;
+                // Construir objeto de dominio y persistir
+                recurso.Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId));
+                recurso.Codigo = recursoVM.Codigo;
+                recurso.Descripcion = recursoVM.Descripcion;
+                recurso.Nombre = recursoVM.Nombre;
 
-            // TODO Dangerous list sizes and not checking null
-            List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
+                // TODO Dangerous list sizes and not checking null
+                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
+                    .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
 
-            List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
+                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
+                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
 
-            recurso.EliminarTodasCaracteristicas();
-            recurso.AgregarCaracteristicas(caracteristicas);
+                recurso.EliminarTodasCaracteristicas();
+                recurso.AgregarCaracteristicas(caracteristicas);
 
-            recursosRepo.Actualizar(recurso);
+                recursosRepo.Actualizar(recurso);
 
+                uow.Commit();
+            }
             return RedirectToAction("Index");
         }
 
