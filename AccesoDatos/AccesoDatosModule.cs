@@ -1,4 +1,5 @@
-﻿using Dominio.Repos;
+﻿using AccesoDatos.Repos;
+using Dominio.Repos;
 using Ninject.Modules;
 using Ninject.Web.Common;
 
@@ -10,6 +11,11 @@ namespace AccesoDatos
         {
             Bind<IUsuariosRepo>().To<UsuariosRepo>().InRequestScope(); 
             Bind<ReservasContext>().ToSelf().InRequestScope();
+
+            Bind<IRecursosRepo>().To<RecursosRepo>().InRequestScope();
+            Bind<ITiposDeCaracteriscasRepo>().To<TiposDeCaracteristicasRepo>().InRequestScope();
+            Bind<ITiposDeRecursosRepo>().To<TiposDeRecursosRepo>().InRequestScope();
+
         }
     }
 }

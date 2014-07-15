@@ -2,12 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Ninject.Infrastructure.Language;
-using System.Collections;
 
 namespace Dominio
 {
     public enum EstadoRecurso { Activo, Inactivo };
-
+    
     public class Recurso
     {
         public int Id { get; private set; }

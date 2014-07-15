@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dominio;
+using Dominio.Repos;
 
 namespace AccesoDatos.Repos
 {
-    public class RecursosRepo : RepoBase<Recurso>
+    public class RecursosRepo : RepoBase<Recurso>, IRecursosRepo
     {
         public RecursosRepo(ReservasContext ctx) : base(ctx)
         {
