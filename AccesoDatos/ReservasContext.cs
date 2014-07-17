@@ -1,5 +1,6 @@
 ﻿using Dominio;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace AccesoDatos
 {
@@ -24,6 +25,8 @@ namespace AccesoDatos
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {
+            builder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            
             // Mapeo de la entidad Recurso
             builder.Entity<Recurso>().ToTable("Recursos");
             builder.Entity<Recurso>().HasMany<Caracteristica>(x => x.Caracteristicas);
