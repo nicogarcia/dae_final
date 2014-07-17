@@ -3,7 +3,7 @@ using Dominio.Repos;
 
 namespace AccesoDatos.Repos
 {
-    public class TiposDeCaracteristicasRepo : RepoBase<TipoCaracteristica>, ITiposDeCaracteriscasRepo
+    public class TiposDeCaracteristicasRepo : RepoBase<TipoCaracteristica>, ITiposDeCaracteristicasRepo
     {
         public TiposDeCaracteristicasRepo(ReservasContext ctx) : base(ctx)
         {

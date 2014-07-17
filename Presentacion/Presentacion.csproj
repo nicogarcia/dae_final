@@ -203,8 +203,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReservasController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\Conversor.cs" />
-    <Compile Include="Controllers\ReservasController.cs" />
+    <Compile Include="Models\ConversorRecurso.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
     <Compile Include="Soporte\ModelStateHelper.cs" />
     <Compile Include="Controllers\RecursosController.cs" />
@@ -293,6 +296,7 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\recursos-utilities.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -334,7 +338,6 @@
     <Content Include="Views\Recursos\Details.cshtml" />
     <Content Include="Views\Recursos\Edit.cshtml" />
     <Content Include="Views\Recursos\Index.cshtml" />
-    <Content Include="Views\Recursos\ObtenerTiposPartial.cshtml" />
     <Content Include="Views\Usuarios\Index.cshtml" />
     <Content Include="Views\Usuarios\Details.cshtml" />
     <Content Include="Views\Usuarios\Create.cshtml" />

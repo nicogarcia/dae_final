@@ -8,5 +8,10 @@ namespace AccesoDatos.Repos
         public TiposDeRecursosRepo(ReservasContext ctx) : base(ctx)
         {
         }
+
+        public bool ExisteId(int id)
+        {
+            return ObtenerPorId(id) != null;
+        }
     }
 }

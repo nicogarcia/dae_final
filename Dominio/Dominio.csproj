@@ -71,6 +71,7 @@
     <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="Usuario.cs" />
+    <Compile Include="ValidadorDeRecursos.cs" />
     <Compile Include="ValidadorDeUsuarios.cs" />
   </ItemGroup>
   <ItemGroup>

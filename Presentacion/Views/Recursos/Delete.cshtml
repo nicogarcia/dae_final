@@ -1,12 +1,12 @@
 ﻿@model Dominio.Recurso
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar Recurso";
 }
 
-<h2>Delete</h2>
+<h2>Eliminar Recurso</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Está seguro de que quiere eliminar este recurso?</h3>
 <fieldset>
     <legend>Recurso</legend>
 
@@ -20,7 +20,7 @@
 @using (Html.BeginForm()) {
     @Html.AntiForgeryToken()
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Volver al listado", "Index", null, new { @class = "actionButton" })
+        <input type="submit" value="Eliminar" /> 
     </p>
 }

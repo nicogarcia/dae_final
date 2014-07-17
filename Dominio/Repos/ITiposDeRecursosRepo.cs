@@ -9,5 +9,6 @@ namespace Dominio.Repos
         void Agregar(TipoRecurso entidad);
         void Actualizar(TipoRecurso entidad);
         void Eliminar(TipoRecurso entidad);
+        bool ExisteId(int id);
     }
 }

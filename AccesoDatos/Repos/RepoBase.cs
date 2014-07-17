@@ -32,7 +32,6 @@ namespace AccesoDatos.Repos
         public void Actualizar(TTipo entidad)
         {
             Ctx.Entry(entidad).State = EntityState.Modified;
-            Ctx.SaveChanges();
         }
 
         public void Eliminar(TTipo entidad)

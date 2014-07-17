@@ -2,7 +2,7 @@
 
 namespace Dominio.Repos
 {
-    public interface ITiposDeCaracteriscasRepo
+    public interface ITiposDeCaracteristicasRepo
     {
         IList<TipoCaracteristica> Todos();
         TipoCaracteristica ObtenerPorId(int id);

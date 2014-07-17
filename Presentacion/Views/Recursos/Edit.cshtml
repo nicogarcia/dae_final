@@ -1,11 +1,10 @@
-﻿@using System.Activities.Expressions
-@model Presentacion.Models.RecursoVM
+﻿@model Presentacion.Models.RecursoVM
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar Recurso";
 }
 
-<h2>Edit</h2>
+<h2>Editar Recurso</h2>
 
 @using (Html.BeginForm())
 {
@@ -58,86 +57,62 @@
         </div>
 
         <div id="characteristics-container">
-           @for(var i = 0; i < Model.CaracteristicasTipo.Count; i++)
+            @foreach (var tipoCaracteristica in Model.Tipo.TiposDeCaracteristicas)
             {
-                <div class="editor-field">
-                    <div class="tiposDeCaracteristica">
-                        @Html.DropDownListFor(model => Model.CaracteristicasTipo[i],
-                            Model.Tipo.TiposDeCaracteristicas.Select(tipo => new SelectListItem
-                                {
-                                    Text = tipo.Nombre,
-                                    Value = tipo.Id.ToString(),
-                                    Selected = tipo.Id.ToString() == Model.CaracteristicasTipo[i]
-                                }
-                        ))
-                    </div>
+                var index = Model.CaracteristicasTipo.IndexOf(tipoCaracteristica.Id.ToString());
+
+                <div class="editor-label">
+                    <input name='CaracteristicasTipo' value='@tipoCaracteristica.Id' type="hidden">
+                    @Html.Label(tipoCaracteristica.Nombre)
                 </div>
                 <div class="editor-field">
-                    @Html.EditorFor(model => Model.CaracteristicasValor[i])
+                    @if (index != -1)
+                    {
+                        @Html.EditorFor(model => Model.CaracteristicasValor[index])
+                    }
+                    else
+                    {
+                        <input type='text' name='CaracteristicasValor' />
+                    }
                 </div>
             }
         </div>
-        <button type="button" onclick='javascript: AddNewCharacteristic();'>Agregar caracteristica</button>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Guardar" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Volver al listado", "Index")
 </div>
+
+<script type="text/template" id="characteristic-template">
+    <div class='editor-label'>
+        <input name='CaracteristicasTipo' value='{{TipoId}}' type="hidden">
+        <label for='{{CharacteristicName}}'>{{CharacteristicName}}</label>
+    </div>
+
+    <div class='editor-field'>
+        <input type='text' name='CaracteristicasValor' />
+    </div>
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/recursos-utilities.js")
 
     <script type="text/javascript">
-        /* TODO DUPLICATED CODE FROM CREATE */
-
-        // Registrar evento para el cambio de tipo de recurso
+        // Obtener tipos de recursos y registar evento para el cambio de tipo de recurso
         $(document).ready(
             function () {
-                $('#TipoId').on('change', function () { CambiarTiposDeRecursos(); });
+                ObtenerTiposDeRecursos();
+
                 UpdateCaracteristicasNames();
+
+                $('#TipoId').on('change', CambiarTiposDeRecursos);
             }
         );
-
-        function UpdateCaracteristicasNames() {
-            $("input[name^='CaracteristicasValor'").attr('name', 'CaracteristicasValor');
-            $("select[name^='CaracteristicasTipo'").attr('name', 'CaracteristicasTipo');
-        }
-
-        function CambiarTiposDeRecursos() {
-            $("div[class='tiposDeCaracteristica'").html(ObtenerTiposDeRecursos());
-            UpdateCaracteristicasNames();
-        }
-
-        function ObtenerTiposDeRecursos() {
-            var toReturn = null;
-            $.ajax({
-                    url: '/Recursos/ObtenerTiposPartial',
-                    async: false,
-                    contentType: 'application/html; charset=utf-8',
-                    type: 'GET',
-                    data: { tipoId: $('#TipoId').val() },
-                    dataType: 'html'
-                }
-            ).success(function(result) {
-                toReturn = result;
-            });
-            return toReturn;
-        };
-
-        function AddNewCharacteristic() {
-            $('#characteristics-container').append(
-                "<div class='editor-field'>" +
-                "   <div class='tiposDeCaracteristica' >" +
-                ObtenerTiposDeRecursos() +
-                "   </div>" +
-                "   <input type=\"text\" name='CaracteristicasValor' />" +
-                "</div>"
-            );
-        }
     </script>
 }

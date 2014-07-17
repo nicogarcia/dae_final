@@ -15,7 +15,7 @@ namespace AccesoDatos
             Bind<ReservasContext>().ToSelf().InRequestScope();
 
             Bind<IRecursosRepo>().To<RecursosRepo>().InRequestScope();
-            Bind<ITiposDeCaracteriscasRepo>().To<TiposDeCaracteristicasRepo>().InRequestScope();
+            Bind<ITiposDeCaracteristicasRepo>().To<TiposDeCaracteristicasRepo>().InRequestScope();
             Bind<ITiposDeRecursosRepo>().To<TiposDeRecursosRepo>().InRequestScope();
 
             Bind<IUnitOfWork>().To<EFUnitOfWork>().InRequestScope();

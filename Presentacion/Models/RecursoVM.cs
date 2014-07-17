@@ -32,43 +32,21 @@ namespace Presentacion.Models
         public IEnumerable<SelectListItem> SelectTiposDeRecursos { get; set; }
         public IEnumerable<SelectListItem> TiposDeCaracteristicas { get; set; }
 
-        // TODO: To be removed, used to get Initial set of TipoCaracteristica
         public TipoRecurso Tipo { get; set; }
 
-        public RecursoVM() 
+        public RecursoVM()
         {
             CaracteristicasTipo = new List<string>();
             CaracteristicasValor = new List<string>();
         }
 
-        public RecursoVM(IEnumerable<TipoRecurso> tiposDeRecursos) : this()
+        public RecursoVM(string id, string codigo, string nombre, string descripcion, string tipoId) : this()
         {
-            TiposDeRecursos = tiposDeRecursos.ToArray();
-
-            SelectTiposDeRecursos = TiposDeRecursos.Select(
-                tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
-            
-            TiposDeCaracteristicas = TiposDeRecursos.First().TiposDeCaracteristicas.Select(
-                caracteristica => new SelectListItem
-                    { Text = caracteristica.Nombre, Value = caracteristica.Id.ToString() });
+            Id = id;
+            TipoId = tipoId;
+            Codigo = codigo;
+            Descripcion = descripcion;
+            Nombre = nombre;
         }
-
-        public RecursoVM(Recurso recurso, IEnumerable<TipoRecurso> tiposDeRecursos)
-            : this(tiposDeRecursos)
-        {
-            // Cargar propiedades
-            Tipo = recurso.Tipo;
-            Id = recurso.Id.ToString();
-            TipoId = recurso.Tipo.Id.ToString();
-            Codigo = recurso.Codigo;
-            Descripcion = recurso.Descripcion;
-            Nombre = recurso.Nombre;
-
-            // Agregar las caracteristicas actuales al modelo de vista
-            CaracteristicasTipo.AddRange(recurso.ObtenerCaracteristicas().Select(car => car.Tipo.Id.ToString()));
-            CaracteristicasValor.AddRange(recurso.ObtenerCaracteristicas().Select(car => car.Valor));
-        }
-
-
     }
 }

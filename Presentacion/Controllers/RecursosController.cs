@@ -1,30 +1,26 @@
-﻿using AccesoDatos;
-using AccesoDatos.Repos;
-using Dominio;
+﻿using Dominio;
+using Dominio.Repos;
 using Dominio.UnitOfWork;
-using Microsoft.Practices.ServiceLocation;
 using Presentacion.Filters;
 using Presentacion.Models;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
+using Presentacion.Soporte;
 
 namespace Presentacion.Controllers
 {
     public class RecursosController : Controller
     {
-        private ReservasContext db;
-        private RecursosRepo recursosRepo;
-        private TiposDeRecursosRepo tiposDeRecursosRepo;
-        private TiposDeCaracteristicasRepo tiposDeCaracteristicasRepo;
+        private IRecursosRepo RecursosRepo;
+        private ITiposDeRecursosRepo TiposDeRecursosRepo;
+        private ITiposDeCaracteristicasRepo TiposDeCaracteristicasRepo;
         private IUnitOfWorkFactory uowFactory;
 
-        public RecursosController(IUnitOfWorkFactory uowFactory)
+        public RecursosController(IRecursosRepo recursosRepo, ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
+            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory)
         {
-            db = ServiceLocator.Current.GetInstance<ReservasContext>();
-            recursosRepo = new RecursosRepo(db);
-            tiposDeRecursosRepo = new TiposDeRecursosRepo(db);
-            tiposDeCaracteristicasRepo = new TiposDeCaracteristicasRepo(db);
+            RecursosRepo = recursosRepo;
+            TiposDeRecursosRepo = tiposDeRecursosRepo;
+            TiposDeCaracteristicasRepo = tiposDeCaracteriscasRepo;
             this.uowFactory = uowFactory;
         }
 
@@ -39,9 +35,9 @@ namespace Presentacion.Controllers
             ViewBag.OrdenCodigo = orden == "codigo" ? "codigo_desc" : "codigo";
             ViewBag.OrdenTipo = orden == "tipo" ? "tipo_desc" : "tipo";
 
-            var recursos = recursosRepo.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
+            var recursos = RecursosRepo.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
 
-            return View(new ListadoRecursosVM(recursos, tiposDeRecursosRepo.Todos()));
+            return View(new ListadoRecursosVM(recursos, TiposDeRecursosRepo.Todos()));
         }
 
         //
@@ -50,7 +46,7 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Details(int id = 0)
         {
-            Recurso recurso = recursosRepo.ObtenerPorId(id);
+            Recurso recurso = RecursosRepo.ObtenerPorId(id);
             if (recurso == null)
             {
                 return HttpNotFound();
@@ -64,7 +60,9 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Create()
         {
-            return View(new RecursoVM(tiposDeRecursosRepo.Todos()));
+            var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo);
+
+            return View(conversorRecurso.CrearViewModelVacio());
         }
 
         //
@@ -75,58 +73,31 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecursoVM recursoVM)
         {
-            if (!ModelState.IsValid)
+            using (var uow = uowFactory.Actual)
             {
-                // Repoblar tipos de recursos
-                recursoVM.SelectTiposDeRecursos = tiposDeRecursosRepo.Todos()
-                    .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
+                var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo);
+
+                Recurso nuevoRecurso = conversorRecurso.CrearDomainModel(recursoVM);
+
+                var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
+
+                if (ModelState.IsValid && validador.EsValido(nuevoRecurso))
+                {
+                    nuevoRecurso.Activar();
+
+                    RecursosRepo.Agregar(nuevoRecurso);
+
+                    uow.Commit();
+
+                    return RedirectToAction("Index");
+                }
+
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+
+                conversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
                 return View(recursoVM);
             }
-
-            bool mismoCodigo = recursosRepo.Todos().Select(rec => rec.Codigo).Contains(recursoVM.Codigo);
-            bool mismoNombre = recursosRepo.Todos().Select(rec => rec.Nombre).Contains(recursoVM.Nombre);
-
-            if (mismoCodigo)
-                ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
-            if (mismoNombre)
-                ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
-
-            if (mismoCodigo || mismoNombre)
-            {
-                recursoVM.SelectTiposDeRecursos = tiposDeRecursosRepo.Todos().Select(
-                    tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
-
-                return View(recursoVM);
-            }
-
-            using (var uow = this.uowFactory.Actual)
-            {
-                // Construir objeto de dominio y cargar propiedades
-                var recurso = new Recurso(
-                    recursoVM.Codigo,
-                    tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId)),
-                    recursoVM.Nombre,
-                    recursoVM.Descripcion
-                );
-
-                // TODO Dangerous list sizes and not checking null
-                // Cargar caracteristicas
-                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                    .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
-
-                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
-                recurso.AgregarCaracteristicas(caracteristicas);
-
-                // Marcar Recurso como Activo
-                recurso.Activar();
-
-                recursosRepo.Agregar(recurso);
-
-                uow.Commit();
-            }
-            return RedirectToAction("Index");
         }
 
         //
@@ -135,13 +106,14 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Edit(int id = 0)
         {
-            Recurso recurso = recursosRepo.ObtenerPorId(id);
+            Recurso recurso = RecursosRepo.ObtenerPorId(id);
             if (recurso == null)
             {
                 return HttpNotFound();
             }
 
-            var recursoVM = new RecursoVM(recurso, tiposDeRecursosRepo.Todos());
+            var recursoVM = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo)
+                .CrearViewModel(recurso);
 
             return View(recursoVM);
         }
@@ -154,55 +126,30 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(RecursoVM recursoVM)
         {
-            /* TODO Removed ModelState.IsValid, is that correct? */
-            if (recursoVM == null) return View();
-
-            // Validar Nombre y Codigo
-            bool mismoCodigo = recursosRepo.Todos()
-                .Where(rec => (rec.Codigo.Equals(recursoVM.Codigo)) && (rec.Id != int.Parse(recursoVM.Id)))
-                .ToList().Count != 0;
-            bool mismoNombre = recursosRepo.Todos()
-                .Where(rec => (rec.Nombre.Equals(recursoVM.Nombre)) && (rec.Id != int.Parse(recursoVM.Id)))
-                .ToList().Count != 0;
-
-            if (mismoCodigo) ModelState.AddModelError("Recurso.Codigo", "El código de recurso ya existe.");
-            if (mismoNombre) ModelState.AddModelError("Recurso.Nombre", "El nombre de recurso ya existe.");
-
-            if (mismoCodigo || mismoNombre)
+            using (var uow = uowFactory.Actual)
             {
-                IEnumerable<TipoRecurso> tiposDeRecursos = tiposDeRecursosRepo.Todos();
+                var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo,
+                    TiposDeCaracteristicasRepo);
 
-                recursoVM.SelectTiposDeRecursos = tiposDeRecursos.Select(
-                    tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
+                var recurso = conversorRecurso.ActualizarDomainModel(recursoVM);
+
+                var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
+
+                if (ModelState.IsValid && validador.EsValidoParaActualizar(recurso))
+                {
+                    RecursosRepo.Actualizar(recurso);
+
+                    uow.Commit();
+
+                    return RedirectToAction("Index");
+                }
+
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+
+                conversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
                 return View(recursoVM);
             }
-
-            using (var uow = this.uowFactory.Actual)
-            {
-                var recurso = recursosRepo.ObtenerPorId(int.Parse(recursoVM.Id));
-
-                // Construir objeto de dominio y persistir
-                recurso.Tipo = tiposDeRecursosRepo.ObtenerPorId(int.Parse(recursoVM.TipoId));
-                recurso.Codigo = recursoVM.Codigo;
-                recurso.Descripcion = recursoVM.Descripcion;
-                recurso.Nombre = recursoVM.Nombre;
-
-                // TODO Dangerous list sizes and not checking null
-                List<TipoCaracteristica> tiposDeCaracteristicas = recursoVM.CaracteristicasTipo
-                    .Select(tipo => tiposDeCaracteristicasRepo.ObtenerPorId(int.Parse(tipo))).Where(t => t != null).ToList();
-
-                List<Caracteristica> caracteristicas = tiposDeCaracteristicas
-                    .Select((t, i) => new Caracteristica(t, recursoVM.CaracteristicasValor[i])).ToList();
-
-                recurso.EliminarTodasCaracteristicas();
-                recurso.AgregarCaracteristicas(caracteristicas);
-
-                recursosRepo.Actualizar(recurso);
-
-                uow.Commit();
-            }
-            return RedirectToAction("Index");
         }
 
         //
@@ -211,7 +158,7 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Delete(int id = 0)
         {
-            Recurso recurso = recursosRepo.ObtenerPorId(id);
+            Recurso recurso = RecursosRepo.ObtenerPorId(id);
             if (recurso == null)
             {
                 return HttpNotFound();
@@ -227,34 +174,32 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Recurso recurso = recursosRepo.ObtenerPorId(id);
+            using (var uow = uowFactory.Actual)
+            {
+                Recurso recurso = RecursosRepo.ObtenerPorId(id);
 
-            recurso.Desactivar();
+                recurso.Desactivar();
 
-            recursosRepo.Actualizar(recurso);
+                RecursosRepo.Actualizar(recurso);
 
-            return RedirectToAction("Index");
+                uow.Commit();
+
+                return RedirectToAction("Index");
+            }
         }
 
         //
-        // GET: /Recursos/ObtenerTiposPartial/5
-        // TODO: Change result to JSON, parse in JS, Remove Partial view
-        public ActionResult ObtenerTiposPartial(int tipoId = 0)
+        // GET: /Recursos/ObtenerTiposDeRecursosYCaracteristicas
+        [Autorizar(TipoDeUsuario.Administrador)]
+        public ActionResult ObtenerTiposDeRecursosYCaracteristicas()
         {
-            var tipo = tiposDeRecursosRepo.ObtenerPorId(tipoId);
+            var tipos = TiposDeRecursosRepo.Todos();
 
-            if (tipo == null)
+            if (tipos == null)
             {
                 return HttpNotFound();
             }
-            return PartialView(tipo);
+            return Json(tipos, JsonRequestBehavior.AllowGet);
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            db.Dispose();
-            base.Dispose(disposing);
-        }
-
     }
 }

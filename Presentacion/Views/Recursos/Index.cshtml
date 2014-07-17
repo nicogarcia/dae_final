@@ -1,13 +1,13 @@
 ﻿@model Presentacion.Models.ListadoRecursosVM
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Listado de Recursos";
 }
 
-<h2>Index</h2>
+<h2>Listado de Recursos</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear Nuevo Recurso", "Create", null, new { @class = "actionButton"})
 </p>
 @using (Html.BeginForm())
 {
@@ -48,9 +48,9 @@
             @Html.DisplayFor(modelItem => item.Nombre)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "actionButton littleButton" })
+            @Html.ActionLink("Ver Detalle", "Details", new { id = item.Id }, new { @class = "actionButton littleButton" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "actionButton littleButton" })
         </td>
     </tr>
 }

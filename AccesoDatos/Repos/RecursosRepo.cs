@@ -58,5 +58,14 @@ namespace AccesoDatos.Repos
             return recursos.ToList();
         }
 
+        public bool ExisteCodigo(string codigo)
+        {
+            return Todos().Select(recurso => recurso.Codigo).Contains(codigo);
+        }
+
+        public bool ExisteNombre(string nombre)
+        {
+            return Todos().Select(recurso => recurso.Nombre).Contains(nombre);
+        }
     }
 }
