@@ -1,26 +1,32 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Dominio.Repos;
-using System.Collections.Generic;
 
-
-namespace Dominio
+namespace Dominio.Validacion
 {
-    public class ValidadorDeRecursos
+    public class ValidadorDeRecursos : IValidadorDeRecursos
     {
         IRecursosRepo RecursosRepo;
         ITiposDeRecursosRepo TiposDeRecursosRepo;
 
-        public IDictionary<string, string> Errores { get; private set; }
+        IDictionary<string, string> Errores;
 
         public ValidadorDeRecursos(IRecursosRepo recursosRepo, ITiposDeRecursosRepo tiposDeRecursosRepo)
         {
             RecursosRepo = recursosRepo;
             TiposDeRecursosRepo = tiposDeRecursosRepo;
+            Errores = new Dictionary<string, string>();
         }
+
+        public IDictionary<string, string> ObtenerErrores()
+        {
+            return new ReadOnlyDictionary<string, string>(Errores);
+        } 
 
         public bool EsValido(Recurso recurso)
         {
-            Errores = new Dictionary<string, string>();
+            Errores.Clear();
 
             if (RecursosRepo.ExisteCodigo(recurso.Codigo))
                 Errores.Add("Codigo", "El código de recurso ya existe.");

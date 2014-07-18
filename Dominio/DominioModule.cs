@@ -1,5 +1,7 @@
 ﻿using Dominio.UnitOfWork;
+using Dominio.Validacion;
 using Ninject.Modules;
+using Ninject.Web.Common;
 
 namespace Dominio
 {
@@ -8,6 +10,8 @@ namespace Dominio
         public override void Load()
         {
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
+
+            Bind<IValidadorDeRecursos>().To<ValidadorDeRecursos>().InRequestScope();
         }
     }
 }

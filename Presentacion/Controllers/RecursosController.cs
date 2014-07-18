@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
+using Dominio.Validacion;
 using Presentacion.Filters;
 using Presentacion.Models;
 using System.Web.Mvc;
@@ -16,17 +17,26 @@ namespace Presentacion.Controllers
         private ITiposDeCaracteristicasRepo TiposDeCaracteristicasRepo;
         private IUnitOfWorkFactory uowFactory;
         private IConversorRecurso ConversorRecurso;
+        private IValidadorDeRecursos ValidadorDeRecursos;
 
-        public RecursosController(IRecursosRepo recursosRepo, ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
-            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory, IConversorRecurso conversor)
+        public RecursosController(
+            IRecursosRepo recursosRepo, ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
+            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory,
+            IConversorRecurso conversor, IValidadorDeRecursos validador)
         {
+            // Repos
             RecursosRepo = recursosRepo;
             TiposDeRecursosRepo = tiposDeRecursosRepo;
             TiposDeCaracteristicasRepo = tiposDeCaracteriscasRepo;
+            
+            // Utilidades
             ConversorRecurso = conversor;
+            ValidadorDeRecursos = validador;
+
+            // Unit of Work
             this.uowFactory = uowFactory;
         }
-
+        
         //
         // GET: /Recursos/
 
@@ -78,9 +88,7 @@ namespace Presentacion.Controllers
             {
                 Recurso nuevoRecurso = ConversorRecurso.CrearDomainModel(recursoVM);
 
-                var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
-
-                if (ModelState.IsValid && validador.EsValido(nuevoRecurso))
+                if (ModelState.IsValid && ValidadorDeRecursos.EsValido(nuevoRecurso))
                 {
                     nuevoRecurso.Activar();
 
@@ -91,7 +99,7 @@ namespace Presentacion.Controllers
                     return RedirectToAction("Index");
                 }
 
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                ModelStateHelper.CopyErrors(ValidadorDeRecursos.ObtenerErrores(), ModelState);
 
                 ConversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
@@ -128,9 +136,7 @@ namespace Presentacion.Controllers
             {
                 var recurso = ConversorRecurso.ActualizarDomainModel(recursoVM);
 
-                var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
-
-                if (ModelState.IsValid && validador.EsValidoParaActualizar(recurso))
+                if (ModelState.IsValid && ValidadorDeRecursos.EsValidoParaActualizar(recurso))
                 {
                     RecursosRepo.Actualizar(recurso);
 
@@ -139,7 +145,7 @@ namespace Presentacion.Controllers
                     return RedirectToAction("Index");
                 }
 
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                ModelStateHelper.CopyErrors(ValidadorDeRecursos.ObtenerErrores(), ModelState);
 
                 ConversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
