@@ -5,9 +5,9 @@ using System.Web.WebPages;
 using Dominio;
 using Dominio.Repos;
 
-namespace Presentacion.Models
+namespace Presentacion.Models.Conversores
 {
-    public class ConversorRecurso
+    public class ConversorRecurso : IConversorRecurso
     {
         public TipoRecurso[] TiposDeRecursos;
         public ITiposDeRecursosRepo TiposDeRecursosRepo;

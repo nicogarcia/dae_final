@@ -207,7 +207,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Conversor.cs" />
-    <Compile Include="Models\ConversorRecurso.cs" />
+    <Compile Include="Models\Conversores\ConversorRecurso.cs" />
+    <Compile Include="Models\Conversores\IConversorRecurso.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
     <Compile Include="Soporte\ModelStateHelper.cs" />
     <Compile Include="Controllers\RecursosController.cs" />

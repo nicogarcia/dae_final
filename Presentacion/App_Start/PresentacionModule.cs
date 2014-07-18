@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using Ninject.Web.Common;
+using Presentacion.Models.Conversores;
 
 namespace Presentacion.App_Start
 {
@@ -7,7 +8,7 @@ namespace Presentacion.App_Start
     {
         public override void Load()
         {
-            //Bind<IWeapon>().To<Sword>();
+            Bind<IConversorRecurso>().To<ConversorRecurso>().InRequestScope();
         }
     }
 }

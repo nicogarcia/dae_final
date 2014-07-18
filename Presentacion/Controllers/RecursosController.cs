@@ -4,6 +4,7 @@ using Dominio.UnitOfWork;
 using Presentacion.Filters;
 using Presentacion.Models;
 using System.Web.Mvc;
+using Presentacion.Models.Conversores;
 using Presentacion.Soporte;
 
 namespace Presentacion.Controllers
@@ -14,13 +15,15 @@ namespace Presentacion.Controllers
         private ITiposDeRecursosRepo TiposDeRecursosRepo;
         private ITiposDeCaracteristicasRepo TiposDeCaracteristicasRepo;
         private IUnitOfWorkFactory uowFactory;
+        private IConversorRecurso ConversorRecurso;
 
         public RecursosController(IRecursosRepo recursosRepo, ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
-            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory)
+            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory, IConversorRecurso conversor)
         {
             RecursosRepo = recursosRepo;
             TiposDeRecursosRepo = tiposDeRecursosRepo;
             TiposDeCaracteristicasRepo = tiposDeCaracteriscasRepo;
+            ConversorRecurso = conversor;
             this.uowFactory = uowFactory;
         }
 
@@ -60,9 +63,7 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Create()
         {
-            var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo);
-
-            return View(conversorRecurso.CrearViewModelVacio());
+            return View(ConversorRecurso.CrearViewModelVacio());
         }
 
         //
@@ -75,9 +76,7 @@ namespace Presentacion.Controllers
         {
             using (var uow = uowFactory.Actual)
             {
-                var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo);
-
-                Recurso nuevoRecurso = conversorRecurso.CrearDomainModel(recursoVM);
+                Recurso nuevoRecurso = ConversorRecurso.CrearDomainModel(recursoVM);
 
                 var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
 
@@ -94,7 +93,7 @@ namespace Presentacion.Controllers
 
                 ModelStateHelper.CopyErrors(validador.Errores, ModelState);
 
-                conversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
+                ConversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
                 return View(recursoVM);
             }
@@ -112,8 +111,7 @@ namespace Presentacion.Controllers
                 return HttpNotFound();
             }
 
-            var recursoVM = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo, TiposDeCaracteristicasRepo)
-                .CrearViewModel(recurso);
+            var recursoVM = ConversorRecurso.CrearViewModel(recurso);
 
             return View(recursoVM);
         }
@@ -128,10 +126,7 @@ namespace Presentacion.Controllers
         {
             using (var uow = uowFactory.Actual)
             {
-                var conversorRecurso = new ConversorRecurso(RecursosRepo, TiposDeRecursosRepo,
-                    TiposDeCaracteristicasRepo);
-
-                var recurso = conversorRecurso.ActualizarDomainModel(recursoVM);
+                var recurso = ConversorRecurso.ActualizarDomainModel(recursoVM);
 
                 var validador = new ValidadorDeRecursos(RecursosRepo, TiposDeRecursosRepo);
 
@@ -146,7 +141,7 @@ namespace Presentacion.Controllers
 
                 ModelStateHelper.CopyErrors(validador.Errores, ModelState);
 
-                conversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
+                ConversorRecurso.PoblarTiposDeRecursosSelectList(recursoVM);
 
                 return View(recursoVM);
             }
