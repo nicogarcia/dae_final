@@ -7,19 +7,28 @@ using System.Web;
 using System.Web.Mvc;
 using Dominio;
 using AccesoDatos;
+using Dominio.Repos;
+using Dominio.UnitOfWork;
 
 namespace Presentacion.Controllers
 {
     public class ReservasController : Controller
     {
-        private ReservasContext db = new ReservasContext();
+        public IUnitOfWorkFactory Uow;
+        public IReservaRepo ReservasRepo;
+
+        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo)
+        {
+            Uow = uow;
+            ReservasRepo = reservasRepo;
+        }
 
         //
         // GET: /Reservas/
 
         public ActionResult Index()
         {
-            return View(db.Reservas.ToList());
+            return View(ReservasRepo.Todos());
         }
 
         //
@@ -27,7 +36,7 @@ namespace Presentacion.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Reserva reserva = db.Reservas.Find(id);
+            Reserva reserva = ReservasRepo.ObtenerPorId(id);
             if (reserva == null)
             {
                 return HttpNotFound();
@@ -50,14 +59,19 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Reserva reserva)
         {
-            if (ModelState.IsValid)
+            using (var uow = Uow.Actual)
             {
-                db.Reservas.Add(reserva);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    ReservasRepo.Agregar(reserva);
 
-            return View(reserva);
+                    uow.Commit();
+
+                    return RedirectToAction("Index");
+                }
+
+                return View(reserva);
+            }
         }
 
         //
@@ -65,7 +79,7 @@ namespace Presentacion.Controllers
 
         public ActionResult Edit(int id = 0)
         {
-            Reserva reserva = db.Reservas.Find(id);
+            Reserva reserva = ReservasRepo.ObtenerPorId(id);
             if (reserva == null)
             {
                 return HttpNotFound();
@@ -80,13 +94,18 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Reserva reserva)
         {
-            if (ModelState.IsValid)
+            using (var uow = Uow.Actual)
             {
-                db.Entry(reserva).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    ReservasRepo.Actualizar(reserva);
+                    
+                    uow.Commit();
+
+                    return RedirectToAction("Index");
+                }
+                return View(reserva);
             }
-            return View(reserva);
         }
 
         //
@@ -94,7 +113,7 @@ namespace Presentacion.Controllers
 
         public ActionResult Delete(int id = 0)
         {
-            Reserva reserva = db.Reservas.Find(id);
+            Reserva reserva = ReservasRepo.ObtenerPorId(id);
             if (reserva == null)
             {
                 return HttpNotFound();
@@ -109,16 +128,16 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Reserva reserva = db.Reservas.Find(id);
-            db.Reservas.Remove(reserva);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            using (var uow = Uow.Actual)
+            {
+                Reserva reserva = ReservasRepo.ObtenerPorId(id);
 
-        protected override void Dispose(bool disposing)
-        {
-            db.Dispose();
-            base.Dispose(disposing);
+                ReservasRepo.Eliminar(reserva);
+
+                uow.Commit();
+
+                return RedirectToAction("Index");
+            }
         }
     }
 }
