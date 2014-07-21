@@ -1,4 +1,5 @@
-﻿using Dominio.UnitOfWork;
+﻿using Dominio.Autorizacion;
+using Dominio.UnitOfWork;
 using Dominio.Validacion;
 using Ninject.Modules;
 using Ninject.Web.Common;
@@ -12,6 +13,9 @@ namespace Dominio
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
 
             Bind<IValidadorDeRecursos>().To<ValidadorDeRecursos>().InRequestScope();
+
+            Bind<IAutorizacionUsuario>().To<AutorizacionUsuario>().InRequestScope();
+
         }
     }
 }

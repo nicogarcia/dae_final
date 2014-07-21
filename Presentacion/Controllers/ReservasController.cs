@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Dominio;
-using AccesoDatos;
+using Dominio.Autorizacion;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
+using WebMatrix.WebData;
 
 namespace Presentacion.Controllers
 {
@@ -16,11 +11,14 @@ namespace Presentacion.Controllers
     {
         public IUnitOfWorkFactory Uow;
         public IReservaRepo ReservasRepo;
+        public IAutorizacionUsuario AutorizacionUsuario;
 
-        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo)
+        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo, 
+            IAutorizacionUsuario autorizacionUsuario)
         {
             Uow = uow;
             ReservasRepo = reservasRepo;
+            AutorizacionUsuario = autorizacionUsuario;
         }
 
         //
@@ -80,10 +78,15 @@ namespace Presentacion.Controllers
         public ActionResult Edit(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
+
             if (reserva == null)
             {
                 return HttpNotFound();
             }
+
+            if(!AutorizacionUsuario.AutorizarSobreReserva(WebSecurity.CurrentUserId, reserva))
+                return new HttpUnauthorizedResult();
+
             return View(reserva);
         }
 
