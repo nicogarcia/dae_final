@@ -49,9 +49,28 @@ namespace Dominio
 
             return valido;
         }
-        public bool validarUsuario(Usuario usr)
+        public bool validarUsuario(Usuario u)
         {
-            return true;
+            
+            bool valido = true;
+            if (usuariorepo.ChequearExistenciaEmail(u))
+            {
+                Errores.Add("Email", "Este email ya se encuentra registrado en otro usuario.");
+                valido = false;
+            }
+
+            if (usuariorepo.ChequearExistenciaDNI(u))
+            {
+                Errores.Add("DNI", "Este DNI ya se encuentra registrado en otro usuario.");
+                valido = false;
+            }
+
+            if (usuariorepo.ChequearExistenciaLegajo(u))
+            {
+                Errores.Add("Legajo", "Este Legajo ya se encuentra registrado en otro usuario.");
+                valido = false;
+            }
+            return valido;
         }
         
     }
