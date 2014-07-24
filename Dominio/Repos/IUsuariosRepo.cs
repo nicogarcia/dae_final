@@ -24,8 +24,11 @@ namespace Dominio.Repos
         void Agregar(Usuario usuario);
 
         void Actualizar(Usuario usuario);
-        bool ChequearExistenciaEmail(Usuario u);
-        bool ChequearExistenciaDNI(Usuario u);
-        bool ChequearExistenciaLegajo(Usuario u);
+        
+        bool ChequearExistenciaEmail(string email, int id);
+
+        bool ChequearExistenciaDNI(string dni, int id);
+
+        bool ChequearExistenciaLegajo(string legajo, int id);
     }
 }

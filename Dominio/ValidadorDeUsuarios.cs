@@ -49,23 +49,23 @@ namespace Dominio
 
             return valido;
         }
-        public bool validarUsuario(Usuario u)
+        public bool validarUsuario(Usuario u, int id)
         {
-            
             bool valido = true;
-            if (usuariorepo.ChequearExistenciaEmail(u))
+            Errores = new Dictionary<string, string>();
+            if (usuariorepo.ChequearExistenciaEmail(u.Email,id))
             {
                 Errores.Add("Email", "Este email ya se encuentra registrado en otro usuario.");
                 valido = false;
             }
 
-            if (usuariorepo.ChequearExistenciaDNI(u))
+            if (usuariorepo.ChequearExistenciaDNI(u.DNI, id))
             {
                 Errores.Add("DNI", "Este DNI ya se encuentra registrado en otro usuario.");
                 valido = false;
             }
 
-            if (usuariorepo.ChequearExistenciaLegajo(u))
+            if (usuariorepo.ChequearExistenciaLegajo(u.Legajo, id))
             {
                 Errores.Add("Legajo", "Este Legajo ya se encuentra registrado en otro usuario.");
                 valido = false;

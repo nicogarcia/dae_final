@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Presentacion.Models
 {
-    public class Conversor
+    public class ConversorUsuarioUsuarioVM
     {
         public static UsuarioVM getInstance(Usuario u)
         {
@@ -28,7 +28,7 @@ namespace Presentacion.Models
             toR.DNI = u.DNI;
             toR.Email = u.Email;
             //toR.EstadoUsuario = u.EstadoUsuario.ToString();
-            //toR.id = u.Id;
+            //toR.Id = u.id;
             toR.Legajo = u.Legajo;
             toR.Nombre = u.Nombre;
             //toR.NombreUsuario = u.NombreUsuario;

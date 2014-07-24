@@ -82,17 +82,17 @@ namespace AccesoDatos
             }
             return true;
         }
-        public bool ChequearExistenciaEmail(Usuario u)
+        public bool ChequearExistenciaEmail(string email, int id)
         {
-            return Ctx.Usuarios.Where(r => (r.Id != u.Id & r.Email == u.Email)).ToList().Count != 0;
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.Email == email)).ToList().Count != 0;
         }
-        public bool ChequearExistenciaDNI(Usuario u)
+        public bool ChequearExistenciaDNI(string dni, int id)
         {
-            return Ctx.Usuarios.Where(r => (r.Id != u.Id & r.DNI == u.DNI)).ToList().Count != 0;
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.DNI == dni)).ToList().Count != 0;
         }
-        public bool ChequearExistenciaLegajo(Usuario u)
+        public bool ChequearExistenciaLegajo(string legajo, int id)
         {
-            return Ctx.Usuarios.Where(r => (r.Id != u.Id & r.Legajo == u.Legajo)).ToList().Count != 0;
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.Legajo == legajo)).ToList().Count != 0;
         }
     }
 }

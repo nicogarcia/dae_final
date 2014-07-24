@@ -46,7 +46,7 @@ namespace Presentacion.Controllers
             Usuario u = ur.getUsuario(id);
             if(u== null)
                 return HttpNotFound();
-            UsuarioVM usuario = Conversor.getInstance(u);
+            UsuarioVM usuario = ConversorUsuarioUsuarioVM.getInstance(u);
             return View(usuario);
         }
 
@@ -107,7 +107,7 @@ namespace Presentacion.Controllers
             if (u == null)
                 return HttpNotFound();
             if (u.isActive())
-                return View(Conversor.getInstance(u));
+                return View(ConversorUsuarioUsuarioVM.getInstance(u));
             else
                 return RedirectToAction("Edit");
             
@@ -121,16 +121,17 @@ namespace Presentacion.Controllers
         public ActionResult Edit(UsuarioVM usuario){
             using (var uow = this.uowFactory.Actual){
                 ValidadorDeUsuarios val = new ValidadorDeUsuarios(ur);
-                if ( val.validarUsuario(Conversor.getInstance(new Usuario(),usuario)))
+                Usuario user = ConversorUsuarioUsuarioVM.getInstance(new Usuario(),usuario);
+                if (val.validarUsuario(user,usuario.id))
                 {
-                    Usuario user = ur.getUsuario(usuario.id);
+                    user = ur.getUsuario(usuario.id);
                     var roles = (SimpleRoleProvider)Roles.Provider;
                     if (usuario.Tipo != user.Tipo)
                     {
                         roles.RemoveUsersFromRoles(new[] { user.NombreUsuario }, new []{user.Tipo.ToString()});
                         roles.AddUsersToRoles(new[] { user.NombreUsuario }, new[] { usuario.Tipo.ToString() });
                     }
-                    user = Conversor.getInstance(user, usuario);
+                    user = ConversorUsuarioUsuarioVM.getInstance(user, usuario);
                     ur.Actualizar(user);
                     uow.Commit();
                     return RedirectToAction("Index");
@@ -190,7 +191,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(Conversor.getInstance(usuario));
+            return View(ConversorUsuarioUsuarioVM.getInstance(usuario));
         }
 
         //
