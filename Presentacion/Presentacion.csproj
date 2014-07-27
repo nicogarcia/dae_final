@@ -206,9 +206,12 @@
     <Compile Include="Controllers\ReservasController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Conversores\ConversorReservaMV.cs" />
     <Compile Include="Models\Conversores\ConversorUsuarioUsuarioVM.cs" />
     <Compile Include="Models\Conversores\ConversorRecurso.cs" />
     <Compile Include="Models\Conversores\IConversorRecurso.cs" />
+    <Compile Include="Models\ReservasSearchContainer.cs" />
+    <Compile Include="Models\ReservaVM.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
     <Compile Include="Soporte\ModelStateHelper.cs" />
     <Compile Include="Controllers\RecursosController.cs" />
@@ -349,6 +352,7 @@
     <Content Include="Views\Reservas\Create.cshtml" />
     <Content Include="Views\Reservas\Edit.cshtml" />
     <Content Include="Views\Reservas\Delete.cshtml" />
+    <Content Include="Views\Reservas\ListAndSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

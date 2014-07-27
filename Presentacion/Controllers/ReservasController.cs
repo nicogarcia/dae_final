@@ -2,9 +2,10 @@
 using Dominio;
 using Dominio.Autorizacion;
 using Dominio.Repos;
+using Presentacion.Models;
 using Dominio.UnitOfWork;
 using WebMatrix.WebData;
-
+using System.Collections.Generic;
 namespace Presentacion.Controllers
 {
     public class ReservasController : Controller
@@ -26,7 +27,11 @@ namespace Presentacion.Controllers
 
         public ActionResult Index()
         {
-            return View(ReservasRepo.Todos());
+            IList<Presentacion.Models.ReservaVM> lista = new List<Presentacion.Models.ReservaVM>();
+            foreach (Reserva x in ReservasRepo.Todos()){
+                lista.Add(Presentacion.Models.Conversores.ConversorReservaMV.convertirReserva(x));
+            }
+            return View(lista);
         }
 
         //
@@ -142,5 +147,17 @@ namespace Presentacion.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public ActionResult ListAndSearch(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva)
+        {
+            using (var uow = Uow.Actual)
+            {
+                
+                uow.Commit();
+
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }
