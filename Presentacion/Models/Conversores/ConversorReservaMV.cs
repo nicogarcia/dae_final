@@ -25,5 +25,15 @@ namespace Presentacion.Models.Conversores
 
             return toR;
         }
+        public static Reserva convertirReserva(ReservaVM r)
+        {
+            Reserva toR = new Reserva();
+            toR.FechaCreacion = r.FechaCreacion;
+            toR.Fin = r.Fin;
+            toR.Inicio = r.Inicio;
+            toR.Descripcion = r.Descripcion;
+
+            return toR;
+        }
     }
 }

@@ -18,5 +18,6 @@ namespace Dominio.Repos
 
         void Eliminar(Reserva entidad);
 
+        IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva);
     }
 }

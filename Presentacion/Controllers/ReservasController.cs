@@ -6,6 +6,7 @@ using Presentacion.Models;
 using Dominio.UnitOfWork;
 using WebMatrix.WebData;
 using System.Collections.Generic;
+using Presentacion.Filters;
 namespace Presentacion.Controllers
 {
     public class ReservasController : Controller
@@ -60,13 +61,13 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Reserva reserva)
+        public ActionResult Create(ReservaVM reserva)
         {
             using (var uow = Uow.Actual)
             {
                 if (ModelState.IsValid)
                 {
-                    ReservasRepo.Agregar(reserva);
+                    ReservasRepo.Agregar(Presentacion.Models.Conversores.ConversorReservaMV.convertirReserva(reserva));
 
                     uow.Commit();
 
@@ -147,16 +148,18 @@ namespace Presentacion.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult ListAndSearch(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva)
         {
-            using (var uow = Uow.Actual)
+            ReservasSearchContainer toR = new ReservasSearchContainer();
+            IList<Presentacion.Models.ReservaVM> lista = new List<Presentacion.Models.ReservaVM>();
+            foreach (Reserva x in ReservasRepo.buscarReservas(fecha_desde, fecha_hasta, 
+                tipo_recurso, usuario_responsable, estado_reserva))
             {
-                
-                uow.Commit();
-
-                return RedirectToAction("Index");
+                lista.Add(Presentacion.Models.Conversores.ConversorReservaMV.convertirReserva(x));
             }
+            toR.list = lista;
+            return View(toR);
         }
 
     }
