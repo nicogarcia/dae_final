@@ -1,5 +1,8 @@
-﻿using Dominio;
+﻿using System.Web;
+using Dominio;
 using System.Web.Mvc;
+using Dominio.Repos;
+using WebMatrix.WebData;
 
 namespace Presentacion.Filters
 {
@@ -16,4 +19,5 @@ namespace Presentacion.Filters
             this.Roles= rol.ToString();
         }
     }
+
 }

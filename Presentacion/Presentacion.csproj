@@ -206,6 +206,7 @@
     <Compile Include="Controllers\ReservasController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Filters\AutorizarReserva.cs" />
     <Compile Include="Models\Conversor.cs" />
     <Compile Include="Models\Conversores\ConversorRecurso.cs" />
     <Compile Include="Models\Conversores\IConversorRecurso.cs" />

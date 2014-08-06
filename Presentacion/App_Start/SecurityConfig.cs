@@ -56,7 +56,7 @@ namespace Presentacion
             {
                 membership.CreateUserAndAccount(DefaultAdminUsername, DefaultAdminPwd);
                 var roles = (SimpleRoleProvider)Roles.Provider;
-                roles.AddUsersToRoles(new[] { DefaultAdminUsername }, new[] { TipoDeUsuario.Administrador.ToString() });
+                roles.AddUsersToRoles(new[] { DefaultAdminUsername }, new[] { TipoDeUsuario.Administrador.ToString(), TipoDeUsuario.Miembro.ToString() });
             }
         }
 

@@ -1,3 +1,7 @@
+using System.Web.Mvc;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using Presentacion.Filters;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Presentacion.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Presentacion.App_Start.NinjectWebCommon), "Stop")]
 
@@ -73,6 +77,9 @@ namespace Presentacion.App_Start
                 new DominioModule(), 
                 new PresentacionModule() 
             });
+
+            kernel.BindFilter<FiltroAutorizar>(FilterScope.Action, 0)
+                .WhenActionMethodHas<AutorizarReserva>();
         }        
     }
 }

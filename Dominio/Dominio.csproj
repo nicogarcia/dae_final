@@ -52,8 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autorizacion\AutorizacionUsuario.cs" />
-    <Compile Include="Autorizacion\IAutorizacionUsuario.cs" />
     <Compile Include="Caracteristica.cs" />
     <Compile Include="DominioModule.cs" />
     <Compile Include="EstadoReserva.cs" />

@@ -1,9 +1,8 @@
 ﻿using System.Web.Mvc;
 using Dominio;
-using Dominio.Autorizacion;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
-using WebMatrix.WebData;
+using Presentacion.Filters;
 
 namespace Presentacion.Controllers
 {
@@ -11,19 +10,17 @@ namespace Presentacion.Controllers
     {
         public IUnitOfWorkFactory Uow;
         public IReservaRepo ReservasRepo;
-        public IAutorizacionUsuario AutorizacionUsuario;
 
-        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo, 
-            IAutorizacionUsuario autorizacionUsuario)
+        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo)
         {
             Uow = uow;
             ReservasRepo = reservasRepo;
-            AutorizacionUsuario = autorizacionUsuario;
         }
 
         //
         // GET: /Reservas/
 
+        [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult Index()
         {
             return View(ReservasRepo.Todos());
@@ -32,6 +29,8 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Details/5
 
+        [Autorizar(TipoDeUsuario.Miembro)]
+        [AutorizarReserva]
         public ActionResult Details(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -45,6 +44,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Create
 
+        [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult Create()
         {
             return View();
@@ -55,6 +55,7 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult Create(Reserva reserva)
         {
             using (var uow = Uow.Actual)
@@ -75,6 +76,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Edit/5
 
+        [AutorizarReserva]
         public ActionResult Edit(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -84,9 +86,6 @@ namespace Presentacion.Controllers
                 return HttpNotFound();
             }
 
-            if(!AutorizacionUsuario.AutorizarSobreReserva(WebSecurity.CurrentUserId, reserva))
-                return new HttpUnauthorizedResult();
-
             return View(reserva);
         }
 
@@ -95,6 +94,7 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult Edit(Reserva reserva)
         {
             using (var uow = Uow.Actual)
@@ -114,6 +114,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Delete/5
 
+        [AutorizarReserva]
         public ActionResult Delete(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -129,6 +130,7 @@ namespace Presentacion.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult DeleteConfirmed(int id)
         {
             using (var uow = Uow.Actual)
