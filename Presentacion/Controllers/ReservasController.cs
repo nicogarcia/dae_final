@@ -1,8 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Dominio;
 using Dominio.Repos;
-using Dominio.UnitOfWork;
 using Presentacion.Filters;
+using Presentacion.Models;
+using Dominio.UnitOfWork;
+using Presentacion.Models.Conversores;
 
 namespace Presentacion.Controllers
 {
@@ -23,7 +26,13 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Miembro)]
         public ActionResult Index()
         {
-            return View(ReservasRepo.Todos());
+            IList<ReservaVM> lista = new List<ReservaVM>();
+
+            foreach (Reserva x in ReservasRepo.Todos()){
+                lista.Add(ConversorReservaMV.convertirReserva(x));
+            }
+
+            return View(lista);
         }
 
         //
@@ -38,7 +47,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(reserva);
+            return View(ConversorReservaMV.convertirReserva(reserva));
         }
 
         //
@@ -56,13 +65,13 @@ namespace Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Autorizar(TipoDeUsuario.Miembro)]
-        public ActionResult Create(Reserva reserva)
+        public ActionResult Create(ReservaVM reserva)
         {
             using (var uow = Uow.Actual)
             {
                 if (ModelState.IsValid)
                 {
-                    ReservasRepo.Agregar(reserva);
+                    ReservasRepo.Agregar(ConversorReservaMV.convertirReserva(reserva));
 
                     uow.Commit();
 
@@ -86,7 +95,7 @@ namespace Presentacion.Controllers
                 return HttpNotFound();
             }
 
-            return View(reserva);
+            return View(ConversorReservaMV.convertirReserva(reserva));
         }
 
         //
@@ -95,13 +104,13 @@ namespace Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Autorizar(TipoDeUsuario.Miembro)]
-        public ActionResult Edit(Reserva reserva)
+        public ActionResult Edit(ReservaVM reserva)
         {
             using (var uow = Uow.Actual)
             {
                 if (ModelState.IsValid)
                 {
-                    ReservasRepo.Actualizar(reserva);
+                    ReservasRepo.Actualizar(ConversorReservaMV.convertirReserva(reserva));
                     
                     uow.Commit();
 
@@ -122,7 +131,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(reserva);
+            return View(ConversorReservaMV.convertirReserva(reserva));
         }
 
         //
@@ -144,5 +153,24 @@ namespace Presentacion.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        [Autorizar(TipoDeUsuario.Administrador)]
+        public ActionResult ListAndSearch(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva)
+        {
+            ReservasSearchContainer toR = new ReservasSearchContainer();
+
+            IList<ReservaVM> lista = new List<ReservaVM>();
+
+            foreach (Reserva x in ReservasRepo.buscarReservas(fecha_desde, fecha_hasta, 
+                tipo_recurso, usuario_responsable, estado_reserva))
+            {
+                lista.Add(Models.Conversores.ConversorReservaMV.convertirReserva(x));
+            }
+
+            toR.list = lista;
+
+            return View(toR);
+        }
+
     }
 }

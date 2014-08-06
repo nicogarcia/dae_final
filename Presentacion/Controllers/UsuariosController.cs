@@ -43,19 +43,10 @@ namespace Presentacion.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            //IList<Usuario> lista_usuarios = ur.ListarUsuarios(null, null, id.ToString());
             Usuario u = ur.getUsuario(id);
-            System.Diagnostics.Debug.WriteLine("id->"+id.ToString());
-            /*if(lista_usuarios == null)
-                return HttpNotFound();
-            else if(lista_usuarios.Count == 0)
-                return HttpNotFound();
-             **/
             if(u== null)
                 return HttpNotFound();
-            //Usuario u = lista_usuarios[0];
-            System.Diagnostics.Debug.WriteLine("usuario->" + u.NombreUsuario);
-            UsuarioVM usuario = Conversor.getInstance(u);
+            UsuarioVM usuario = ConversorUsuarioUsuarioVM.getInstance(u);
             return View(usuario);
         }
 
@@ -112,20 +103,11 @@ namespace Presentacion.Controllers
 
         public ActionResult Edit(int id = 0)
         {
-            /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(null, null, id.ToString());
-            if (lista_usuarios == null)
-                return HttpNotFound("lista_usuarios == null");
-            else if (lista_usuarios.Count == 0)
-                return HttpNotFound("lista_usuarios.count == 0");
-            System.Diagnostics.Debug.WriteLine("llego al 1");
-            Usuario u = lista_usuarios[0];*/
             Usuario u = ur.getUsuario(id);
             if (u == null)
                 return HttpNotFound();
-            System.Diagnostics.Debug.WriteLine("llego al 2");
-            System.Diagnostics.Debug.WriteLine(""+u.isActive());
             if (u.isActive())
-                return View(Conversor.getInstance(u));
+                return View(ConversorUsuarioUsuarioVM.getInstance(u));
             else
                 return RedirectToAction("Edit");
             
@@ -139,37 +121,24 @@ namespace Presentacion.Controllers
         public ActionResult Edit(UsuarioVM usuario){
             using (var uow = this.uowFactory.Actual){
                 ValidadorDeUsuarios val = new ValidadorDeUsuarios(ur);
-                System.Diagnostics.Debug.WriteLine("EDIT --> " + ModelState.IsValid + val.validarUsuario(Conversor.getInstance(new Usuario(), usuario)));
-                //¿Porque modelstate is false? ModelState.IsValid ->false
-                if ( val.validarUsuario(Conversor.getInstance(new Usuario(),usuario)))
+                Usuario user = ConversorUsuarioUsuarioVM.getInstance(new Usuario(),usuario);
+                if (val.validarUsuario(user,usuario.id))
                 {
-                    /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(usuario.Nombre, usuario.Apellido, usuario.id.ToString());
-                    if (lista_usuarios == null)
-                        return HttpNotFound();
-                    else if (lista_usuarios.Count == 0)
-                        return HttpNotFound();
-                    Usuario user = lista_usuarios[0];*/
-                    Usuario user = ur.getUsuario(usuario.id);
+                    user = ur.getUsuario(usuario.id);
                     var roles = (SimpleRoleProvider)Roles.Provider;
-                    System.Diagnostics.Debug.WriteLine("EDIT --> 1");
-
                     if (usuario.Tipo != user.Tipo)
                     {
                         roles.RemoveUsersFromRoles(new[] { user.NombreUsuario }, new []{user.Tipo.ToString()});
                         roles.AddUsersToRoles(new[] { user.NombreUsuario }, new[] { usuario.Tipo.ToString() });
                     }
-                    System.Diagnostics.Debug.WriteLine("EDIT --> 2");
-                    user = Conversor.getInstance(user, usuario);
+                    user = ConversorUsuarioUsuarioVM.getInstance(user, usuario);
                     ur.Actualizar(user);
-                    System.Diagnostics.Debug.WriteLine("EDIT --> 4");
-                    System.Diagnostics.Debug.WriteLine("EDIT --> 5");
                     uow.Commit();
                     return RedirectToAction("Index");
                 }
                 else
                 {
                     ModelStateHelper.CopyErrors(val.Errores, ModelState);
-                    System.Diagnostics.Debug.WriteLine("EDIT --> 3");
                     return View(usuario);
                 }
             }
@@ -181,12 +150,6 @@ namespace Presentacion.Controllers
         {
             using (var uow = this.uowFactory.Actual)
             {
-                /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(null,null, id.ToString());
-                if (lista_usuarios == null)
-                    return HttpNotFound();
-                else if (lista_usuarios.Count == 0)
-                    return HttpNotFound();
-                Usuario usuario = lista_usuarios[0];*/
                 Usuario usuario = ur.getUsuario(id);
                 if (usuario == null)
                     return HttpNotFound();
@@ -204,12 +167,6 @@ namespace Presentacion.Controllers
         {
             using (var uow = this.uowFactory.Actual)
             {
-                /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(null, null, id.ToString());
-                if (lista_usuarios == null)
-                    return HttpNotFound();
-                else if (lista_usuarios.Count == 0)
-                    return HttpNotFound();
-                Usuario usuario = lista_usuarios[0];*/
                 Usuario usuario = ur.getUsuario(id);
                 if (usuario == null)
                     return HttpNotFound();
@@ -227,12 +184,6 @@ namespace Presentacion.Controllers
 
         public ActionResult Delete(int id = 0)
         {
-            /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(null, null, id.ToString());
-            if (lista_usuarios == null)
-                return HttpNotFound();
-            else if (lista_usuarios.Count == 0)
-                return HttpNotFound();
-            Usuario usuario = lista_usuarios[0];*/
             Usuario usuario = ur.getUsuario(id);
             if (usuario == null)
                 return HttpNotFound();
@@ -240,7 +191,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(Conversor.getInstance(usuario));
+            return View(ConversorUsuarioUsuarioVM.getInstance(usuario));
         }
 
         //
@@ -252,12 +203,6 @@ namespace Presentacion.Controllers
         {
             using (var uow = this.uowFactory.Actual)
             {
-                /*IList<Usuario> lista_usuarios = ur.ListarUsuarios(null, null, id.ToString());
-                if (lista_usuarios == null)
-                    return HttpNotFound();
-                else if (lista_usuarios.Count == 0)
-                    return HttpNotFound();
-                Usuario usuario = lista_usuarios[0];*/
                 Usuario usuario = ur.getUsuario(id);
 
                 if (usuario == null)

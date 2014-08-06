@@ -41,8 +41,8 @@ namespace AccesoDatos
             {
                 recursos = recursos.Where(r => r.Legajo.ToUpper().Contains(filtrolegajo.ToUpper()));
             }
-
-            recursos = recursos.OrderByDescending(recurso => recurso.Nombre + recurso.Apellido);
+            if(recursos.ToList().Count > 0)
+                recursos = recursos.OrderByDescending(recurso => recurso.Nombre + recurso.Apellido);            
             return recursos.ToList();                       
         }
 
@@ -82,7 +82,17 @@ namespace AccesoDatos
             }
             return true;
         }
-
-       
+        public bool ChequearExistenciaEmail(string email, int id)
+        {
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.Email == email)).ToList().Count != 0;
+        }
+        public bool ChequearExistenciaDNI(string dni, int id)
+        {
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.DNI == dni)).ToList().Count != 0;
+        }
+        public bool ChequearExistenciaLegajo(string legajo, int id)
+        {
+            return Ctx.Usuarios.Where(r => (r.Id != id & r.Legajo == legajo)).ToList().Count != 0;
+        }
     }
 }
