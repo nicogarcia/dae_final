@@ -6,6 +6,7 @@ using Presentacion.Filters;
 using Presentacion.Models;
 using Dominio.UnitOfWork;
 using Presentacion.Models.Conversores;
+using Presentacion.Soporte;
 
 namespace Presentacion.Controllers
 {
@@ -18,12 +19,13 @@ namespace Presentacion.Controllers
         {
             Uow = uow;
             ReservasRepo = reservasRepo;
+            
         }
 
         //
         // GET: /Reservas/
 
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar()]
         public ActionResult Index()
         {
             IList<ReservaVM> lista = new List<ReservaVM>();
@@ -53,10 +55,10 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Create
 
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar()]
         public ActionResult Create()
         {
-            return View();
+            return View(new ReservacreateVM(User.IsInRole(TipoDeUsuario.Administrador.ToString())));
         }
 
         //
@@ -64,22 +66,56 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Autorizar(TipoDeUsuario.Miembro)]
-        public ActionResult Create(ReservaVM reserva)
+        [Autorizar()]
+        public ActionResult Create(ReservacreateVM reservaVM)
         {
             using (var uow = Uow.Actual)
             {
-                if (ModelState.IsValid)
-                {
-                    ReservasRepo.Agregar(ConversorReservaMV.convertirReserva(reserva));
-
+                ValidadorDeReserva validador = new ValidadorDeReserva(ReservasRepo);
+                if (ModelState.IsValid && CrearReservaController(reservaVM, validador))
+                { 
                     uow.Commit();
 
                     return RedirectToAction("Index");
                 }
+                else
+                {
+                    ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                    return View(reservaVM);
+                }
 
-                return View(reserva);
+                //return View(reserva);
             }
+        }
+
+        private bool CrearReservaController(ReservacreateVM reservaVM, ValidadorDeReserva validador)
+        {
+            string responsable;
+            if (validador.Validar(reservaVM.Responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
+            {
+                if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
+                {
+                    if (reservaVM.Responsable.Length==0)
+                    {
+                          responsable = User.Identity.Name;
+                    }
+                    else
+                    {
+                        responsable = reservaVM.Responsable;
+                    } 
+                 }
+                else
+                {
+                    responsable = responsable = User.Identity.Name;
+                }
+                Reserva reserva = ReservasRepo.CrearReserva( User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,    reservaVM.Fin, reservaVM.Descripcion);  
+                ReservasRepo.Agregar(reserva);
+                return true;
+
+            
+            }
+            
+            return false;
         }
 
         //

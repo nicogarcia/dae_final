@@ -1,4 +1,4 @@
-﻿@model Presentacion.Models.ReservaVM
+﻿@model Presentacion.Models.ReservacreateVM
 @{
     ViewBag.Title = "Create";
 }
@@ -12,6 +12,23 @@
     <fieldset>
         <legend>Reserva</legend>
 
+        @if (Model.administrador)
+        {
+           <div class="editor-label">
+               <p> UserName</p> 
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Responsable)
+                @Html.ValidationMessageFor(model => model.Responsable)
+            </div>
+        }
+        <div class="editor-label">
+            <p> Codigo del Recurso</p> 
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.RecursoReservado)
+            @Html.ValidationMessageFor(model => model.RecursoReservado)
+        </div>
         <div class="editor-label">
             @Html.LabelFor(model => model.Inicio)
         </div>
@@ -28,14 +45,7 @@
             @Html.ValidationMessageFor(model => model.Fin)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.FechaCreacion)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.FechaCreacion)
-            @Html.ValidationMessageFor(model => model.FechaCreacion)
-        </div>
-
+     
         <div class="editor-label">
             @Html.LabelFor(model => model.Descripcion)
         </div>

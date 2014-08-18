@@ -94,5 +94,15 @@ namespace AccesoDatos
         {
             return Ctx.Usuarios.Where(r => (r.Id != id & r.Legajo == legajo)).ToList().Count != 0;
         }
+
+        public Usuario BuscarUsuario (string username)
+        {
+            IQueryable<Usuario> consulta = Ctx.Usuarios;
+            IList<Usuario> listado = consulta.Where(r => r.NombreUsuario == username).ToList();
+            if (listado.Count != 0)
+                return listado.First();
+            else
+                return null;
+        }
     }
 }

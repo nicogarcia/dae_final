@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Dominio.Repos;
 
 namespace Dominio
 {
@@ -38,5 +39,19 @@ namespace Dominio
 
         public Reserva()
         { }
+
+        public Reserva (Usuario usuario_creador, Usuario usuario_responsable, Recurso recurso_reservado, DateTime inicio, DateTime fin, string descripcion)
+        {
+           
+            Creador =  usuario_creador;
+            Responsable = usuario_responsable;
+            RecursoReservado = recurso_reservado;
+            Inicio = inicio;
+            Fin = fin;
+            Descripcion = descripcion;
+            Estado = EstadoReserva.Activo;
+            FechaCreacion = DateTime.Now;
+
+        }
     }
 }

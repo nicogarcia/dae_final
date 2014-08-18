@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using AccesoDatos.Repos;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
 using Dominio.Validacion;
@@ -202,5 +203,8 @@ namespace Presentacion.Controllers
             }
             return Json(tipos, JsonRequestBehavior.AllowGet);
         }
+
+    
+
     }
 }

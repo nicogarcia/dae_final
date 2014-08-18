@@ -67,5 +67,15 @@ namespace AccesoDatos.Repos
         {
             return Todos().Select(recurso => recurso.Nombre).Contains(nombre);
         }
+
+        public Recurso BuscarRecurso(string codigo)
+        {
+            IQueryable<Recurso> consulta = Ctx.Recursos;
+            IList<Recurso> listado = consulta.Where(r => r.Codigo == codigo).ToList();
+            if (listado.Count != 0)
+                return listado.First();
+            else
+                return null;
+        }
     }
 }

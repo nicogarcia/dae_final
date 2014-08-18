@@ -73,6 +73,7 @@
     <Compile Include="Usuario.cs" />
     <Compile Include="Validacion\IValidadorDeRecursos.cs" />
     <Compile Include="Validacion\ValidadorDeRecursos.cs" />
+    <Compile Include="ValidadorDeReserva.cs" />
     <Compile Include="ValidadorDeUsuarios.cs" />
   </ItemGroup>
   <ItemGroup>

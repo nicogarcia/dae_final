@@ -211,6 +211,7 @@
     <Compile Include="Filters\AutorizarReserva.cs" />
     <Compile Include="Models\Conversores\ConversorRecurso.cs" />
     <Compile Include="Models\Conversores\IConversorRecurso.cs" />
+    <Compile Include="Models\ReservacreateVM.cs" />
     <Compile Include="Models\ReservasSearchContainer.cs" />
     <Compile Include="Models\ReservaVM.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
