@@ -3,6 +3,7 @@ using Presentacion.Models;
 using System;
 using System.Web.Mvc;
 using WebMatrix.WebData;
+using Dominio.Repos;
 namespace Presentacion.Controllers
 {
     public class AccountController : Controller
@@ -10,9 +11,12 @@ namespace Presentacion.Controllers
         //
         // GET: /Account/Login
 
+        IUsuariosRepo Repousario;
+
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(string returnUrl )
         {
+           
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }

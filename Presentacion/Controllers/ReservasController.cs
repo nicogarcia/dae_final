@@ -91,13 +91,13 @@ namespace Presentacion.Controllers
         private bool CrearReservaController(ReservacreateVM reservaVM, ValidadorDeReserva validador)
         {
             string responsable;
-            if (validador.Validar(reservaVM.Responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
-            {
+            
                 if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
                 {
                     if (reservaVM.Responsable.Length==0)
                     {
                           responsable = User.Identity.Name;
+                          
                     }
                     else
                     {
@@ -108,15 +108,23 @@ namespace Presentacion.Controllers
                 {
                     responsable = responsable = User.Identity.Name;
                 }
-                Reserva reserva = ReservasRepo.CrearReserva( User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,    reservaVM.Fin, reservaVM.Descripcion);  
-                ReservasRepo.Agregar(reserva);
-                return true;
+
+                if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
+                {
+                    Reserva reserva = ReservasRepo.CrearReserva( User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,    reservaVM.Fin, reservaVM.Descripcion);  
+                    ReservasRepo.Agregar(reserva);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
 
             
             }
             
-            return false;
-        }
+  
+        
 
         //
         // GET: /Reservas/Edit/5
