@@ -21,8 +21,7 @@ namespace AccesoDatos.Repos
             RecursosRepo recursorepo = new RecursosRepo(Ctx);
             Recurso recurso = recursorepo.BuscarRecurso(codigo_recurso);
 
-
-            return null;
+            return new Reserva(creador, responsanble, recurso, fecha_desde, fecha_hasta, descripcion); 
         }
 
         public bool ExisteResponsable(string usuario_responsable)

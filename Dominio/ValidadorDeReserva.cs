@@ -41,7 +41,7 @@ namespace Dominio
             }
             else
             {
-                if (!Reservarepo.ExisteReserva(codigo_recurso,inicio,fin))
+                if (Reservarepo.ExisteReserva(codigo_recurso,inicio,fin))
                 {
                     Errores.Add("ReservaReservado", "El recurso que desea reserva, ya que se encuentra reservado en esos horarios");
                     valido = false;

@@ -15,6 +15,10 @@ namespace Presentacion.Models
             this.administrador = adminstrador;
         }
 
+        public ReservacreateVM()
+        {
+            
+        }
         public int Id { get; private set; }
 
 
