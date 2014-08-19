@@ -13,10 +13,10 @@ namespace Dominio
         public int Id { get; private set; }
 
         [Required]
-        public Usuario Creador { get; set; }
+        public virtual Usuario  Creador { get; set; }
 
         [Required]
-        public Usuario Responsable { get; set; }
+        public virtual Usuario Responsable { get; set; }
 
         [Required]
         public DateTime Inicio { get; set; }
@@ -32,7 +32,7 @@ namespace Dominio
         public string Descripcion { get; set; }
 
         [Required]
-        public Recurso RecursoReservado { get; set; }
+        public virtual Recurso RecursoReservado { get; set; }
 
 
         public EstadoReserva Estado { get; set; }

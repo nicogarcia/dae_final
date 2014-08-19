@@ -94,7 +94,7 @@ namespace Presentacion.Controllers
             
                 if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
                 {
-                    if (reservaVM.Responsable.Length==0)
+                    if (reservaVM.Responsable == null)
                     {
                           responsable = User.Identity.Name;
                           
