@@ -36,28 +36,26 @@
         <div class="editor-field">
             @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
         </div>
-        
-        <!-- Características -->
-        <p>
-            Características:
-            <div id="characteristics-container">
 
-            </div>
-        </p>
-        
+        <!-- Características -->
+        <h3>Características</h3>
+        <div id="characteristics-container">
+
+        </div>
+
         <a onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a>
-        
-        <input type="submit" value="Buscar"/>
+
+        <input type="submit" value="Buscar" />
 
     </fieldset>
-    
+
     <div id="resultadoBusqueda">
-        
+
     </div>
 }
 
 <script type="text/template" id="characteristic-template">
-    
+
     <div class="caracteristica">
         <div class='editor-label'>
             <input name='CaracteristicasTipo' value='{{TipoId}}' type="checkbox">
@@ -65,9 +63,14 @@
         </div>
 
         <div class='editor-field'>
-            <input id="CaracteristicaValor_{{TipoId}}" type='text' name='CaracteristicasValor' disabled/>
+            <input id="CaracteristicaValor_{{TipoId}}" type='text' name='CaracteristicasValor' disabled />
         </div>
     </div>
+
+</script>
+
+<script type="text/template" id="resource-template">
+
 
 </script>
 
@@ -79,16 +82,16 @@
 
         // Obtener todas las caracteristicas y registrar los eventos para habilitarlas y deshabilitarlas
         $(document).ready(
-            function() {
+            function () {
                 ObtenerTodasCaracteristicas('@Url.Action("ObtenerTodasCaracteristicas")');
 
-                $.each(tiposDeCaracteristicas, function(i, value) {
+                $.each(tiposDeCaracteristicas, function (i, value) {
                     AddNewCharacteristic(value['Id'], value['Nombre']);
                 });
 
                 $("input:checkbox").each(function () {
                     console.log(this.value);
-                    $(this).on('click', function() {
+                    $(this).on('click', function () {
                         $('#CaracteristicaValor_' + this.value).toggleDisabled();
                     });
                 });

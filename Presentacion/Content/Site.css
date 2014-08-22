@@ -1,6 +1,14 @@
 ﻿/************/
 .editor-label {
+    margin: 0 20px;
+    width: 20%;
     font-weight: bold;
+    float: left;
+}
+
+.editor-field {
+    margin: 0 20px;
+    width: 80%;
 }
 
 .actionButton {
@@ -435,7 +443,6 @@ fieldset {
         }
 
 label {
-    display: block;
     font-size: 1.2em;
     font-weight: 600;
 }
