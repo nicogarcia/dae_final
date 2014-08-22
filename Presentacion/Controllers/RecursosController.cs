@@ -204,7 +204,51 @@ namespace Presentacion.Controllers
             return Json(tipos, JsonRequestBehavior.AllowGet);
         }
 
-    
+
+        //
+        // GET: /Recursos/BuscarRecurso
+        [Autorizar(TipoDeUsuario.Miembro)]
+        public ActionResult Buscar()
+        {
+            var busquedaRecursoVM = new BusquedaRecursoVM();
+
+            ConversorRecurso.PoblarTiposDeRecursosSelectListConCampoVacio(busquedaRecursoVM);
+
+            return View(busquedaRecursoVM);
+        }
+
+        //
+        // POST: /Recursos/Buscar
+
+        [Autorizar(TipoDeUsuario.Miembro)]
+        [HttpPost, ActionName("Buscar")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Buscar(BusquedaRecursoVM busquedaRecursoVM)
+        {
+            var recursos = RecursosRepo.Buscar(
+                busquedaRecursoVM.Nombre,
+                busquedaRecursoVM.Codigo,
+                busquedaRecursoVM.TipoId,
+                busquedaRecursoVM.CaracteristicasTipo,
+                busquedaRecursoVM.CaracteristicasValor
+            );
+            
+            return Json(recursos);
+        }
+
+        //
+        // GET: /Recursos/ObtenerTodasCaracteristicas
+        [Autorizar(TipoDeUsuario.Miembro)]
+        public ActionResult ObtenerTodasCaracteristicas()
+        {
+            var tipos = TiposDeCaracteristicasRepo.Todos();
+
+            if (tipos == null)
+            {
+                return HttpNotFound();
+            }
+            return Json(tipos, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

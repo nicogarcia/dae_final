@@ -104,5 +104,23 @@ namespace Presentacion.Models.Conversores
             recursoVM.SelectTiposDeRecursos = TiposDeRecursosRepo.Todos()
                 .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
         }
+
+        public void PoblarTiposDeRecursosSelectList(BusquedaRecursoVM busquedaRecursoVM)
+        {
+            busquedaRecursoVM.SelectTiposDeRecursos = TiposDeRecursosRepo.Todos()
+                .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() });
+        }
+
+        public void PoblarTiposDeRecursosSelectListConCampoVacio(BusquedaRecursoVM busquedaRecursoVM)
+        {
+            var listaTiposRecursos = new List<SelectListItem>();
+
+            listaTiposRecursos.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
+
+            listaTiposRecursos.AddRange(TiposDeRecursosRepo.Todos()
+                .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() }));
+
+            busquedaRecursoVM.SelectTiposDeRecursos = listaTiposRecursos;
+        }
     }
 }

@@ -13,5 +13,9 @@ namespace Presentacion.Models.Conversores
         Recurso ActualizarDomainModel(RecursoVM recursoVM);
         
         void PoblarTiposDeRecursosSelectList(RecursoVM recursoVM);
+
+        void PoblarTiposDeRecursosSelectList(BusquedaRecursoVM busquedaRecursoVM);
+
+        void PoblarTiposDeRecursosSelectListConCampoVacio(BusquedaRecursoVM busquedaRecursoVM);
     }
 }

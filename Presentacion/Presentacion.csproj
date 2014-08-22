@@ -206,6 +206,7 @@
     <Compile Include="Controllers\ReservasController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\BusquedaRecursoVM.cs" />
     <Compile Include="Models\Conversores\ConversorReservaMV.cs" />
     <Compile Include="Models\Conversores\ConversorUsuarioUsuarioVM.cs" />
     <Compile Include="Filters\AutorizarReserva.cs" />
@@ -355,6 +356,7 @@
     <Content Include="Views\Reservas\Edit.cshtml" />
     <Content Include="Views\Reservas\Delete.cshtml" />
     <Content Include="Views\Reservas\ListAndSearch.cshtml" />
+    <Content Include="Views\Recursos\Buscar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

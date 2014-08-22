@@ -14,10 +14,14 @@ namespace Dominio.Repos
         
         void Eliminar(Recurso entidad);
 
-        IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre);
-
         bool ExisteCodigo(string codigo);
 
         bool ExisteNombre(string nombre);
+
+        IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre);
+
+        IList<Recurso> Buscar(string nombre, string codigo, string tipo, List<string> caracteristicasTipo,
+            List<string> caracteristicasValor);
+ 
     }
 }

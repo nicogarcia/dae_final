@@ -1,6 +1,13 @@
 ﻿var tiposDeRecursosJSON;
+var tiposDeCaracteristicas;
 
-
+(function ($) {
+    $.fn.toggleDisabled = function () {
+        return this.each(function () {
+            this.disabled = !this.disabled;
+        });
+    };
+})(jQuery);
 
 function replaceAll(find, replace, str) {
     return str.replace(new RegExp(find, 'g'), replace);
@@ -37,6 +44,31 @@ function ObtenerTiposDeRecursos() {
         tiposDeRecursosJSON = result;
     });
 };
+
+function ObtenerTodasCaracteristicas(url) {
+    $.ajax({
+        url: url,
+        async: false,
+        contentType: 'application/html; charset=utf-8',
+        type: 'GET',
+        dataType: 'json'
+    }
+    ).success(function (result) {
+        tiposDeCaracteristicas = result;
+    });
+}
+
+function ObtenerRecursos(url) {
+    $.ajax({
+        url: url,
+        async: false,
+        type: 'POST',
+        data: $("form[action='" + url + "'").serialize()
+
+    }).success(function (result) {
+        $('#resultadoBusqueda').html(JSON.stringify(result));
+    });
+}
 
 function AddNewCharacteristic(tipoId, characteristicName) {
     // Get template from html
