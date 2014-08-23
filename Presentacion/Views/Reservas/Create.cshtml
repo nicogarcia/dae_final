@@ -1,4 +1,5 @@
-﻿@model Presentacion.Models.ReservacreateVM
+﻿@using Dominio
+@model Presentacion.Models.ReservaVM
 @{
     ViewBag.Title = "Create";
 }
@@ -12,7 +13,7 @@
     <fieldset>
         <legend>Reserva</legend>
 
-        @if (Model.administrador)
+        @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
         {
            <div class="editor-label">
                <label> UserName</label> 

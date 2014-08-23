@@ -30,7 +30,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/
 
-        [Autorizar()]
+        [Autorizar]
         public ActionResult Index()
         {
             IList<ReservaVM> lista = ReservasRepo.Todos()
@@ -43,7 +43,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Details/5
 
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         [AutorizarReserva]
         public ActionResult Details(int id = 0)
         {
@@ -58,10 +58,10 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Create
 
-        [Autorizar()]
+        [Autorizar]
         public ActionResult Create()
         {
-            return View(new ReservacreateVM(User.IsInRole(TipoDeUsuario.Administrador.ToString())));
+            return View(new ReservaVM());
         }
 
         //
@@ -69,8 +69,8 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Autorizar()]
-        public ActionResult Create(ReservacreateVM reservaVM)
+        [Autorizar]
+        public ActionResult Create(ReservaVM reservaVM)
         {
             using (var uow = Uow.Actual)
             {
@@ -88,7 +88,7 @@ namespace Presentacion.Controllers
             }
         }
 
-        private bool CrearReservaAuxiliar(ReservacreateVM reservaVM, ValidadorDeReserva validador)
+        private bool CrearReservaAuxiliar(ReservaVM reservaVM, ValidadorDeReserva validador)
         {
             string responsable = User.Identity.Name;
 
@@ -133,7 +133,7 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         public ActionResult Edit(ReservaVM reserva)
         {
             using (var uow = Uow.Actual)
@@ -169,7 +169,7 @@ namespace Presentacion.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         public ActionResult DeleteConfirmed(int id)
         {
             using (var uow = Uow.Actual)

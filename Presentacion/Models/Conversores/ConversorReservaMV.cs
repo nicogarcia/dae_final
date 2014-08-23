@@ -9,18 +9,14 @@ namespace Presentacion.Models.Conversores
             ReservaVM reservaVM = new ReservaVM();
 
             reservaVM.Id = reserva.Id;
-            reservaVM.Creador = ConversorUsuarioUsuarioVM.getInstance(reserva.Creador);
+            reservaVM.Creador = reserva.Creador.NombreUsuario;
             reservaVM.Estado = reserva.Estado.ToString();
             reservaVM.FechaCreacion = reserva.FechaCreacion;
             reservaVM.Fin = reserva.Fin;
             reservaVM.Inicio = reserva.Inicio;
-
-            RecursoVM recursoVM = new RecursoVM();
-            recursoVM.Nombre = reserva.RecursoReservado.Nombre;
-            recursoVM.Tipo = reserva.RecursoReservado.Tipo;
-
-            reservaVM.RecursoReservado = recursoVM;
-            reservaVM.Responsable = ConversorUsuarioUsuarioVM.getInstance(reserva.Responsable);
+            
+            reservaVM.RecursoReservado = reserva.RecursoReservado.Codigo;
+            reservaVM.Responsable = reserva.Responsable.NombreUsuario;
             reservaVM.Descripcion = reserva.Descripcion;
 
             return reservaVM;
