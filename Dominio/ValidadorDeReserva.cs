@@ -1,53 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dominio.Repos;
 
 namespace Dominio
 {
     public class ValidadorDeReserva
     {
-          public IDictionary<string, string> Errores { get; private set; }
-        IReservaRepo Reservarepo;
+        IReservaRepo ReservasRepo;
+        IUsuariosRepo UsuariosRepo;
+        IRecursosRepo RecursosRepo;
 
-        public ValidadorDeReserva (IReservaRepo reservarepo)
+        public IDictionary<string, string> Errores { get; private set; }
+
+        public ValidadorDeReserva (IReservaRepo reservaRepo, IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo)
         {
-            this.Reservarepo = reservarepo;
+            ReservasRepo = reservaRepo;
+            UsuariosRepo = usuariosRepo;
+            RecursosRepo = recursosRepo;
         }
-
 
         public bool Validar(string usuario_responsable, string codigo_recurso, DateTime inicio, DateTime fin)
         {
             bool valido = true;
             Errores = new Dictionary<string, string>();
-            if (inicio>fin)
+            
+            if (inicio > fin)
             {
                 Errores.Add("FechasIF", "La fecha de inicio es mayor que la fecha del fin");
                 valido = false;
             }
                 
-            if (!Reservarepo.ExisteResponsable(usuario_responsable))
+            if (!UsuariosRepo.ExisteNombreUsuario(usuario_responsable))
             {
                 Errores.Add("Responsable", "El usuario responsable ingresado no existe");
                 valido = false;
             }
 
-            if (!Reservarepo.ExisteRecurso(codigo_recurso))
+            if (!RecursosRepo.ExisteCodigo(codigo_recurso))
             {
                 Errores.Add("RecursoReservado", "El codigo de recurso ingresado no existe");
                 valido = false;
             }
-            else
+            else if (ReservasRepo.ExisteReserva(codigo_recurso, inicio, fin))
             {
-                if (Reservarepo.ExisteReserva(codigo_recurso,inicio,fin))
-                {
-                    Errores.Add("ReservaReservado", "El recurso que desea reserva, ya que se encuentra reservado en esos horarios");
-                    valido = false;
-                }
-
+                Errores.Add("ReservaReservado",
+                    "El recurso que desea reservar, ya que se encuentra reservado en esos horarios");
+                valido = false;
             }
+
             return valido;
         }
     }

@@ -1,39 +1,40 @@
 ﻿using Dominio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Presentacion.Models.Conversores
 {
     public class ConversorReservaMV
     {
-        public static ReservaVM convertirReserva(Reserva r)
+        public static ReservaVM convertirReserva(Reserva reserva)
         {
-            ReservaVM toR = new ReservaVM();
-            toR.Creador = ConversorUsuarioUsuarioVM.getInstance(r.Creador);
-            toR.Estado = r.Estado.ToString();
-            toR.FechaCreacion = r.FechaCreacion;
-            toR.Fin = r.Fin;
-            toR.Inicio = r.Inicio;
-            RecursoVM rec = new RecursoVM();
-            rec.Nombre = r.RecursoReservado.Nombre;
-            rec.Tipo = r.RecursoReservado.Tipo;
-            toR.RecursoReservado = rec;
-            toR.Responsable = ConversorUsuarioUsuarioVM.getInstance(r.Responsable);
-            toR.Descripcion = r.Descripcion;
+            ReservaVM reservaVM = new ReservaVM();
 
-            return toR;
+            reservaVM.Id = reserva.Id;
+            reservaVM.Creador = ConversorUsuarioUsuarioVM.getInstance(reserva.Creador);
+            reservaVM.Estado = reserva.Estado.ToString();
+            reservaVM.FechaCreacion = reserva.FechaCreacion;
+            reservaVM.Fin = reserva.Fin;
+            reservaVM.Inicio = reserva.Inicio;
+
+            RecursoVM recursoVM = new RecursoVM();
+            recursoVM.Nombre = reserva.RecursoReservado.Nombre;
+            recursoVM.Tipo = reserva.RecursoReservado.Tipo;
+
+            reservaVM.RecursoReservado = recursoVM;
+            reservaVM.Responsable = ConversorUsuarioUsuarioVM.getInstance(reserva.Responsable);
+            reservaVM.Descripcion = reserva.Descripcion;
+
+            return reservaVM;
         }
-        public static Reserva convertirReserva(ReservaVM r)
+        public static Reserva convertirReserva(ReservaVM reservaVM)
         {
-            Reserva toR = new Reserva();
-            toR.FechaCreacion = r.FechaCreacion;
-            toR.Fin = r.Fin;
-            toR.Inicio = r.Inicio;
-            toR.Descripcion = r.Descripcion;
+            Reserva reserva = new Reserva();
 
-            return toR;
+            reserva.FechaCreacion = reservaVM.FechaCreacion;
+            reserva.Fin = reservaVM.Fin;
+            reserva.Inicio = reservaVM.Inicio;
+            reserva.Descripcion = reservaVM.Descripcion;
+
+            return reserva;
         }
     }
 }

@@ -15,7 +15,7 @@
         @if (Model.administrador)
         {
            <div class="editor-label">
-               <p> UserName</p> 
+               <label> UserName</label> 
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Responsable)
@@ -23,7 +23,7 @@
             </div>
         }
         <div class="editor-label">
-            <p> Codigo del Recurso</p> 
+            <label> Codigo del Recurso</label> 
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.RecursoReservado)

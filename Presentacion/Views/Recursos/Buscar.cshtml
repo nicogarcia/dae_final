@@ -70,8 +70,9 @@
 </script>
 
 <script type="text/template" id="resource-template">
-
-
+    <div class="recurso">
+        <strong>Código: </strong>{{CodigoRecurso}}, <strong>Nombre: </strong>{{NombreRecurso}}
+    </div>
 </script>
 
 @section Scripts {
@@ -79,19 +80,19 @@
     @Scripts.Render("~/Scripts/recursos-utilities.js")
 
     <script type="text/javascript">
-
+        
         // Obtener todas las caracteristicas y registrar los eventos para habilitarlas y deshabilitarlas
         $(document).ready(
-            function () {
+            function() {
                 ObtenerTodasCaracteristicas('@Url.Action("ObtenerTodasCaracteristicas")');
 
-                $.each(tiposDeCaracteristicas, function (i, value) {
+                $.each(tiposDeCaracteristicas, function(i, value) {
                     AddNewCharacteristic(value['Id'], value['Nombre']);
                 });
 
-                $("input:checkbox").each(function () {
+                $("input:checkbox").each(function() {
                     console.log(this.value);
-                    $(this).on('click', function () {
+                    $(this).on('click', function() {
                         $('#CaracteristicaValor_' + this.value).toggleDisabled();
                     });
                 });

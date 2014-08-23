@@ -22,6 +22,7 @@ namespace Dominio.Repos
 
         IList<Recurso> Buscar(string nombre, string codigo, string tipo, List<string> caracteristicasTipo,
             List<string> caracteristicasValor);
- 
+
+        Recurso ObtenerPorCodigo(string codigoRecurso);
     }
 }

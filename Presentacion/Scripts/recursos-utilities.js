@@ -66,7 +66,8 @@ function ObtenerRecursos(url) {
         data: $("form[action='" + url + "'").serialize()
 
     }).success(function (result) {
-        $('#resultadoBusqueda').html(JSON.stringify(result));
+        //$('#resultadoBusqueda').html(JSON.stringify(result));
+        MostrarResultados(result);
     });
 }
 
@@ -84,4 +85,16 @@ function AddNewCharacteristic(tipoId, characteristicName) {
 function UpdateCaracteristicasNames() {
     $("input[name^='CaracteristicasValor'").attr('name', 'CaracteristicasValor');
     $("select[name^='CaracteristicasTipo'").attr('name', 'CaracteristicasTipo');
+}
+
+function MostrarResultados(result) {
+    $('#resultadoBusqueda').html('');
+    $.each(result, function () {
+        var template = $('#resource-template').html();
+
+        template = replaceAll('{{CodigoRecurso}}', this['Codigo'], template);
+        template = replaceAll('{{NombreRecurso}}', this['Nombre'], template);
+
+        $('#resultadoBusqueda').append(template);
+    });
 }

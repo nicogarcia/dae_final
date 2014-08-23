@@ -8,7 +8,7 @@ namespace Presentacion.Models
 {
     public class ReservaVM
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         public UsuarioVM Creador { get; set; }
 

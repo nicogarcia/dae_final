@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity.Migrations.Model;
 using System.Linq;
 using Dominio;
 using Dominio.Repos;
@@ -8,9 +7,12 @@ namespace AccesoDatos.Repos
 {
     public class RecursosRepo : RepoBase<Recurso>, IRecursosRepo
     {
-        public RecursosRepo(ReservasContext ctx)
+        IReservaRepo ReservasRepo;
+
+        public RecursosRepo(ReservasContext ctx, IReservaRepo reservasRepo)
             : base(ctx)
         {
+            ReservasRepo = reservasRepo;
         }
 
         public IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)
@@ -46,24 +48,18 @@ namespace AccesoDatos.Repos
 
         public bool ExisteCodigo(string codigo)
         {
-            return Todos().Select(recurso => recurso.Codigo).Contains(codigo);
+            return Ctx.Recursos.Any(recurso => recurso.Codigo == codigo);
         }
 
         public bool ExisteNombre(string nombre)
         {
-            return Todos().Select(recurso => recurso.Nombre).Contains(nombre);
+            return Ctx.Recursos.Any(recurso => recurso.Nombre == nombre);
         }
 
-        public Recurso BuscarRecurso(string codigo)
+        public Recurso ObtenerPorCodigo(string codigo)
         {
-            IQueryable<Recurso> consulta = Ctx.Recursos;
-            IList<Recurso> listado = consulta.Where(r => r.Codigo == codigo).ToList();
-            if (listado.Count != 0)
-                return listado.First();
-            else
-                return null;
+            return Ctx.Recursos.FirstOrDefault(recurso => recurso.Codigo == codigo);
         }
-
 
         public IList<Recurso> Buscar(string nombre, string codigo, string tipo, List<string> caracteristicasTipo,
             List<string> caracteristicasValor)
@@ -72,24 +68,34 @@ namespace AccesoDatos.Repos
             IQueryable<Recurso> recursos = Filtrar(codigo, nombre, tipo);
 
             // Filtrar por caracteristicas
+
+            // Lista de recursos validos
             var listaRecursos = new List<Recurso>();
             
             foreach (var recurso in recursos.ToList())
             {
                 int i = 0;
-                bool add = true;
+                bool toBeAdded = true;
                 foreach (var caracteristicaTipo in caracteristicasTipo)
                 {
-                    if (!recurso.Caracteristicas.Any(
+                    bool noCumpleCaracteristica = !recurso.Caracteristicas.Any(
                         caracteristica => caracteristica.Tipo.Id.ToString() == caracteristicaTipo &&
-                            caracteristica.Valor == caracteristicasValor[i]))
+                                          caracteristica.Valor == caracteristicasValor[i]);
+
+                    
+
+                    // Si existe alguno que no cumple con el tipo y valor de las
+                    // caracteristicas de filtro no se agregara a la lista
+                    if (noCumpleCaracteristica)
                     {
-                        add = false;
+                        toBeAdded = false;
                         break;
                     }
                     i++;
                 }
-                if(add)
+
+                // Si no fue descartado, el recurso es valido
+                if(toBeAdded)
                     listaRecursos.Add(recurso);
             }
 
@@ -106,15 +112,15 @@ namespace AccesoDatos.Repos
 
             // Aplicar filtros
             if (!string.IsNullOrEmpty(filtroCodigo))
-                recursos = recursos.Where(r => r.Codigo.ToUpper().Contains(filtroCodigo.ToUpper()));
+                recursos = recursos.Where(recurso => recurso.Codigo.ToUpper().Contains(filtroCodigo.ToUpper()));
 
             if (!string.IsNullOrEmpty(filtroNombre))
-                recursos = recursos.Where(r => r.Nombre.ToUpper().Contains(filtroNombre.ToUpper()));
+                recursos = recursos.Where(recurso => recurso.Nombre.ToUpper().Contains(filtroNombre.ToUpper()));
 
             if (!string.IsNullOrEmpty(filtroTipo))
             {
                 int filtroTipoInt = int.Parse(filtroTipo);
-                recursos = recursos.Where(r => r.Tipo.Id == filtroTipoInt);
+                recursos = recursos.Where(recurso => recurso.Tipo.Id == filtroTipoInt);
             }
 
             return recursos;

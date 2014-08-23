@@ -31,5 +31,7 @@ namespace Dominio.Repos
         bool ChequearExistenciaDNI(string dni, int id);
 
         bool ChequearExistenciaLegajo(string legajo, int id);
+
+        Usuario BuscarUsuario(string usuario_responsable);
     }
 }

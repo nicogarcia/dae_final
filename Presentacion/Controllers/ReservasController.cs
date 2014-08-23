@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Dominio;
 using Dominio.Repos;
@@ -12,14 +13,18 @@ namespace Presentacion.Controllers
 {
     public class ReservasController : Controller
     {
-        public IUnitOfWorkFactory Uow;
-        public IReservaRepo ReservasRepo;
+        IUnitOfWorkFactory Uow;
+        IReservaRepo ReservasRepo;
+        IUsuariosRepo UsuariosRepo;
+        IRecursosRepo RecursosRepo;
 
-        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo)
+        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo,
+            IRecursosRepo recursosRepo, IUsuariosRepo usuariosRepo)
         {
             Uow = uow;
             ReservasRepo = reservasRepo;
-            
+            UsuariosRepo = usuariosRepo;
+            RecursosRepo = recursosRepo;
         }
 
         //
@@ -28,11 +33,9 @@ namespace Presentacion.Controllers
         [Autorizar()]
         public ActionResult Index()
         {
-            IList<ReservaVM> lista = new List<ReservaVM>();
-
-            foreach (Reserva x in ReservasRepo.Todos()){
-                lista.Add(ConversorReservaMV.convertirReserva(x));
-            }
+            IList<ReservaVM> lista = ReservasRepo.Todos()
+                .Select(reservaVM => ConversorReservaMV.convertirReserva(reservaVM))
+                .ToList();
 
             return View(lista);
         }
@@ -71,60 +74,43 @@ namespace Presentacion.Controllers
         {
             using (var uow = Uow.Actual)
             {
-                ValidadorDeReserva validador = new ValidadorDeReserva(ReservasRepo);
-                if (ModelState.IsValid && CrearReservaController(reservaVM, validador))
-                { 
+                var validador = new ValidadorDeReserva(ReservasRepo, UsuariosRepo, RecursosRepo);
+
+                if (ModelState.IsValid && CrearReservaAuxiliar(reservaVM, validador))
+                {
                     uow.Commit();
 
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    ModelStateHelper.CopyErrors(validador.Errores, ModelState);
-                    return View(reservaVM);
-                }
 
-                //return View(reserva);
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                return View(reservaVM);
             }
         }
 
-        private bool CrearReservaController(ReservacreateVM reservaVM, ValidadorDeReserva validador)
+        private bool CrearReservaAuxiliar(ReservacreateVM reservaVM, ValidadorDeReserva validador)
         {
-            string responsable;
-            
-                if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
-                {
-                    if (reservaVM.Responsable == null)
-                    {
-                          responsable = User.Identity.Name;
-                          
-                    }
-                    else
-                    {
-                        responsable = reservaVM.Responsable;
-                    } 
-                 }
-                else
-                {
-                    responsable = responsable = User.Identity.Name;
-                }
+            string responsable = User.Identity.Name;
 
-                if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
-                {
-                    Reserva reserva = ReservasRepo.CrearReserva( User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,    reservaVM.Fin, reservaVM.Descripcion);  
-                    ReservasRepo.Agregar(reserva);
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            
+            if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
+            {
+                responsable = reservaVM.Responsable ?? User.Identity.Name;
             }
-            
-  
-        
+
+            if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
+            {
+                Recurso recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
+
+                Reserva reserva = ReservasRepo.CrearReserva(User.Identity.Name, responsable, recurso, reservaVM.Inicio,
+                    reservaVM.Fin, reservaVM.Descripcion);
+
+                ReservasRepo.Agregar(reserva);
+
+                return true;
+            }
+
+            return false;
+        }
 
         //
         // GET: /Reservas/Edit/5
@@ -208,7 +194,7 @@ namespace Presentacion.Controllers
             foreach (Reserva x in ReservasRepo.buscarReservas(fecha_desde, fecha_hasta, 
                 tipo_recurso, usuario_responsable, estado_reserva))
             {
-                lista.Add(Models.Conversores.ConversorReservaMV.convertirReserva(x));
+                lista.Add(ConversorReservaMV.convertirReserva(x));
             }
 
             toR.list = lista;

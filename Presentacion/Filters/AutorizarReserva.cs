@@ -20,7 +20,6 @@ namespace Presentacion.Filters
             ReservasRepo = reservasRepo;
         }
 
-
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             string id = filterContext.ActionParameters["id"].ToString();
@@ -43,7 +42,7 @@ namespace Presentacion.Filters
 
         private bool AutorizarSobreReserva(Reserva reserva)
         {
-            var usuario = UsuariosRepo.getUsuario(WebSecurity.CurrentUserId);
+            var usuario = UsuariosRepo.BuscarUsuario(WebSecurity.CurrentUserName);
 
             if (usuario == null)
                 return false;
