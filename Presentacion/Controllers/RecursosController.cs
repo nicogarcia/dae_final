@@ -207,7 +207,7 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Recursos/BuscarRecurso
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         public ActionResult Buscar()
         {
             var busquedaRecursoVM = new BusquedaRecursoVM();
@@ -220,7 +220,7 @@ namespace Presentacion.Controllers
         //
         // POST: /Recursos/Buscar
 
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         [HttpPost, ActionName("Buscar")]
         [ValidateAntiForgeryToken]
         public ActionResult Buscar(BusquedaRecursoVM busquedaRecursoVM)
@@ -238,7 +238,7 @@ namespace Presentacion.Controllers
 
         //
         // GET: /Recursos/ObtenerTodasCaracteristicas
-        [Autorizar(TipoDeUsuario.Miembro)]
+        [Autorizar]
         public ActionResult ObtenerTodasCaracteristicas()
         {
             var tipos = TiposDeCaracteristicasRepo.Todos();
