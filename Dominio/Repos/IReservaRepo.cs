@@ -19,6 +19,6 @@ namespace Dominio.Repos
 
         IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva);
 
-        Reserva CrearReserva(string usuario_creador, string usuario_responsable, Recurso recurso, DateTime fecha_desde, DateTime fecha_hasta, string descripcion);
+        Reserva CrearReserva(string usuario_creador, string usuario_responsable, string codigo_recurso, DateTime fecha_desde, DateTime fecha_hasta, string descripcion);
     }
 }

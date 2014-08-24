@@ -99,9 +99,9 @@ namespace Presentacion.Controllers
 
             if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
             {
-                Recurso recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
 
-                Reserva reserva = ReservasRepo.CrearReserva(User.Identity.Name, responsable, recurso, reservaVM.Inicio,
+
+                Reserva reserva = ReservasRepo.CrearReserva(User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,
                     reservaVM.Fin, reservaVM.Descripcion);
 
                 ReservasRepo.Agregar(reserva);

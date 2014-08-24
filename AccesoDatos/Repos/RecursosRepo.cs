@@ -7,12 +7,12 @@ namespace AccesoDatos.Repos
 {
     public class RecursosRepo : RepoBase<Recurso>, IRecursosRepo
     {
-        IReservaRepo ReservasRepo;
 
-        public RecursosRepo(ReservasContext ctx, IReservaRepo reservasRepo)
+
+        public RecursosRepo(ReservasContext ctx)
             : base(ctx)
         {
-            ReservasRepo = reservasRepo;
+
         }
 
         public IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)

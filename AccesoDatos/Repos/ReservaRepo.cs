@@ -9,17 +9,21 @@ namespace AccesoDatos.Repos
     class ReservaRepo : RepoBase<Reserva>, IReservaRepo
     {
         IUsuariosRepo UsuariosRepo;
+        IRecursosRepo RecursosRepo;
 
-        public ReservaRepo(ReservasContext reservasContext, IUsuariosRepo usuariosRepo) : base(reservasContext)
+        public ReservaRepo(ReservasContext reservasContext, IUsuariosRepo usuariosRepo, IRecursosRepo recursorepo) : base(reservasContext)
         {
             UsuariosRepo = usuariosRepo;
+            RecursosRepo = recursorepo;
         }
 
-        public Reserva CrearReserva(string usuario_creado, string usuario_responsable, Recurso recurso, DateTime fecha_desde, DateTime fecha_hasta, string descripcion)
+        public Reserva CrearReserva(string usuario_creado, string usuario_responsable, string codigo_recurso, DateTime fecha_desde, DateTime fecha_hasta, string descripcion)
         {
             Usuario creador = UsuariosRepo.BuscarUsuario(usuario_creado);
 
             Usuario responsanble = UsuariosRepo.BuscarUsuario(usuario_responsable);
+
+            Recurso recurso = RecursosRepo.ObtenerPorCodigo(codigo_recurso);
 
             return new Reserva(creador, responsanble, recurso, fecha_desde, fecha_hasta, descripcion); 
         }

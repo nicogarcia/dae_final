@@ -11,8 +11,13 @@ namespace Presentacion.Controllers
         //
         // GET: /Account/Login
 
-        IUsuariosRepo Repousario;
+        IUsuariosRepo UsuarioRepo;
 
+
+        public AccountController(IUsuariosRepo usuarioRepo)
+        {
+            UsuarioRepo = usuarioRepo;
+        }
         [AllowAnonymous]
         public ActionResult Login(string returnUrl )
         {
@@ -29,7 +34,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe) && UsuarioRepo.ExisteNombreUsuario(model.UserName))
             {
                 return RedirectToLocal(returnUrl);
             }
