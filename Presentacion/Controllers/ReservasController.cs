@@ -99,11 +99,10 @@ namespace Presentacion.Controllers
 
             if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
             {
-
-
-                Reserva reserva = ReservasRepo.CrearReserva(User.Identity.Name, responsable, reservaVM.RecursoReservado, reservaVM.Inicio,
-                    reservaVM.Fin, reservaVM.Descripcion);
-
+                Usuario Creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
+                Usuario Responsable = UsuariosRepo.BuscarUsuario(responsable);
+                Recurso Recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
+                Reserva reserva = new Reserva(Creador, Responsable, Recurso, reservaVM.Inicio, reservaVM.Fin, reservaVM.Descripcion);
                 ReservasRepo.Agregar(reserva);
 
                 return true;

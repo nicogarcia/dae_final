@@ -17,16 +17,7 @@ namespace AccesoDatos.Repos
             RecursosRepo = recursorepo;
         }
 
-        public Reserva CrearReserva(string usuario_creado, string usuario_responsable, string codigo_recurso, DateTime fecha_desde, DateTime fecha_hasta, string descripcion)
-        {
-            Usuario creador = UsuariosRepo.BuscarUsuario(usuario_creado);
-
-            Usuario responsanble = UsuariosRepo.BuscarUsuario(usuario_responsable);
-
-            Recurso recurso = RecursosRepo.ObtenerPorCodigo(codigo_recurso);
-
-            return new Reserva(creador, responsanble, recurso, fecha_desde, fecha_hasta, descripcion); 
-        }
+      
 
         public IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso,
             string usuario_responsable, string estado_reserva)
