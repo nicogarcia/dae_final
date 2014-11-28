@@ -30,5 +30,16 @@ namespace Presentacion.Models
         public string RecursoReservado { get; set; }
 
         public string Estado { get; set; }
+
+        public ReservaVM()
+        {
+            Inicio = DateTime.Today;
+            Fin = DateTime.Today.AddDays(1);
+        }
+
+        public ReservaVM(string recursoReservado) : this()
+        {
+            RecursoReservado = recursoReservado;
+        }
     }
 }

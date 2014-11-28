@@ -8,16 +8,10 @@ namespace AccesoDatos.Repos
 {
     class ReservaRepo : RepoBase<Reserva>, IReservaRepo
     {
-        IUsuariosRepo UsuariosRepo;
-        IRecursosRepo RecursosRepo;
 
-        public ReservaRepo(ReservasContext reservasContext, IUsuariosRepo usuariosRepo, IRecursosRepo recursorepo) : base(reservasContext)
+        public ReservaRepo(ReservasContext reservasContext) : base(reservasContext)
         {
-            UsuariosRepo = usuariosRepo;
-            RecursosRepo = recursorepo;
         }
-
-      
 
         public IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso,
             string usuario_responsable, string estado_reserva)

@@ -92,8 +92,10 @@ function MostrarResultados(result) {
     $.each(result, function () {
         var template = $('#resource-template').html();
 
+        template = replaceAll('{{Id}}', this['Id'], template);
         template = replaceAll('{{CodigoRecurso}}', this['Codigo'], template);
         template = replaceAll('{{NombreRecurso}}', this['Nombre'], template);
+        template = replaceAll('{{DescripcionRecurso}}', this['Descripcion'], template);
 
         $('#resultadoBusqueda').append(template);
     });

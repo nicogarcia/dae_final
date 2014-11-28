@@ -71,7 +71,8 @@
 
 <script type="text/template" id="resource-template">
     <div class="recurso">
-        <strong>Código: </strong>{{CodigoRecurso}}, <strong>Nombre: </strong>{{NombreRecurso}}
+        <strong>Código: </strong>{{CodigoRecurso}} - <strong>Nombre: </strong>{{NombreRecurso}} - <strong>Descripción:</strong> {{DescripcionRecurso}}
+        <a href='@Url.Action("CreateForResource", "Reservas")/{{Id}}'><strong>Reservar</strong></a>
     </div>
 </script>
 

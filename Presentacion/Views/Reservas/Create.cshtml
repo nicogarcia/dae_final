@@ -16,7 +16,7 @@
         @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
         {
            <div class="editor-label">
-               <label> UserName</label> 
+               <label>Usuario Responsable</label> 
             </div>
             <div class="editor-field">
                 @Html.EditorFor(model => model.Responsable)
@@ -28,6 +28,7 @@
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.RecursoReservado)
+            @Html.ActionLink("Buscar recurso", "Buscar", "Recursos")
             @Html.ValidationMessageFor(model => model.RecursoReservado)
         </div>
         <div class="editor-label">
@@ -67,4 +68,14 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script type="text/javascript">
+        $(function () {
+            $('#Inicio').datetimepicker({format:'m/d/Y H:i', inline:true});
+            $('#Fin').datetimepicker({ format: 'm/d/Y H:i', inline: true });
+        });
+    </script>
+
 }

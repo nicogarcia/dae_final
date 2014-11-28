@@ -65,6 +65,20 @@ namespace Presentacion.Controllers
         }
 
         //
+        // GET: /Reservas/Create/5
+
+        [Autorizar]
+        public ActionResult CreateForResource(int id = 0)
+        {
+            Recurso recurso = RecursosRepo.ObtenerPorId(id);
+            if (recurso == null)
+            {
+                return HttpNotFound();
+            }
+            return View("Create", new ReservaVM(recurso.Codigo));
+        }
+
+        //
         // POST: /Reservas/Create
 
         [HttpPost]
