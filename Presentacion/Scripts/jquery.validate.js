@@ -213,7 +213,7 @@ $.extend($.validator, {
 		messages: {},
 		groups: {},
 		rules: {},
-		errorClass: "error",
+		errorClass: "control-label",
 		validClass: "valid",
 		errorElement: "label",
 		focusInvalid: true,
@@ -255,14 +255,18 @@ $.extend($.validator, {
 				this.element(element.parentNode);
 			}
 		},
-		highlight: function(element, errorClass, validClass) {
+		highlight: function (element, errorClass, validClass) {
+		    $(element).closest('.form-group').addClass('has-error');
+
 			if (element.type === 'radio') {
 				this.findByName(element.name).addClass(errorClass).removeClass(validClass);
 			} else {
 				$(element).addClass(errorClass).removeClass(validClass);
 			}
 		},
-		unhighlight: function(element, errorClass, validClass) {
+		unhighlight: function (element, errorClass, validClass) {
+		    $(element).closest('.form-group').removeClass('has-error');
+
 			if (element.type === 'radio') {
 				this.findByName(element.name).removeClass(errorClass).addClass(validClass);
 			} else {

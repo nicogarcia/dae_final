@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Dominio;
+﻿using Dominio;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;

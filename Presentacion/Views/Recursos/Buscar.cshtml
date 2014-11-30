@@ -3,53 +3,64 @@
 @{
     ViewBag.Title = "Búsqueda de Recursos";
 }
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Búsqueda avanzada de recursos</h2>
+        <hr />
+    </div>
+</div>
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-2">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
 
-    <fieldset>
+            <!-- Codigo -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Codigo)
+                @Html.BootstrapTextBoxFor(model => model.Codigo)
+                @Html.BootstrapValidationMessageFor(model => model.Codigo)
+            </div>
 
-        <h2>Búsqueda de Recursos</h2>
-        <!-- Codigo -->
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Codigo)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Codigo)
-            @Html.ValidationMessageFor(model => model.Codigo)
-        </div>
+            <!-- Nombre -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Nombre)
+                @Html.BootstrapTextBoxFor(model => model.Nombre)
+                @Html.BootstrapValidationMessageFor(model => model.Nombre)
+            </div>
 
-        <!-- Nombre -->
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Nombre)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Nombre)
-            @Html.ValidationMessageFor(model => model.Nombre)
-        </div>
-
-        <!-- Tipo -->
-        <div class="editor-label">
-            @Html.Label("Tipo")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
-        </div>
-
-        <!-- Características -->
-        <h3>Características</h3>
-        <div id="characteristics-container">
+            <!-- Tipo -->
+            <div class="form-group">
+                @Html.Label("Tipo")
+                @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
+            </div>
 
         </div>
 
-        <a onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a>
+        <div class="col-md-3">
+            <!-- Características -->
+            <h3>Características</h3>
+            <div id="characteristics-container"></div>
 
-        <input type="submit" value="Buscar" />
+            <div class="col-md-12">
+                <!-- Boton de busqueda-->
+                <p><a class="btn btn-success pull-right" onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a></p>
+            </div>
+        </div>
 
-    </fieldset>
+        <div class="col-md-6">
+            <table id="resultadoBusqueda" class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Accion</th>
+                </tr>
+            </table>
+        </div>
 
-    <div id="resultadoBusqueda">
 
     </div>
 }
@@ -57,23 +68,32 @@
 <script type="text/template" id="characteristic-template">
 
     <div class="caracteristica">
-        <div class='editor-label'>
-            <input name='CaracteristicasTipo' value='{{TipoId}}' type="checkbox">
-            <label for='{{CharacteristicName}}'>{{CharacteristicName}}</label>
-        </div>
-
-        <div class='editor-field'>
-            <input id="CaracteristicaValor_{{TipoId}}" type='text' name='CaracteristicasValor' disabled />
+        <div class='form-group'>
+            <div class="row">
+                <div class="col-md-1">
+                    <input name='CaracteristicasTipo' value='{{TipoId}}' type="checkbox">
+                </div>
+                <div class="col-md-4">
+                    <label class="control-label" for='{{CharacteristicName}}'>{{CharacteristicName}}</label>
+                </div>
+                <div class="col-md-6">
+                    <input class="form-control" id="CaracteristicaValor_{{TipoId}}" type='text' name='CaracteristicasValor' disabled />
+                </div>
+            </div>
         </div>
     </div>
 
 </script>
 
 <script type="text/template" id="resource-template">
-    <div class="recurso">
-        <strong>Código: </strong>{{CodigoRecurso}} - <strong>Nombre: </strong>{{NombreRecurso}} - <strong>Descripción:</strong> {{DescripcionRecurso}}
-        <a href='@Url.Action("CreateForResource", "Reservas")/{{Id}}'><strong>Reservar</strong></a>
-    </div>
+    <tr>
+        <td>{{CodigoRecurso}}</td>
+        <td>{{NombreRecurso}}</td>
+        <td>{{DescripcionRecurso}}</td>
+        <td>
+            <a class="btn btn-info" href='@Url.Action("CreateForResource", "Reservas")/{{Id}}'>Reservar</a>
+        </td>
+    </tr>
 </script>
 
 @section Scripts {
@@ -81,19 +101,18 @@
     @Scripts.Render("~/Scripts/recursos-utilities.js")
 
     <script type="text/javascript">
-        
+
         // Obtener todas las caracteristicas y registrar los eventos para habilitarlas y deshabilitarlas
         $(document).ready(
-            function() {
+            function () {
                 ObtenerTodasCaracteristicas('@Url.Action("ObtenerTodasCaracteristicas")');
 
-                $.each(tiposDeCaracteristicas, function(i, value) {
+                $.each(tiposDeCaracteristicas, function (i, value) {
                     AddNewCharacteristic(value['Id'], value['Nombre']);
                 });
 
-                $("input:checkbox").each(function() {
-                    console.log(this.value);
-                    $(this).on('click', function() {
+                $("input:checkbox").each(function () {
+                    $(this).on('click', function () {
                         $('#CaracteristicaValor_' + this.value).toggleDisabled();
                     });
                 });

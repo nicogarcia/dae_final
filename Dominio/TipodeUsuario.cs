@@ -5,6 +5,7 @@
         Administrador,
         Miembro
     }
+
     public enum EstadoUsuario
     {
         Activo,

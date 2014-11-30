@@ -80,7 +80,7 @@ namespace AccesoDatos.Repos
                 {
                     bool noCumpleCaracteristica = !recurso.Caracteristicas.Any(
                         caracteristica => caracteristica.Tipo.Id.ToString() == caracteristicaTipo &&
-                                          caracteristica.Valor == caracteristicasValor[i]);
+                                          caracteristica.Valor.ToUpper().Contains(caracteristicasValor[i].ToUpper()));
 
                     
 

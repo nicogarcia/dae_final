@@ -19,7 +19,7 @@ namespace Dominio
             RecursosRepo = recursosRepo;
         }
 
-        public bool Validar(string usuario_responsable, string codigo_recurso, DateTime inicio, DateTime fin)
+        public bool Validar(string usuarioResponsable, string codigoRecurso, DateTime inicio, DateTime fin)
         {
             bool valido = true;
             Errores = new Dictionary<string, string>();
@@ -30,18 +30,24 @@ namespace Dominio
                 valido = false;
             }
                 
-            if (!UsuariosRepo.ExisteNombreUsuario(usuario_responsable))
+            if (!UsuariosRepo.ExisteNombreUsuario(usuarioResponsable))
             {
                 Errores.Add("Responsable", "El usuario responsable ingresado no existe");
                 valido = false;
             }
 
-            if (!RecursosRepo.ExisteCodigo(codigo_recurso))
+            if (UsuariosRepo.BuscarUsuario(usuarioResponsable).IsLocked())
+            {
+                Errores.Add("Responsable", "El usuario responsable no puede realizar reservas");
+                valido = false;
+            }
+
+            if (!RecursosRepo.ExisteCodigo(codigoRecurso))
             {
                 Errores.Add("RecursoReservado", "El codigo de recurso ingresado no existe");
                 valido = false;
             }
-            else if (ReservasRepo.ExisteReserva(codigo_recurso, inicio, fin))
+            else if (ReservasRepo.ExisteReserva(codigoRecurso, inicio, fin))
             {
                 Errores.Add("ReservaReservado",
                     "El recurso que desea reservar, ya que se encuentra reservado en esos horarios");

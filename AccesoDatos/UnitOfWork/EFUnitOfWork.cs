@@ -23,7 +23,7 @@ namespace AccesoDatos.UnitOfWork
         /// </summary>
         public void Commit()
         {
-            this.ctx.SaveChanges();
+            ctx.SaveChanges();
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace AccesoDatos.UnitOfWork
         /// </summary>
         public void Dispose()
         {
-            this.ctx.Dispose();
+            ctx.Dispose();
         }
     }
 }

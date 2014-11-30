@@ -1,8 +1,6 @@
 ﻿using Dominio;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Presentacion.Models
@@ -18,43 +16,7 @@ namespace Presentacion.Models
         public string Apellido { get; set; }
 
         public string Legajo { get; set; }
-
-        public bool Bloqueado (int id)
-        {
-            Usuario usuario = (Usuario) ListaUsuario.Where(x=> x.Id == id);
-            if (usuario.EstadoUsuario == EstadoUsuario.Bloqueado)
-            {
-                return true;
-            }
-            
-            return false;
-        }
-
-        public bool Activo (int id)
-        {
-            Usuario usuario = (Usuario) ListaUsuario.Where(x=> x.Id == id);
-            if (usuario.EstadoUsuario == EstadoUsuario.Activo)
-            {
-                return true;
-            }
-            
-            return false;
-        }
-
-        public string ObtenerAccionBloquear(int usuarioId)
-        {
-            Usuario usuario = (Usuario)ListaUsuario.Where(x => x.Id == usuarioId).FirstOrDefault();
-            string accion = string.Empty;
-            if (usuario != null)
-            {
-                if (usuario.EstadoUsuario == EstadoUsuario.Activo)
-                    accion = "Lock";
-                if (usuario.EstadoUsuario == EstadoUsuario.Bloqueado)
-                    accion = "Unlock";
-            }
-            return accion;
-        }
-
+        
         public ListaUsuariosVM(IEnumerable<Usuario> listausario)
         {
             ListaUsuario = listausario;
@@ -64,7 +26,19 @@ namespace Presentacion.Models
         {
             ListaUsuario = new List<Usuario>();
         }
-      
 
+        public bool Bloqueado(int id)
+        {
+            var usuario = ListaUsuario.First(x => x.Id == id);
+
+            return usuario.EstadoUsuario == EstadoUsuario.Bloqueado;
+        }
+
+        public bool Activo(int id)
+        {
+            var usuario = ListaUsuario.First(x => x.Id == id);
+
+            return usuario.EstadoUsuario == EstadoUsuario.Activo;
+        }
     }
 }

@@ -198,21 +198,23 @@ namespace Presentacion.Controllers
         }
 
         [Autorizar(TipoDeUsuario.Administrador)]
-        public ActionResult ListAndSearch(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva)
+        public ActionResult FullList(string fechaDesde, string fechaHasta, string codigoRecurso,
+            string usuarioResponsable, string estadoReserva)
         {
-            ReservasSearchContainer toR = new ReservasSearchContainer();
+            // TODO: REMOVE DEPENDENCIES
+            var searchVm = new BusquedaReservasVM(RecursosRepo, UsuariosRepo);
 
             IList<ReservaVM> lista = new List<ReservaVM>();
 
-            foreach (Reserva x in ReservasRepo.buscarReservas(fecha_desde, fecha_hasta, 
-                tipo_recurso, usuario_responsable, estado_reserva))
+            foreach (Reserva x in ReservasRepo.buscarReservas(fechaDesde, fechaHasta,
+                codigoRecurso, usuarioResponsable, estadoReserva))
             {
                 lista.Add(ConversorReservaMV.convertirReserva(x));
             }
 
-            toR.list = lista;
+            searchVm.ListaDeReservas = lista;
 
-            return View(toR);
+            return View(searchVm);
         }
 
     }

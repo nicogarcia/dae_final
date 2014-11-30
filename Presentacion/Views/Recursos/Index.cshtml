@@ -4,69 +4,77 @@
     ViewBag.Title = "Listado de Recursos";
 }
 
-<h2>Listado de Recursos</h2>
+<legend>Listado de Recursos</legend>
 
-<p>
-    @Html.ActionLink("Crear Nuevo Recurso", "Create", null, new { @class = "actionButton" })
-</p>
-@using (Html.BeginForm())
-{
-    <div class="editor-label">
-        <label>Buscar por Código</label>
+<div class="row">
+    <div class="col-md-9">
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    @Html.BootstrapActionButton("Crear Recurso", "Create", null, new { @class = "btn-primary" })
+                    @Html.BootstrapActionButton("Búsqueda avanzada", "Buscar", null, new { @class = "btn-success" })
+                </p>
+            </div>
+        </div>
+
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>
+                    @Html.ActionLink("Codigo", "Index", new { orden = ViewBag.OrdenCodigo })
+                </th>
+                <th>
+                    @Html.ActionLink("Tipo", "Index", new { orden = ViewBag.OrdenTipo })
+                </th>
+                <th>
+                    @Html.ActionLink("Nombre", "Index", new { orden = ViewBag.OrdenNombre })
+                </th>
+                <th>Acciones</th>
+            </tr>
+
+            @foreach (var item in Model.Recursos)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Codigo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipo.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info" })
+                        @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
+                        @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
+                    </td>
+                </tr>
+            }
+
+        </table>
     </div>
-    <div class="editor-field">
-        @Html.TextBox("filtroCodigo")
+
+    <div class="col-md-3">
+        <legend>Filtros</legend>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <label>Código</label>
+                @Html.TextBox("filtroCodigo", null, new { @class = "form-control" })
+            </div>
+
+            <div class="form-group">
+                <div><label>Tipo</label></div>
+                @Html.DropDownList("filtroTipo", Model.SelectTiposDeRecursos)
+            </div>
+
+            <div class="form-group">
+                <label>Nombre</label>
+                @Html.TextBox("filtroNombre", null, new { @class = "form-control" })
+            </div>
+            <button type="submit" class="btn btn-default">Filtrar</button>
+        }
     </div>
 
-    <div class="editor-label">
-        <label>Buscar por Tipo</label>
-    </div>
-    <div class="editor-field">
-        @Html.DropDownList("filtroTipo", Model.SelectTiposDeRecursos)
-    </div>
-
-    <div class="editor-label">
-        <label>Buscar por Nombre</label>
-    </div>
-    <div class="editor-field">
-        @Html.TextBox("filtroNombre")
-    </div>
-
-    <input type="submit" value="Buscar" />
-}
-<table>
-    <tr>
-        <th>
-            @Html.ActionLink("Codigo", "Index", new { orden = ViewBag.OrdenCodigo })
-        </th>
-        <th>
-            @Html.ActionLink("Tipo", "Index", new { orden = ViewBag.OrdenTipo })
-        </th>
-        <th>
-            @Html.ActionLink("Nombre", "Index", new { orden = ViewBag.OrdenNombre })
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model.Recursos)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Codigo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new { @class = "actionButton littleButton" })
-                @Html.ActionLink("Ver Detalle", "Details", new { id = item.Id }, new { @class = "actionButton littleButton" })
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Id }, new { @class = "actionButton littleButton" })
-
-            </td>
-        </tr>
-    }
-
-</table>
+</div>

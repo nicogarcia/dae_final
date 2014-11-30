@@ -13,29 +13,35 @@ namespace AccesoDatos.Repos
         {
         }
 
-        public IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso,
-            string usuario_responsable, string estado_reserva)
+        public IList<Reserva> buscarReservas(string fechaDesde, string fechaHasta, string codigoRecurso,
+            string usuarioResponsable, string estadoReserva)
         {
             // Query de recursos
-            IQueryable<Reserva> listado_reservas = Ctx.Reservas;
-
+            IQueryable<Reserva> queryReservas = Ctx.Reservas;
+            
+            // TODO: FIX DATE FILTER
+            
             // Aplicar filtros
-            if (!string.IsNullOrEmpty(fecha_desde))
-                listado_reservas = listado_reservas.Where(r => r.Inicio.ToString() == fecha_desde);
+            if (!string.IsNullOrEmpty(fechaDesde))
+                queryReservas = queryReservas.Where(r => r.Inicio.ToString() == fechaDesde);
             
-            if (!string.IsNullOrEmpty(fecha_hasta))
-                listado_reservas = listado_reservas.Where(r => r.Fin.ToString() == fecha_hasta);
+            if (!string.IsNullOrEmpty(fechaHasta))
+                queryReservas = queryReservas.Where(r => r.Fin.ToString() == fechaHasta);
             
-            if (!string.IsNullOrEmpty(tipo_recurso))
-                listado_reservas = listado_reservas.Where(r => r.RecursoReservado.Tipo.ToString() == tipo_recurso);
+            if (!string.IsNullOrEmpty(codigoRecurso))
+                queryReservas = queryReservas.Where(r => r.RecursoReservado.Codigo == codigoRecurso);
             
-            if (!string.IsNullOrEmpty(usuario_responsable))
-                listado_reservas = listado_reservas.Where(r => r.Responsable.NombreUsuario.ToString() == usuario_responsable);
+            if (!string.IsNullOrEmpty(usuarioResponsable))
+                queryReservas = queryReservas.Where(
+                    r => r.Responsable.NombreUsuario.ToUpper().Contains(usuarioResponsable.ToUpper()));
 
-            if (!string.IsNullOrEmpty(estado_reserva))
-                listado_reservas = listado_reservas.Where(r => r.Estado.ToString() == estado_reserva);
+            if (!string.IsNullOrEmpty(estadoReserva))
+            {
+                var estado = (EstadoReserva)Enum.Parse(typeof(EstadoReserva), estadoReserva);
+                queryReservas = queryReservas.Where(r => r.Estado == estado);
+            }
 
-            return listado_reservas.ToList();                       
+            return queryReservas.ToList();                       
         }
 
         public bool ExisteReserva(string codigo_recurso, DateTime inicio, DateTime fin)

@@ -24,6 +24,7 @@ namespace Dominio
         [MaxLength(50)]
         public string Apellido { get; set;}//Apellido*: 50 caracteres
 
+        [Required]
         [MaxLength(9)]
         public string DNI { get; set; }//DNI*: 9 dígitos
 
@@ -40,46 +41,56 @@ namespace Dominio
 
         public Usuario()
         { }
-
         
         public Usuario (string nombreusuario, string nombre, string apellido, string dni, string legajo, string email, string telefono, TipoDeUsuario tipo)
         {
-            this.NombreUsuario = nombreusuario;
-            this.Nombre = nombre;
-            this.Apellido = apellido;
-            this.DNI = dni;
-            this.Legajo = legajo;
-            this.Email = email;
-            this.Telefono = telefono;
-            this.Tipo = tipo;
-            this.EstadoUsuario = EstadoUsuario.Activo;
+            NombreUsuario = nombreusuario;
+            Nombre = nombre;
+            Apellido = apellido;
+            DNI = dni;
+            Legajo = legajo;
+            Email = email;
+            Telefono = telefono;
+            Tipo = tipo;
+            EstadoUsuario = EstadoUsuario.Activo;
         }
 
+        public bool IsActive()
+        {
+            return EstadoUsuario == EstadoUsuario.Activo;
+        }
 
+        public bool IsLocked()
+        {
+            return EstadoUsuario == EstadoUsuario.Bloqueado;
+        }
 
-        public bool isActive()
+        public bool IsInactive()
         {
-            return this.EstadoUsuario == EstadoUsuario.Activo;
+            return EstadoUsuario == EstadoUsuario.Inactivo;
         }
-        public bool isLocked()
+        
+        public void SetStateActive()
         {
-            return this.EstadoUsuario == EstadoUsuario.Bloqueado;
+            EstadoUsuario = EstadoUsuario.Activo;
         }
-        public bool isInactive()
+        
+        public void SetStateInactive()
         {
-            return this.EstadoUsuario == EstadoUsuario.Inactivo;
+            EstadoUsuario = EstadoUsuario.Inactivo;
         }
-        public void setStateActive()
+
+        public void SetStateLocked()
         {
-            this.EstadoUsuario = EstadoUsuario.Activo;
+            EstadoUsuario = EstadoUsuario.Bloqueado;
         }
-        public void setStateInactive()
+
+        public void ToggleState()
         {
-            this.EstadoUsuario = EstadoUsuario.Inactivo;
-        }
-        public void setStateLocked()
-        {
-            this.EstadoUsuario = EstadoUsuario.Bloqueado;
+            if (EstadoUsuario != EstadoUsuario.Inactivo)
+            {
+                EstadoUsuario = (EstadoUsuario == EstadoUsuario.Bloqueado) ? EstadoUsuario.Activo : EstadoUsuario.Bloqueado;
+            }
         }
     }
 }

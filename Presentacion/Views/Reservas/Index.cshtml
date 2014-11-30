@@ -1,65 +1,75 @@
 ﻿@model IEnumerable<Presentacion.Models.ReservaVM>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Listado de reservas";
 }
-<h2>Index</h2>
+<legend>Listado de reservas</legend>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-    @Html.ActionLink("Buscar y Listar", "ListAndSearch")
-</p>
+<div class="row">
+    <div class="col-md-12">
+        <p>
+            @Html.BootstrapActionButton("Crear reserva", "Create", new { @class = "btn-primary"})
+            @Html.BootstrapActionButton("Ver todas las reservas", "FullList", new { @class = "btn-success" })
+        </p>
+    </div>
+    
+    <div class="col-md-12">
+        @if (Model.Any())
+        {
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>
+                        Inicio de reserva
+                    </th>
+                    <th>
+                        Fin de reserva
+                    </th>
+                    <th>
+                        Recurso reservado
+                    </th>
+                    <th>
+                        Estado de reserva
+                    </th>
+                    <th>
+                        Descripción
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inicio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RecursoReservado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @Html.BootstrapActionButton("Editar", "Edit", new {id = item.Id}, new {@class = "btn-info"})
+                            @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
+                            @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No hay reservas almacenadas</p>
+        }
+    </div>
+</div>
 
-@if (Model.Count() > 0)
-{
-    <table>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Inicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RecursoReservado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descripcion)
-            </th>
-            <th></th>
-        </tr>
-        @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Inicio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fin)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RecursoReservado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Estado)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Descripcion)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                </td>
-            </tr>
-}
-    </table>
-}
-@if (Model.Count() == 0)
-{
-    <p>No hay reservas almacenadas</p>
-}
+
+
             
 

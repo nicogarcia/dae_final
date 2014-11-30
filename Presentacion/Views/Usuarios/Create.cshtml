@@ -1,100 +1,83 @@
 ﻿@model Presentacion.Models.UsuarioVM
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Crear usuario";
 }
-
-<h2>Create</h2>
-
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Usuario</legend>
-
-       
-        <div class="editor-label">
-            @Html.LabelFor(model => model.NombreUsuario)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.NombreUsuario)
-            @Html.ValidationMessageFor(model => model.NombreUsuario)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Password)
-        </div>
-        <div class="editor-field">
-                 @Html.EditorFor(model => model.Password)
-                 @Html.ValidationMessageFor(model => model.Password)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Nombre)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Nombre)
-            @Html.ValidationMessageFor(model => model.Nombre)
-        </div>
-        
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Apellido)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Apellido)
-            @Html.ValidationMessageFor(model => model.Apellido)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DNI)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.DNI)
-            @Html.ValidationMessageFor(model => model.DNI)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Legajo)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Legajo)
-            @Html.ValidationMessageFor(model => model.Legajo)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Email)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Email)
-            @Html.ValidationMessageFor(model => model.Email)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Telefono)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Telefono)
-            @Html.ValidationMessageFor(model => model.Telefono)
-        </div>
-
-     <div class="editor-label">
-        @Html.Label("Tipo")
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h2 class="text-center">Crear usuario</h2>
+        <hr />
     </div>
-    <div class="editor-field">
-        @Html.DropDownListFor(model => model.Tipo, Model.SelectoTipoDeUsuario)
-    </div>
-   
+    @using (Html.BeginForm())
+    {
+        <div class="col-md-3 col-md-offset-3">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
 
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.NombreUsuario, "Nombre de usuario")
+                @Html.BootstrapTextBoxFor(model => model.NombreUsuario)
+                @Html.BootstrapValidationMessageFor(model => model.NombreUsuario)
+            </div>
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
-}
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Password)
+                @Html.BootstrapTextBoxFor(model => model.Password)
+                @Html.BootstrapValidationMessageFor(model => model.Password)
+            </div>
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Nombre)
+                @Html.BootstrapTextBoxFor(model => model.Nombre)
+                @Html.BootstrapValidationMessageFor(model => model.Nombre)
+            </div>
+
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Apellido)
+                @Html.BootstrapTextBoxFor(model => model.Apellido)
+                @Html.BootstrapValidationMessageFor(model => model.Apellido)
+            </div>
+
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Email)
+                @Html.BootstrapTextBoxFor(model => model.Email)
+                @Html.BootstrapValidationMessageFor(model => model.Email)
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Legajo)
+                @Html.BootstrapTextBoxFor(model => model.Legajo)
+                @Html.BootstrapValidationMessageFor(model => model.Legajo)
+            </div>
+
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.DNI)
+                @Html.BootstrapTextBoxFor(model => model.DNI)
+                @Html.BootstrapValidationMessageFor(model => model.DNI)
+            </div>
+
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Telefono)
+                @Html.BootstrapTextBoxFor(model => model.Telefono)
+                @Html.BootstrapValidationMessageFor(model => model.Telefono)
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Tipo")
+                @Html.DropDownListFor(model => model.Tipo, Model.SelectoTipoDeUsuario)
+            </div>
+        </div>
+
+        <div class="col-md-6 col-md-offset-3">
+            <p class="pull-right">
+                @Html.BootstrapActionButton("Volver al listado", "Index", new { @class = "btn-default" })
+                <button class="btn btn-success" type="submit">Crear usuario</button>
+            </p>
+        </div>
+    }
 </div>
 
 @section Scripts {

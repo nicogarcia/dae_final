@@ -17,7 +17,7 @@
         @Html.HiddenFor(model => model.Id)
 
         <!-- Codigo -->
-        <div class="editor-label">
+        <div class="form-group">
             @Html.LabelFor(model => model.Codigo)
         </div>
         <div class="editor-field">
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Nombre -->
-        <div class="editor-label">
+        <div class="form-group">
             @Html.LabelFor(model => model.Nombre)
         </div>
         <div class="editor-field">
@@ -35,7 +35,7 @@
         </div>
 
         <!-- Tipo -->
-        <div class="editor-label">
+        <div class="form-group">
             @Html.Label("Tipo")
         </div>
         <div class="editor-field">
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Descripcion -->
-        <div class="editor-label">
+        <div class="form-group">
             @Html.LabelFor(model => model.Descripcion)
         </div>
         <div class="editor-field">
@@ -59,7 +59,7 @@
             {
                 var index = Model.CaracteristicasTipo.IndexOf(tipoCaracteristica.Id.ToString());
 
-                <div class="editor-label">
+                <div class="form-group">
                     <input name='CaracteristicasTipo' value='@tipoCaracteristica.Id' type="hidden">
                     @Html.Label(tipoCaracteristica.Nombre)
                 </div>
@@ -87,7 +87,7 @@
 </div>
 
 <script type="text/template" id="characteristic-template">
-    <div class='editor-label'>
+    <div class='form-group'>
         <input name='CaracteristicasTipo' value='{{TipoId}}' type="hidden">
         <label for='{{CharacteristicName}}'>{{CharacteristicName}}</label>
     </div>

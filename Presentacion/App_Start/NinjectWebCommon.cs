@@ -1,9 +1,11 @@
 using System.Web.Mvc;
 using Ninject.Web.Mvc.FilterBindingSyntax;
+using Presentacion.App_Start;
 using Presentacion.Filters;
+using WebActivatorEx;
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Presentacion.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(Presentacion.App_Start.NinjectWebCommon), "Stop")]
+[assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
 namespace Presentacion.App_Start
 {

@@ -1,8 +1,5 @@
-﻿using System.Web;
-using Dominio;
+﻿using Dominio;
 using System.Web.Mvc;
-using Dominio.Repos;
-using WebMatrix.WebData;
 
 namespace Presentacion.Filters
 {
@@ -16,7 +13,7 @@ namespace Presentacion.Filters
         public Autorizar(TipoDeUsuario rol)
             : this()
         {
-            this.Roles= rol.ToString();
+            Roles= rol.ToString();
         }
     }
 

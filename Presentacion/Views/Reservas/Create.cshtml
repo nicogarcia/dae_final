@@ -1,69 +1,72 @@
 ﻿@using Dominio
 @model Presentacion.Models.ReservaVM
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Crear reserva";
 }
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h2 class="text-center">Crear reserva</h2>
+        <hr />
+    </div>
+    @using (Html.BeginForm("Create", "Reservas", FormMethod.Post))
+    {
+        <div class="col-md-4 col-md-offset-4">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
 
-<h2>Create</h2>
-
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Reserva</legend>
-
-        @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
-        {
-           <div class="editor-label">
-               <label>Usuario Responsable</label> 
+            <!-- Usuario responsable -->
+            @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
+            {
+                <div class="form-group">
+                    <label class="control-label">Usuario responsable</label>
+                    @Html.BootstrapTextBoxFor(model => model.Responsable)
+                    @Html.BootstrapValidationMessageFor(model => model.Responsable)
+                </div>
+            }
+            <!-- Codigo del recurso -->
+            <div class="form-group">
+                <label class="control-label"> Codigo del recurso</label>
+                <div class="row">
+                    <div class="col-md-7">
+                        @Html.BootstrapTextBoxFor(model => model.RecursoReservado)
+                        @Html.BootstrapValidationMessageFor(model => model.RecursoReservado)
+                    </div>
+                    <div class="col-md-5">
+                        @Html.BootstrapActionButton("Buscar recurso", "Buscar", "Recursos", null, new { @class = "btn-info" })
+                    </div>
+                </div>
             </div>
-            <div class="editor-field">
-                @Html.EditorFor(model => model.Responsable)
-                @Html.ValidationMessageFor(model => model.Responsable)
+
+            <!-- Inicio reserva -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Inicio)
+                @Html.BootstrapTextBoxFor(model => model.Inicio)
+                @Html.BootstrapValidationMessageFor(model => model.Inicio)
             </div>
-        }
-        <div class="editor-label">
-            <label> Codigo del Recurso</label> 
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.RecursoReservado)
-            @Html.ActionLink("Buscar recurso", "Buscar", "Recursos")
-            @Html.ValidationMessageFor(model => model.RecursoReservado)
-        </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Inicio)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Inicio)
-            @Html.ValidationMessageFor(model => model.Inicio)
-        </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Fin)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Fin)
-            @Html.ValidationMessageFor(model => model.Fin)
-        </div>
+            <!-- Fin reserva-->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Fin)
+                @Html.BootstrapTextBoxFor(model => model.Fin)
+                @Html.BootstrapValidationMessageFor(model => model.Fin)
+            </div>
 
-     
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Descripcion)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Descripcion)
-            @Html.ValidationMessageFor(model => model.Descripcion)
-        </div>
+            <!-- Descripcion -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Descripcion)
+                @Html.BootstrapTextBoxFor(model => model.Descripcion)
+                @Html.BootstrapValidationMessageFor(model => model.Descripcion)
+            </div>
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+            <!-- Submit -->
+            <div class="col-md-12">
+                <p class="pull-right">
+                    @Html.BootstrapActionButton("Volver al listado", "Index", new { @class = "btn-default" })
+                    <button class="btn btn-success" type="submit">Crear reserva</button>
+                </p>
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts {
@@ -73,9 +76,8 @@
 
     <script type="text/javascript">
         $(function () {
-            $('#Inicio').datetimepicker({format:'m/d/Y H:i', inline:true});
-            $('#Fin').datetimepicker({ format: 'm/d/Y H:i', inline: true });
+            $('#Inicio').datetimepicker({ format: 'm/d/Y H:i', inline: false });
+            $('#Fin').datetimepicker({ format: 'm/d/Y H:i', inline: false });
         });
     </script>
-
 }

@@ -4,81 +4,90 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<legend>Lista de usuarios</legend>
+<div class="row">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                <p>@Html.BootstrapActionButton("Crear usuario", "Create", new { @class = "btn-primary" })</p>
+            </div>
+        </div>
+        <table class="table table-hover table-bordered table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </th>
+                <th>
+                    DNI
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Legajo)
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>Acciones</th>
+            </tr>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-
-@using (Html.BeginForm())
-{
-    
-    <p>
-        Buscar por Nombre: 
-        @Html.TextBoxFor(model => model.Nombre)
-    </p>
-    <p>
-        Buscar por Apellido: 
-        @Html.TextBoxFor(model => model.Apellido)
-    </p>
-    <p>
-        Buscar por Legajo: 
-        @Html.TextBoxFor(model => model.Legajo)
-    </p>
-    <input type="submit" value="Buscar" />
-}
-
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Apellido)
-        </th>
-        <th>
-            DNI
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Legajo)
-        </th>
-        <th>
-            Email
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model.ListaUsuario) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Apellido)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DNI)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Legajo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) 
-            @if (!item.isInactive())
+            @foreach (var item in Model.ListaUsuario)
             {
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) 
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id }) 
-                string accion = Model.ObtenerAccionBloquear(item.Id); 
-                @Html.ActionLink(accion, accion, new { id = item.Id })
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Apellido)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DNI)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Legajo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.BootstrapActionButton("Detalles", "Details", new { id = item.Id }, new { @class = "btn-success" })
+                        @if (!item.IsInactive())
+                        {
+                            @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info" })
+                            @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
+                            if (Model.Activo(item.Id))
+                            {
+                                @Html.BootstrapActionButton("Bloquear", "Lock", new {id = item.Id}, new {@class = "btn-warning"})
+                            }
+                            else if(Model.Bloqueado(item.Id))
+                            {
+                                @Html.BootstrapActionButton("Desbloquear", "Lock", new {id = item.Id}, new {@class = "btn-warning"})
+                            }
+                        }
+
+                    </td>
+                </tr>
             }
-
-        </td>
-    </tr>
-}
-
-</table>
+        </table>
+    </div>
+    <div class="col-md-3">
+        <legend>Filtros</legend>
+        @using (Html.BeginForm())
+        {
+            <p>
+                <label>Nombre</label>
+                @Html.BootstrapTextBoxFor(model => model.Nombre)
+            </p>
+            <p>
+                <label>Apellido</label>
+                @Html.BootstrapTextBoxFor(model => model.Apellido)
+            </p>
+            <p>
+                <label>Legajo</label>
+                @Html.BootstrapTextBoxFor(model => model.Legajo)
+            </p>
+            <button class="btn btn-default" type="submit">Filtrar</button>
+        }
+    </div>
+</div>

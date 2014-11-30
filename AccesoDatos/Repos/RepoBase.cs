@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Dominio.Repos;
 
 namespace AccesoDatos.Repos
 {

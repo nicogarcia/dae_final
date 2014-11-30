@@ -1,0 +1,103 @@
+﻿@model Presentacion.Models.BusquedaReservasVM
+@{
+    ViewBag.Title = "Listado de reservas";
+}
+
+<legend>Listado de todas las reservas</legend>
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-12">
+                
+            </div>
+        </div>    
+        @if (Model.ListaDeReservas.Any())
+        {
+            <table class="table table-hover table-bordered table-striped">
+                <tr>
+                    <th>
+                        @Html.DisplayName("Inicio reserva")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Fin reserva")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Recurso")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Usuario")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Estado")
+                    </th>
+                    <th>
+                        @Html.DisplayName("Descripción")
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+
+                @foreach (var item in Model.ListaDeReservas)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Inicio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fin)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RecursoReservado)
+                        </td>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.Responsable)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info btn-xs" })
+                            @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success btn-xs" })
+                            @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No hay reservas a mostrar</p>
+        }
+    </div>
+
+    <div class="col-md-3">
+        <legend>Filtros</legend>
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                <label>Fecha desde</label>
+                @Html.TextBox("fechaDesde", null, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Fecha hasta</label>
+                @Html.TextBox("fechaHasta", null, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label>Recurso</label>
+                @Html.DropDownList("codigoRecurso", Model.SelectDeRecursos())
+            </div>
+            <div class="form-group">
+                <label>Usuario responsable</label>
+                @Html.DropDownList("usuarioResponsable", Model.SelectDeUsuarios())
+            </div>
+            <div class="form-group">
+                <label>Estado de reserva</label>
+                @Html.DropDownList("estadoReserva", Model.SelectEstadosDeReserva())
+            </div>
+            <button class="btn btn-default" type="submit">Filtrar</button>
+        }
+    </div>
+</div>

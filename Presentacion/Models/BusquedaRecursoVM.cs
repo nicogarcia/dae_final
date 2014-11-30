@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Dominio;
-using Dominio.Repos;
 
 namespace Presentacion.Models
 {

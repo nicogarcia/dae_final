@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Linq;
 using Dominio;
 
 namespace AccesoDatos
@@ -13,8 +12,21 @@ namespace AccesoDatos
         {
             base.Seed(context);
             
+            // Add admin user
+            AddAdminUser(context);
+
             // Add data
             InitializeResources(context);            
+        }
+
+        private static void AddAdminUser(ReservasContext context)
+        {
+            var adminUser = new Usuario("admin", "admin", "admin", "33333", "", "admin@admin.com", "",
+                TipoDeUsuario.Administrador);
+
+            context.Usuarios.Add(adminUser);
+
+            context.SaveChanges();
         }
 
         private static void InitializeResources(ReservasContext context)

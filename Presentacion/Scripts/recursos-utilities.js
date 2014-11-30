@@ -88,7 +88,8 @@ function UpdateCaracteristicasNames() {
 }
 
 function MostrarResultados(result) {
-    $('#resultadoBusqueda').html('');
+    $('#resultadoBusqueda tr:gt(0)').remove();
+
     $.each(result, function () {
         var template = $('#resource-template').html();
 
@@ -97,6 +98,6 @@ function MostrarResultados(result) {
         template = replaceAll('{{NombreRecurso}}', this['Nombre'], template);
         template = replaceAll('{{DescripcionRecurso}}', this['Descripcion'], template);
 
-        $('#resultadoBusqueda').append(template);
+        $('#resultadoBusqueda tbody').append(template);
     });
 }
