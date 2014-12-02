@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Dominio;
+using Dominio.Entidades;
 using Dominio.Repos;
 using WebMatrix.WebData;
 
@@ -12,9 +13,9 @@ namespace Presentacion.Filters
     public class FiltroAutorizar : IActionFilter
     {
         IUsuariosRepo UsuariosRepo;
-        IReservaRepo ReservasRepo;
+        IReservasRepo ReservasRepo;
 
-        public FiltroAutorizar(IUsuariosRepo usuariosRepo, IReservaRepo reservasRepo)
+        public FiltroAutorizar(IUsuariosRepo usuariosRepo, IReservasRepo reservasRepo)
         {
             UsuariosRepo = usuariosRepo;
             ReservasRepo = reservasRepo;

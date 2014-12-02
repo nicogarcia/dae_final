@@ -1,5 +1,8 @@
 ﻿using Dominio;
+using Dominio.Entidades;
+using Dominio.Queries;
 using Dominio.Repos;
+using Dominio.Validacion;
 using Presentacion.Models;
 using Presentacion.Filters;
 using System.Web.Mvc;
@@ -15,20 +18,25 @@ namespace Presentacion.Controllers
     public class UsuariosController : Controller
     {
         private IUsuariosRepo UsuariosRepo;
-        private IUnitOfWorkFactory uowFactory;
+        private IUnitOfWorkFactory UowFactory;
+        private IUsuariosQueriesTS UsuariosQueriesTS;
 
         //
         // GET: /Usuario/
 
-        public UsuariosController(IUsuariosRepo usuariosRepo, IUnitOfWorkFactory uowFactory)
+        public UsuariosController(
+            IUsuariosRepo usuariosRepo, 
+            IUnitOfWorkFactory uowFactory,
+            IUsuariosQueriesTS usuariosQueriesTs)
         {
             UsuariosRepo = usuariosRepo;
-            this.uowFactory = uowFactory;
+            UowFactory = uowFactory;
+            UsuariosQueriesTS = usuariosQueriesTs;
         }
 
         public ActionResult Index(ListaUsuariosVM busquedaVM)
         {
-            var listado = UsuariosRepo.ListarUsuarios(busquedaVM.Nombre, busquedaVM.Apellido, busquedaVM.Legajo);
+            var listado = UsuariosQueriesTS.ListarUsuarios(busquedaVM.Nombre, busquedaVM.Apellido, busquedaVM.Legajo);
             busquedaVM.ListaUsuario = listado;
             return View(busquedaVM);
         }
@@ -61,19 +69,18 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(UsuarioVM usuarioVM)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var validador = new ValidadorDeUsuarios(UsuariosRepo);
+
                 if (ModelState.IsValid && CrearUsuarioController(usuarioVM, validador))
                 {
                     uow.Commit();
                     return RedirectToAction("Index");
                 }
-                else
-                {
-                    ModelStateHelper.CopyErrors(validador.Errores, ModelState);
-                    return View(usuarioVM);
-                }
+
+                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                return View(usuarioVM);
             }
         }
 
@@ -119,7 +126,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(UsuarioVM usuario)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var validador = new ValidadorDeUsuarios(UsuariosRepo);
                 Usuario user = ConversorUsuario.getInstance(new Usuario(), usuario);
@@ -146,7 +153,7 @@ namespace Presentacion.Controllers
         //bloquear usuario
         public ActionResult Lock(int id = 0)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var usuario = UsuariosRepo.getUsuario(id);
 
@@ -184,7 +191,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var usuario = UsuariosRepo.getUsuario(id);
 

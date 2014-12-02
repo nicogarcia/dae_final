@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Ninject.Infrastructure.Language;
 
-namespace Dominio
+namespace Dominio.Entidades
 {
     public enum EstadoRecurso { Activo, Inactivo };
     

@@ -1,5 +1,5 @@
 ﻿
-namespace Dominio
+namespace Dominio.Entidades
 {
     public class TipoCaracteristica
     {
@@ -19,5 +19,6 @@ namespace Dominio
         {
             return Nombre;
         }
+
     }
 }

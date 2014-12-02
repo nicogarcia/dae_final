@@ -2,6 +2,7 @@
 using Dominio;
 using System.Data.Entity.Infrastructure;
 using System.Web.Security;
+using Dominio.Entidades;
 using WebMatrix.WebData;
 
 

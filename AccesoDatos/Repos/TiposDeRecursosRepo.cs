@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Entidades;
 using Dominio.Repos;
 
 namespace AccesoDatos.Repos

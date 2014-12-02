@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dominio
+namespace Dominio.Entidades
 {
     public class TipoRecurso
     {

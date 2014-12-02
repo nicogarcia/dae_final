@@ -2,29 +2,44 @@
 using System.Linq;
 using System.Web.Mvc;
 using Dominio;
+using Dominio.Entidades;
+using Dominio.Queries;
 using Dominio.Repos;
+using Dominio.Validacion;
 using Presentacion.Filters;
 using Presentacion.Models;
 using Dominio.UnitOfWork;
 using Presentacion.Models.Conversores;
 using Presentacion.Soporte;
+using WebMatrix.WebData;
 
 namespace Presentacion.Controllers
 {
     public class ReservasController : Controller
     {
-        IUnitOfWorkFactory Uow;
-        IReservaRepo ReservasRepo;
-        IUsuariosRepo UsuariosRepo;
-        IRecursosRepo RecursosRepo;
+        // Repos
+        private IReservasRepo ReservasRepo;
+        private IUsuariosRepo UsuariosRepo;
+        private IRecursosRepo RecursosRepo;
 
-        public ReservasController(IUnitOfWorkFactory uow, IReservaRepo reservasRepo,
-            IRecursosRepo recursosRepo, IUsuariosRepo usuariosRepo)
+        // Repos queries
+        private IReservasQueriesTS ReservasQueriesTS;
+
+        // UoW
+        private IUnitOfWorkFactory UowFactory;
+
+        public ReservasController(
+            IUnitOfWorkFactory uow, 
+            IReservasRepo reservasRepo,
+            IRecursosRepo recursosRepo,
+            IUsuariosRepo usuariosRepo,
+            IReservasQueriesTS reservasQueriesTs)
         {
-            Uow = uow;
+            UowFactory = uow;
             ReservasRepo = reservasRepo;
             UsuariosRepo = usuariosRepo;
             RecursosRepo = recursosRepo;
+            ReservasQueriesTS = reservasQueriesTs;
         }
 
         //
@@ -33,8 +48,12 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult Index()
         {
+            var currentUser = UsuariosRepo.BuscarUsuario(WebSecurity.CurrentUserName);
+            
+            // TODO: FIX, INEFFICIENT!
             IList<ReservaVM> lista = ReservasRepo.Todos()
-                .Select(reservaVM => ConversorReservaMV.convertirReserva(reservaVM))
+                .Where(reserva => reserva.Creador == currentUser)
+                .Select(ConversorReservaMV.convertirReserva)
                 .ToList();
 
             return View(lista);
@@ -86,7 +105,7 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult Create(ReservaVM reservaVM)
         {
-            using (var uow = Uow.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var validador = new ValidadorDeReserva(ReservasRepo, UsuariosRepo, RecursosRepo);
 
@@ -104,19 +123,21 @@ namespace Presentacion.Controllers
 
         private bool CrearReservaAuxiliar(ReservaVM reservaVM, ValidadorDeReserva validador)
         {
-            string responsable = User.Identity.Name;
+            string nombreResponsable = User.Identity.Name;
 
             if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
             {
-                responsable = reservaVM.Responsable ?? User.Identity.Name;
+                nombreResponsable = reservaVM.Responsable ?? User.Identity.Name;
             }
 
-            if (validador.Validar(responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
+            if (validador.Validar(nombreResponsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
             {
-                Usuario Creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
-                Usuario Responsable = UsuariosRepo.BuscarUsuario(responsable);
-                Recurso Recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
-                Reserva reserva = new Reserva(Creador, Responsable, Recurso, reservaVM.Inicio, reservaVM.Fin, reservaVM.Descripcion);
+                Usuario creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
+                Usuario responsable = UsuariosRepo.BuscarUsuario(nombreResponsable);
+                Recurso recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
+                
+                var reserva = new Reserva(creador, responsable, recurso, reservaVM.Inicio, reservaVM.Fin, reservaVM.Descripcion);
+
                 ReservasRepo.Agregar(reserva);
 
                 return true;
@@ -149,7 +170,7 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult Edit(ReservaVM reserva)
         {
-            using (var uow = Uow.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 if (ModelState.IsValid)
                 {
@@ -185,7 +206,7 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult DeleteConfirmed(int id)
         {
-            using (var uow = Uow.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 Reserva reserva = ReservasRepo.ObtenerPorId(id);
 
@@ -206,7 +227,7 @@ namespace Presentacion.Controllers
 
             IList<ReservaVM> lista = new List<ReservaVM>();
 
-            foreach (Reserva x in ReservasRepo.buscarReservas(fechaDesde, fechaHasta,
+            foreach (Reserva x in ReservasQueriesTS.BuscarReservas(fechaDesde, fechaHasta,
                 codigoRecurso, usuarioResponsable, estadoReserva))
             {
                 lista.Add(ConversorReservaMV.convertirReserva(x));

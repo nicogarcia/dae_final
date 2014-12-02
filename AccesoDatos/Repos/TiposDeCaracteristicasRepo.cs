@@ -1,4 +1,6 @@
-﻿using Dominio;
+﻿using System.Linq;
+using Dominio;
+using Dominio.Entidades;
 using Dominio.Repos;
 
 namespace AccesoDatos.Repos
@@ -7,6 +9,12 @@ namespace AccesoDatos.Repos
     {
         public TiposDeCaracteristicasRepo(ReservasContext ctx) : base(ctx)
         {
+        }
+
+        public TipoCaracteristica ObtenerPorNombre(string nombre)
+        {
+            return Ctx.TiposDeCaracteristicas
+                .FirstOrDefault(tipoDeCaracteristica => tipoDeCaracteristica.Nombre == nombre);
         }
     }
 }

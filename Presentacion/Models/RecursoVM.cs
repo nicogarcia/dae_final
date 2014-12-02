@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
+using Dominio.Entidades;
 
 namespace Presentacion.Models
 {

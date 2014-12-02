@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Dominio.Entidades;
 
 namespace Dominio.Repos
 {
-    public interface IReservaRepo
+    public interface IReservasRepo
     {
         IList<Reserva> Todos();
 
@@ -15,10 +17,8 @@ namespace Dominio.Repos
 
         void Eliminar(Reserva entidad);
 
-        bool ExisteReserva(string codigo_recurso, DateTime inicio, DateTime fin);
+        bool ExisteReserva(string codigoRecurso, DateTime inicio, DateTime fin);
 
-        IList<Reserva> buscarReservas(string fecha_desde, string fecha_hasta, string tipo_recurso, string usuario_responsable, string estado_reserva);
-
-        
+        IQueryable<Reserva> AsQueryable();
     }
 }

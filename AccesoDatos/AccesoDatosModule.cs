@@ -19,7 +19,7 @@ namespace AccesoDatos
             Bind<ITiposDeRecursosRepo>().To<TiposDeRecursosRepo>().InRequestScope();
 
             Bind<IUnitOfWork>().To<EFUnitOfWork>().InRequestScope();
-            Bind<IReservaRepo>().To<ReservaRepo>().InRequestScope();
+            Bind<IReservasRepo>().To<ReservasRepo>().InRequestScope();
         }
     }
 }

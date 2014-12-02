@@ -1,4 +1,5 @@
 ﻿@using Dominio
+@using Dominio.Entidades
 @model Presentacion.Models.ReservaVM
 @{
     ViewBag.Title = "Crear reserva";
@@ -76,8 +77,8 @@
 
     <script type="text/javascript">
         $(function () {
-            $('#Inicio').datetimepicker({ format: 'm/d/Y H:i', inline: false });
-            $('#Fin').datetimepicker({ format: 'm/d/Y H:i', inline: false });
+            $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+            $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
         });
     </script>
 }

@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Dominio.Entidades;
 
 namespace AccesoDatos
 {

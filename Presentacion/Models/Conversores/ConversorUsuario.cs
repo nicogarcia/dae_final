@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Entidades;
 
 namespace Presentacion.Models.Conversores
 {

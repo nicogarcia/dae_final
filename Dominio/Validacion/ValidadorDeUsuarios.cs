@@ -1,8 +1,8 @@
-﻿using Dominio.Repos;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Dominio.Entidades;
+using Dominio.Repos;
 
-
-namespace Dominio
+namespace Dominio.Validacion
 {
     public class ValidadorDeUsuarios
     {

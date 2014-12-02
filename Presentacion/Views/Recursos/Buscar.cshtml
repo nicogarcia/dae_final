@@ -36,6 +36,20 @@
                 @Html.Label("Tipo")
                 @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
             </div>
+            
+            <!-- Fecha Inicio -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Inicio)
+                @Html.BootstrapTextBoxFor(model => model.Inicio)
+                @Html.BootstrapValidationMessageFor(model => model.Inicio)
+            </div>
+            
+            <!-- Fecha fin -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Fin)
+                @Html.BootstrapTextBoxFor(model => model.Fin)
+                @Html.BootstrapValidationMessageFor(model => model.Fin)
+            </div>
 
         </div>
 
@@ -50,7 +64,8 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-7">
+            <legend class="text-center">Resultados</legend>
             <table id="resultadoBusqueda" class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>Código</th>
@@ -99,14 +114,24 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/Scripts/recursos-utilities.js")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
+
 
     <script type="text/javascript">
 
         // Obtener todas las caracteristicas y registrar los eventos para habilitarlas y deshabilitarlas
         $(document).ready(
             function () {
+
+                // Initialize datetime pickers
+                $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+                $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+
+                // Get all the characteristics
                 ObtenerTodasCaracteristicas('@Url.Action("ObtenerTodasCaracteristicas")');
 
+                // Generate characteristics form components
                 $.each(tiposDeCaracteristicas, function (i, value) {
                     AddNewCharacteristic(value['Id'], value['Nombre']);
                 });

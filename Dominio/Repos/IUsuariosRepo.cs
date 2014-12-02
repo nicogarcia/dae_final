@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Dominio.Entidades;
 
 namespace Dominio.Repos
 {
@@ -13,9 +15,7 @@ namespace Dominio.Repos
         bool ExisteDNI(string dni);
 
         bool ExisteLegajo(string legajo);
-
-        IList<Usuario> ListarUsuarios(string filtronombre, string filtroapellido, string filtrolegajo);
-
+        
         IList<Usuario> Todos();
 
         void Agregar(Usuario usuario);
@@ -28,6 +28,8 @@ namespace Dominio.Repos
 
         bool ChequearExistenciaLegajo(string legajo, int id);
 
-        Usuario BuscarUsuario(string usuario_responsable);
+        Usuario BuscarUsuario(string usuarioResponsable);
+
+        IQueryable<Usuario> AsQueryable();
     }
 }

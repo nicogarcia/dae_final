@@ -1,4 +1,6 @@
 ﻿using Dominio;
+using Dominio.Entidades;
+using Dominio.Queries;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
 using Dominio.Validacion;
@@ -12,29 +14,47 @@ namespace Presentacion.Controllers
 {
     public class RecursosController : Controller
     {
+        // Repos
         private IRecursosRepo RecursosRepo;
         private ITiposDeRecursosRepo TiposDeRecursosRepo;
         private ITiposDeCaracteristicasRepo TiposDeCaracteristicasRepo;
-        private IUnitOfWorkFactory uowFactory;
+        
+        // Repos queries
+        private IRecursosQueriesTS RecursosQueries;
+        private IMultipleTypeQueriesTS MultipleTypeQueries;
+
+        // UoW
+        private IUnitOfWorkFactory UowFactory;
+
+        // Utilidades
         private IConversorRecurso ConversorRecurso;
         private IValidadorDeRecursos ValidadorDeRecursos;
 
         public RecursosController(
-            IRecursosRepo recursosRepo, ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
-            ITiposDeRecursosRepo tiposDeRecursosRepo, IUnitOfWorkFactory uowFactory,
-            IConversorRecurso conversor, IValidadorDeRecursos validador)
+            IRecursosRepo recursosRepo, 
+            ITiposDeCaracteristicasRepo tiposDeCaracteriscasRepo,
+            ITiposDeRecursosRepo tiposDeRecursosRepo,
+            IUnitOfWorkFactory uowFactory,
+            IConversorRecurso conversor,
+            IValidadorDeRecursos validador,
+            IRecursosQueriesTS recursosQueries,
+            IMultipleTypeQueriesTS multipleTypeQueries)
         {
             // Repos
             RecursosRepo = recursosRepo;
             TiposDeRecursosRepo = tiposDeRecursosRepo;
             TiposDeCaracteristicasRepo = tiposDeCaracteriscasRepo;
+
+            // Repos queries
+            RecursosQueries = recursosQueries;
+            MultipleTypeQueries = multipleTypeQueries;
             
             // Utilidades
             ConversorRecurso = conversor;
             ValidadorDeRecursos = validador;
 
             // Unit of Work
-            this.uowFactory = uowFactory;
+            UowFactory = uowFactory;
         }
         
         //
@@ -48,7 +68,7 @@ namespace Presentacion.Controllers
             ViewBag.OrdenCodigo = orden == "codigo" ? "codigo_desc" : "codigo";
             ViewBag.OrdenTipo = orden == "tipo" ? "tipo_desc" : "tipo";
 
-            var recursos = RecursosRepo.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
+            var recursos = RecursosQueries.FiltrarYOrdenar(orden, filtroCodigo, filtroTipo, filtroNombre);
 
             return View(new ListadoRecursosVM(recursos, TiposDeRecursosRepo.Todos()));
         }
@@ -84,7 +104,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecursoVM recursoVM)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 Recurso nuevoRecurso = ConversorRecurso.CrearDomainModel(recursoVM);
 
@@ -132,7 +152,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(RecursoVM recursoVM)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 var recurso = ConversorRecurso.ActualizarDomainModel(recursoVM);
 
@@ -175,7 +195,7 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            using (var uow = uowFactory.Actual)
+            using (var uow = UowFactory.Actual)
             {
                 Recurso recurso = RecursosRepo.ObtenerPorId(id);
 
@@ -224,15 +244,17 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Buscar(BusquedaRecursoVM busquedaRecursoVM)
         {
-            var recursos = RecursosRepo.Buscar(
+            var recursosDisponibles = MultipleTypeQueries.RecursosDisponibles(
                 busquedaRecursoVM.Nombre,
                 busquedaRecursoVM.Codigo,
                 busquedaRecursoVM.TipoId,
                 busquedaRecursoVM.CaracteristicasTipo,
-                busquedaRecursoVM.CaracteristicasValor
+                busquedaRecursoVM.CaracteristicasValor,
+                busquedaRecursoVM.Inicio,
+                busquedaRecursoVM.Fin
             );
-            
-            return Json(recursos);
+
+            return Json(recursosDisponibles);
         }
 
         //

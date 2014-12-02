@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Dominio;
+using Dominio.Entidades;
 
 namespace Presentacion.Models
 {
@@ -20,6 +22,10 @@ namespace Presentacion.Models
 
         public IEnumerable<TipoRecurso> TiposDeRecursos { get; private set; }
         public IEnumerable<SelectListItem> SelectTiposDeRecursos { get; set; }
+
+        public DateTime Inicio { get; set; }
+
+        public DateTime Fin { get; set; }
 
         public BusquedaRecursoVM()
         {

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using Dominio.Repos;
 
-namespace Dominio
+namespace Dominio.Validacion
 {
     public class ValidadorDeReserva
     {
-        IReservaRepo ReservasRepo;
+        IReservasRepo ReservasRepo;
         IUsuariosRepo UsuariosRepo;
         IRecursosRepo RecursosRepo;
 
         public IDictionary<string, string> Errores { get; private set; }
 
-        public ValidadorDeReserva (IReservaRepo reservaRepo, IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo)
+        public ValidadorDeReserva (IReservasRepo reservaRepo, IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo)
         {
             ReservasRepo = reservaRepo;
             UsuariosRepo = usuariosRepo;

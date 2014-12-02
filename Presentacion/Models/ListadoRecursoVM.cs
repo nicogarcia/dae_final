@@ -2,6 +2,7 @@
 using System.Linq;
 using Dominio;
 using System.Web.Mvc;
+using Dominio.Entidades;
 using DotNetOpenAuth.Messaging;
 
 namespace Presentacion.Models

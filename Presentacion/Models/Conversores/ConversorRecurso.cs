@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.WebPages;
 using Dominio;
+using Dominio.Entidades;
 using Dominio.Repos;
 
 namespace Presentacion.Models.Conversores

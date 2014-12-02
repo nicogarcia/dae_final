@@ -52,29 +52,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caracteristica.cs" />
     <Compile Include="DominioModule.cs" />
-    <Compile Include="EstadoReserva.cs" />
+    <Compile Include="Entidades\Caracteristica.cs" />
+    <Compile Include="Entidades\EstadoReserva.cs" />
+    <Compile Include="Entidades\Recurso.cs" />
+    <Compile Include="Entidades\Reserva.cs" />
+    <Compile Include="Entidades\TipoCaracteristica.cs" />
+    <Compile Include="Entidades\TipodeUsuario.cs" />
+    <Compile Include="Entidades\TipoRecurso.cs" />
+    <Compile Include="Entidades\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Recurso.cs" />
+    <Compile Include="Queries\Implementation\MultipleTypeQueries.cs" />
+    <Compile Include="Queries\Implementation\RecursosQueriesTS.cs" />
+    <Compile Include="Queries\Implementation\ReservasQueriesTS.cs" />
+    <Compile Include="Queries\Implementation\UsuariosQueriesTS.cs" />
+    <Compile Include="Queries\IRecursosQueriesTS.cs" />
+    <Compile Include="Queries\IMultipleTypeQueriesTS.cs" />
+    <Compile Include="Queries\IReservasQueriesTS.cs" />
+    <Compile Include="Queries\IUsuariosQueriesTS.cs" />
     <Compile Include="Repos\IRecursosRepo.cs" />
     <Compile Include="Repos\ITiposDeRecursosRepo.cs" />
     <Compile Include="Repos\ITiposDeCaracteristicasRepo.cs" />
-    <Compile Include="Repos\IReservaRepo.cs" />
+    <Compile Include="Repos\IReservasRepo.cs" />
     <Compile Include="Repos\IUsuariosRepo.cs" />
-    <Compile Include="Reserva.cs" />
     <Compile Include="Security\UserProfile.cs" />
-    <Compile Include="TipoCaracteristica.cs" />
-    <Compile Include="TipoRecurso.cs" />
-    <Compile Include="TipodeUsuario.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\IUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
-    <Compile Include="Usuario.cs" />
     <Compile Include="Validacion\IValidadorDeRecursos.cs" />
     <Compile Include="Validacion\ValidadorDeRecursos.cs" />
-    <Compile Include="ValidadorDeReserva.cs" />
-    <Compile Include="ValidadorDeUsuarios.cs" />
+    <Compile Include="Validacion\ValidadorDeReserva.cs" />
+    <Compile Include="Validacion\ValidadorDeUsuarios.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Dominio
+@using Dominio.Entidades
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -31,9 +33,16 @@
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Reservas", "Index", "Reservas")</li>
-                    <li>@Html.ActionLink("Recursos", "Index", "Recursos")</li>
-                    <li>@Html.ActionLink("Usuarios", "Index", "Usuarios")</li>
+                    @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
+                    {
+                        <li>@Html.ActionLink("Reservas", "Index", "Reservas")</li>
+                        <li>@Html.ActionLink("Recursos", "Index", "Recursos")</li>
+                        <li>@Html.ActionLink("Usuarios", "Index", "Usuarios")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Mis reservas", "Index", "Reservas")</li>
+                    }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")

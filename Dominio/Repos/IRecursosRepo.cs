@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Dominio.Entidades;
 
 namespace Dominio.Repos
 {
@@ -18,11 +20,8 @@ namespace Dominio.Repos
 
         bool ExisteNombre(string nombre);
 
-        IList<Recurso> FiltrarYOrdenar(string orden, string filtroCodigo, string filtroTipo, string filtroNombre);
-
-        IList<Recurso> Buscar(string nombre, string codigo, string tipo, List<string> caracteristicasTipo,
-            List<string> caracteristicasValor);
-
         Recurso ObtenerPorCodigo(string codigoRecurso);
+
+        IQueryable<Recurso> AsQueryable();
     }
 }

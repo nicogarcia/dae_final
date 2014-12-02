@@ -1,15 +1,20 @@
-﻿@model IEnumerable<Presentacion.Models.ReservaVM>
+﻿@using Dominio
+@using Dominio.Entidades
+@model IEnumerable<Presentacion.Models.ReservaVM>
 
 @{
-    ViewBag.Title = "Listado de reservas";
+    ViewBag.Title = "Mis reservas";
 }
-<legend>Listado de reservas</legend>
+<legend>Mis reservas</legend>
 
 <div class="row">
     <div class="col-md-12">
         <p>
             @Html.BootstrapActionButton("Crear reserva", "Create", new { @class = "btn-primary"})
-            @Html.BootstrapActionButton("Ver todas las reservas", "FullList", new { @class = "btn-success" })
+            @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
+            {
+                @Html.BootstrapActionButton("Ver todas las reservas", "FullList", new {@class = "btn-success"})
+            }
         </p>
     </div>
     
@@ -64,12 +69,8 @@
         }
         else
         {
-            <p>No hay reservas almacenadas</p>
+            <br/><h4>Aún no hay reservas</h4>
         }
     </div>
 </div>
-
-
-
-            
 

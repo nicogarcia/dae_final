@@ -37,5 +37,10 @@ namespace AccesoDatos.Repos
         {
             Ctx.Set<TTipo>().Remove(entidad);
         }
+
+        public IQueryable<TTipo> AsQueryable()
+        {
+            return Ctx.Set<TTipo>();
+        } 
     }
 }

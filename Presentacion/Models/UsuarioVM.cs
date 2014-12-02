@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Entidades;
 using Presentacion.Soporte;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
