@@ -10,5 +10,6 @@ namespace Dominio.Queries
         IList<Reserva> BuscarReservas(string fechaDesde, string fechaHasta, string codigoRecurso,
             string usuarioResponsable, string estadoReserva);
 
+        IList<Reserva> ReservasDelUsuario(string username);
     }
 }

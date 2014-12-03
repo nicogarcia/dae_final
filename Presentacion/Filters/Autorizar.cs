@@ -7,7 +7,7 @@ namespace Presentacion.Filters
     public class Autorizar : AuthorizeAttribute
     {
 
-        public Autorizar() : base()
+        public Autorizar()
         { 
         }
 

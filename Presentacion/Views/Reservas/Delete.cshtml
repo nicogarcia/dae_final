@@ -1,55 +1,23 @@
 ﻿@model Presentacion.Models.ReservaVM
 
 @{
-    ViewBag.Title = "Cancelar reserva";
+    ViewBag.Title = "Eliminar reserva";
 }
 
-<h2>Cancelar reserva</h2>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3 class="text-center">Eliminación de reserva</h3><hr />
 
-<h3>¿Está seguro de cancelar la reserva?</h3>
-<fieldset>
-    <legend>Reserva</legend>
+        <h4 class="text-center">¿Está seguro de que quiere eliminar la reserva?</h4>
 
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.RecursoReservado)
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <br />
+            <p class="text-center">
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+                @Html.BootstrapActionButton("Cancelar", "Index", new { @class = "btn-default" })
+            </p>
+        }
     </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.RecursoReservado)
-    </div>
-
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.Inicio)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Inicio)
-    </div>
-
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.Fin)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Fin)
-    </div>
-
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.FechaCreacion)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.FechaCreacion)
-    </div>
-
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.Descripcion)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Descripcion)
-    </div>
-</fieldset>
-
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    <p>
-        <input type="submit" value="Cancelar Reserva" /> |
-        @Html.ActionLink("Volver a la lista", "Index")
-    </p>
-}
+</div>

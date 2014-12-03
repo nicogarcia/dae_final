@@ -47,6 +47,10 @@ namespace Dominio.Queries.Implementation
             return queryReservas.ToList();
         }
 
+        public IList<Reserva> ReservasDelUsuario(string username)
+        {
+            return ReservasRepo.AsQueryable().Where(reserva => reserva.Creador.NombreUsuario == username).ToList();
+        }
 
     }
 }

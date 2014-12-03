@@ -206,13 +206,12 @@
     </Compile>
     <Compile Include="Helpers\Bootstrap\BootstrapHelpers.cs" />
     <Compile Include="Models\BusquedaRecursoVM.cs" />
-    <Compile Include="Models\Conversores\ConversorBusquedaReserva.cs" />
     <Compile Include="Models\Conversores\ConversorReservaMV.cs" />
     <Compile Include="Models\Conversores\ConversorUsuario.cs" />
     <Compile Include="Filters\AutorizarReserva.cs" />
     <Compile Include="Models\Conversores\ConversorRecurso.cs" />
     <Compile Include="Models\Conversores\IConversorRecurso.cs" />
-    <Compile Include="Models\IBusquedaReservaVM.cs" />
+    <Compile Include="Models\Conversores\IConversorReservaMV.cs" />
     <Compile Include="Models\BusquedaReservasVM.cs" />
     <Compile Include="Models\ReservaVM.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
@@ -236,6 +235,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\dcic.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />

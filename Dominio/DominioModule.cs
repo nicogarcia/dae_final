@@ -14,12 +14,13 @@ namespace Dominio
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
 
             Bind<IValidadorDeRecursos>().To<ValidadorDeRecursos>().InRequestScope();
-
+            Bind<IValidadorDeReserva>().To<ValidadorDeReserva>();
+            
             Bind<IRecursosQueriesTS>().To<RecursosQueriesTS>();
             Bind<IUsuariosQueriesTS>().To<UsuariosQueriesTS>();
             Bind<IReservasQueriesTS>().To<ReservasQueriesTS>();
             Bind<IMultipleTypeQueriesTS>().To<MultipleQueriesTS>();
-            
+
         }
     }
 }

@@ -6,61 +6,68 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2 class="text-center">Búsqueda avanzada de recursos</h2>
+        <h3 class="text-center">Búsqueda avanzada de recursos</h3>
         <hr />
     </div>
 </div>
-@using (Html.BeginForm())
+@using (Html.BeginForm("Buscar", "Recursos"))
 {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
     <div class="row">
-        <div class="col-md-2">
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-
-            <!-- Codigo -->
-            <div class="form-group">
-                @Html.BootstrapLabelFor(model => model.Codigo)
-                @Html.BootstrapTextBoxFor(model => model.Codigo)
-                @Html.BootstrapValidationMessageFor(model => model.Codigo)
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-12"><legend class="text-center">Criterios</legend></div>
             </div>
+            <div class="row">
+                <div class="col-md-5">
 
-            <!-- Nombre -->
-            <div class="form-group">
-                @Html.BootstrapLabelFor(model => model.Nombre)
-                @Html.BootstrapTextBoxFor(model => model.Nombre)
-                @Html.BootstrapValidationMessageFor(model => model.Nombre)
-            </div>
+                    <!-- Codigo -->
+                    <div class="form-group">
+                        @Html.BootstrapLabelFor(model => model.Codigo)
+                        @Html.BootstrapTextBoxFor(model => model.Codigo)
+                        @Html.BootstrapValidationMessageFor(model => model.Codigo)
+                    </div>
 
-            <!-- Tipo -->
-            <div class="form-group">
-                @Html.Label("Tipo")
-                @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
-            </div>
-            
-            <!-- Fecha Inicio -->
-            <div class="form-group">
-                @Html.BootstrapLabelFor(model => model.Inicio)
-                @Html.BootstrapTextBoxFor(model => model.Inicio)
-                @Html.BootstrapValidationMessageFor(model => model.Inicio)
-            </div>
-            
-            <!-- Fecha fin -->
-            <div class="form-group">
-                @Html.BootstrapLabelFor(model => model.Fin)
-                @Html.BootstrapTextBoxFor(model => model.Fin)
-                @Html.BootstrapValidationMessageFor(model => model.Fin)
-            </div>
+                    <!-- Nombre -->
+                    <div class="form-group">
+                        @Html.BootstrapLabelFor(model => model.Nombre)
+                        @Html.BootstrapTextBoxFor(model => model.Nombre)
+                        @Html.BootstrapValidationMessageFor(model => model.Nombre)
+                    </div>
 
-        </div>
+                    <!-- Tipo -->
+                    <div class="form-group">
+                        @Html.Label("Tipo")
+                        @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
+                    </div>
 
-        <div class="col-md-3">
-            <!-- Características -->
-            <h3>Características</h3>
-            <div id="characteristics-container"></div>
+                    <!-- Fecha Inicio -->
+                    <div class="form-group">
+                        @Html.BootstrapLabelFor(model => model.Inicio)
+                        @Html.BootstrapTextBoxFor(model => model.Inicio)
+                        @Html.BootstrapValidationMessageFor(model => model.Inicio)
+                    </div>
 
-            <div class="col-md-12">
-                <!-- Boton de busqueda-->
-                <p><a class="btn btn-success pull-right" onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a></p>
+                    <!-- Fecha fin -->
+                    <div class="form-group">
+                        @Html.BootstrapLabelFor(model => model.Fin)
+                        @Html.BootstrapTextBoxFor(model => model.Fin)
+                        @Html.BootstrapValidationMessageFor(model => model.Fin)
+                    </div>
+
+                </div>
+
+                <div class="col-md-7">
+                    <!-- Características -->
+                    <label>Características</label>
+                    <div id="characteristics-container"></div>
+
+                    <div class="col-md-12">
+                        <!-- Boton de busqueda-->
+                        <p><a class="btn btn-success pull-right" onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a></p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -106,7 +113,7 @@
         <td>{{NombreRecurso}}</td>
         <td>{{DescripcionRecurso}}</td>
         <td>
-            <a class="btn btn-info" href='@Url.Action("CreateForResource", "Reservas")/{{Id}}'>Reservar</a>
+            <a class="btn btn-info" href="@(ViewContext.HttpContext.Request.QueryString["ReturnUrl"])/{{Id}}">Reservar</a>
         </td>
     </tr>
 </script>

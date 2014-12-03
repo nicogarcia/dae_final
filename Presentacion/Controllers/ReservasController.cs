@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Dominio;
 using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
@@ -25,21 +25,29 @@ namespace Presentacion.Controllers
         // Repos queries
         private IReservasQueriesTS ReservasQueriesTS;
 
+        // Utilidades
+        private IConversorReservaMV ConversorReserva;
+        private IValidadorDeReserva ValidadorReserva;
+
         // UoW
         private IUnitOfWorkFactory UowFactory;
 
         public ReservasController(
-            IUnitOfWorkFactory uow, 
+            IUnitOfWorkFactory uow,
             IReservasRepo reservasRepo,
             IRecursosRepo recursosRepo,
             IUsuariosRepo usuariosRepo,
-            IReservasQueriesTS reservasQueriesTs)
+            IReservasQueriesTS reservasQueriesTs,
+            IConversorReservaMV conversorReserva,
+            IValidadorDeReserva validadorDeReserva)
         {
             UowFactory = uow;
             ReservasRepo = reservasRepo;
             UsuariosRepo = usuariosRepo;
             RecursosRepo = recursosRepo;
             ReservasQueriesTS = reservasQueriesTs;
+            ConversorReserva = conversorReserva;
+            ValidadorReserva = validadorDeReserva;
         }
 
         //
@@ -48,15 +56,14 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult Index()
         {
-            var currentUser = UsuariosRepo.BuscarUsuario(WebSecurity.CurrentUserName);
-            
-            // TODO: FIX, INEFFICIENT!
-            IList<ReservaVM> lista = ReservasRepo.Todos()
-                .Where(reserva => reserva.Creador == currentUser)
-                .Select(ConversorReservaMV.convertirReserva)
+            var currentUsername = UsuariosRepo.BuscarUsuario(WebSecurity.CurrentUserName).NombreUsuario;
+
+            IList<ReservaVM> misReservas = 
+                ReservasQueriesTS.ReservasDelUsuario(currentUsername)
+                .Select(ConversorReserva.ConvertirReserva)
                 .ToList();
 
-            return View(lista);
+            return View(misReservas);
         }
 
         //
@@ -71,7 +78,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(ConversorReservaMV.convertirReserva(reserva));
+            return View(ConversorReserva.ConvertirReserva(reserva));
         }
 
         //
@@ -80,11 +87,11 @@ namespace Presentacion.Controllers
         [Autorizar]
         public ActionResult Create()
         {
-            return View(new ReservaVM());
+            return View(ConversorReserva.CrearReservaVM());
         }
 
         //
-        // GET: /Reservas/Create/5
+        // GET: /Reservas/CreateForResource/5
 
         [Autorizar]
         public ActionResult CreateForResource(int id = 0)
@@ -94,7 +101,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View("Create", new ReservaVM(recurso.Codigo));
+            return View("Create", ConversorReserva.CrearReservaVM(recurso.Codigo));
         }
 
         //
@@ -107,43 +114,49 @@ namespace Presentacion.Controllers
         {
             using (var uow = UowFactory.Actual)
             {
-                var validador = new ValidadorDeReserva(ReservasRepo, UsuariosRepo, RecursosRepo);
+                PoblarUsuarioResponsable(reservaVM);
 
-                if (ModelState.IsValid && CrearReservaAuxiliar(reservaVM, validador))
+                if (ModelState.IsValid && ValidarReservaAuxiliar(reservaVM))
                 {
+                    var reserva = CrearReservaAuxiliar(reservaVM);
+
+                    ReservasRepo.Agregar(reserva);
+
                     uow.Commit();
 
                     return RedirectToAction("Index");
                 }
 
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                ModelStateHelper.CopyErrors(ValidadorReserva.ObtenerErrores(), ModelState);
+
+                ConversorReserva.PoblarSelectUsuario(reservaVM);
+
                 return View(reservaVM);
             }
         }
 
-        private bool CrearReservaAuxiliar(ReservaVM reservaVM, ValidadorDeReserva validador)
+        private void PoblarUsuarioResponsable(ReservaVM reservaVM)
         {
             string nombreResponsable = User.Identity.Name;
 
             if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
-            {
                 nombreResponsable = reservaVM.Responsable ?? User.Identity.Name;
-            }
 
-            if (validador.Validar(nombreResponsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin))
-            {
-                Usuario creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
-                Usuario responsable = UsuariosRepo.BuscarUsuario(nombreResponsable);
-                Recurso recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
-                
-                var reserva = new Reserva(creador, responsable, recurso, reservaVM.Inicio, reservaVM.Fin, reservaVM.Descripcion);
+            reservaVM.Responsable = nombreResponsable;
+        }
 
-                ReservasRepo.Agregar(reserva);
+        private Reserva CrearReservaAuxiliar(ReservaVM reservaVM)
+        {
+            Usuario creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
+            Usuario responsable = UsuariosRepo.BuscarUsuario(reservaVM.Responsable);
+            Recurso recurso = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
 
-                return true;
-            }
+            return new Reserva(creador, responsable, recurso, reservaVM.Inicio, reservaVM.Fin, reservaVM.Descripcion);
+        }
 
-            return false;
+        private bool ValidarReservaAuxiliar(ReservaVM reservaVM)
+        {
+            return ValidadorReserva.Validar(reservaVM.Responsable, reservaVM.RecursoReservado, reservaVM.Inicio, reservaVM.Fin);
         }
 
         //
@@ -159,7 +172,21 @@ namespace Presentacion.Controllers
                 return HttpNotFound();
             }
 
-            return View(ConversorReservaMV.convertirReserva(reserva));
+            return View(ConversorReserva.ConvertirReserva(reserva));
+        }
+
+        //
+        // GET: /Reservas/EditForResource/5
+
+        [Autorizar]
+        public ActionResult EditForResource(int id = 0)
+        {
+            Recurso recurso = RecursosRepo.ObtenerPorId(id);
+            if (recurso == null)
+            {
+                return HttpNotFound();
+            }
+            return View("Edit", ConversorReserva.CrearReservaVM(recurso.Codigo));
         }
 
         //
@@ -168,20 +195,47 @@ namespace Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Autorizar]
-        public ActionResult Edit(ReservaVM reserva)
+        [AutorizarReserva]
+        public ActionResult Edit(ReservaVM reservaVM)
         {
             using (var uow = UowFactory.Actual)
             {
-                if (ModelState.IsValid)
+                PoblarUsuarioResponsable(reservaVM);
+
+                if (ModelState.IsValid && ValidarReservaAuxiliar(reservaVM))
                 {
-                    ReservasRepo.Actualizar(ConversorReservaMV.convertirReserva(reserva));
-                    
+                    var reserva = EditarReservaAuxiliar(reservaVM);
+
+                    ReservasRepo.Actualizar(reserva);
+
                     uow.Commit();
 
                     return RedirectToAction("Index");
                 }
-                return View(reserva);
+
+                ModelStateHelper.CopyErrors(ValidadorReserva.ObtenerErrores(), ModelState);
+
+                ConversorReserva.PoblarSelectUsuario(reservaVM);
+
+                return View(reservaVM);
             }
+        }
+
+        private Reserva EditarReservaAuxiliar(ReservaVM reservaVM)
+        {
+            Reserva reserva = ReservasRepo.ObtenerPorId(reservaVM.Id);
+
+            // Modificaciones implicitas
+            reserva.Creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
+            reserva.FechaCreacion = DateTime.Now;
+
+            // Modificaciones explicitas
+            reserva.RecursoReservado = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
+            reserva.Inicio = reservaVM.Inicio;
+            reserva.Fin = reservaVM.Fin;
+            reserva.Descripcion = reservaVM.Descripcion;
+
+            return reserva;
         }
 
         //
@@ -195,7 +249,7 @@ namespace Presentacion.Controllers
             {
                 return HttpNotFound();
             }
-            return View(ConversorReservaMV.convertirReserva(reserva));
+            return View(ConversorReserva.ConvertirReserva(reserva));
         }
 
         //
@@ -204,11 +258,17 @@ namespace Presentacion.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Autorizar]
+        [AutorizarReserva]
         public ActionResult DeleteConfirmed(int id)
         {
             using (var uow = UowFactory.Actual)
             {
                 Reserva reserva = ReservasRepo.ObtenerPorId(id);
+
+                if (reserva == null)
+                {
+                    return HttpNotFound();
+                }
 
                 ReservasRepo.Eliminar(reserva);
 
@@ -222,16 +282,18 @@ namespace Presentacion.Controllers
         public ActionResult FullList(string fechaDesde, string fechaHasta, string codigoRecurso,
             string usuarioResponsable, string estadoReserva)
         {
-            // TODO: REMOVE DEPENDENCIES
-            var searchVm = new BusquedaReservasVM(RecursosRepo, UsuariosRepo);
+            var searchVm = ConversorReserva.CrearBusquedaReservasVM();
 
-            IList<ReservaVM> lista = new List<ReservaVM>();
+            IList<ReservaVM> lista;
 
-            foreach (Reserva x in ReservasQueriesTS.BuscarReservas(fechaDesde, fechaHasta,
-                codigoRecurso, usuarioResponsable, estadoReserva))
-            {
-                lista.Add(ConversorReservaMV.convertirReserva(x));
-            }
+            lista = ReservasQueriesTS.BuscarReservas(
+                fechaDesde,
+                fechaHasta,
+                codigoRecurso,
+                usuarioResponsable,
+                estadoReserva)
+                .Select(ConversorReserva.ConvertirReserva)
+                .ToList();
 
             searchVm.ListaDeReservas = lista;
 

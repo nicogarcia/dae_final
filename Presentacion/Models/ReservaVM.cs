@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
+using System.Web.Mvc;
 
 namespace Presentacion.Models
 {
@@ -12,9 +13,11 @@ namespace Presentacion.Models
 
         public string Responsable { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")] 
         [Required]
         public DateTime Inicio { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}")] 
         [Required]
         public DateTime Fin { get; set; }
 
@@ -28,6 +31,8 @@ namespace Presentacion.Models
         public string RecursoReservado { get; set; }
 
         public string Estado { get; set; }
+
+        public List<SelectListItem> SelectUsuarioResponsable { get; set; }
 
         public ReservaVM()
         {

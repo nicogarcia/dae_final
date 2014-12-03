@@ -31,6 +31,7 @@ namespace Presentacion.Models
         [MaxLength(50)]
         public string Apellido { get; set; }//Apellido*: 50 caracteres
 
+        [Required]
         [MaxLength(9)]
         [Phone]
         public string DNI { get; set; }//DNI*: 9 dígitos
@@ -49,15 +50,16 @@ namespace Presentacion.Models
         public string Telefono { get; set; }//Teléfono: 20 caracteres
 
         public string EstadoUsuario { get; set; }
+
+        public UsuarioVM()
+        {
+        }
+
         public UsuarioVM(int id)
         {
             this.id = id;
         }
 
-        public UsuarioVM()
-        {
-            // TODO: Complete member initialization
-        }
         public IEnumerable<SelectListItem> SelectoTipoDeUsuario
         {
             get

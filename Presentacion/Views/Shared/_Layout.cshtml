@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/favicon.ico?v=1" rel="shortcut icon" type="image/x-icon" />
 
     <title>@ViewBag.Title</title>
 
@@ -28,6 +28,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                <a href="#" class="navbar-brand pull-left" style="margin-top:-4px;">
+                    <img src="/Content/dcic.png" height="28px" />
+                </a>
                 <a class="navbar-brand" href='@Url.Action("Index", "Home")'>Reservas DCIC</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">

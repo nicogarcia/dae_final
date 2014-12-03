@@ -32,20 +32,19 @@ namespace Dominio.Entidades
         public EstadoReserva Estado { get; set; }
 
         public Reserva()
-        { }
-
-        public Reserva (Usuario usuario_creador, Usuario usuario_responsable, Recurso recurso_reservado, DateTime inicio, DateTime fin, string descripcion)
         {
-           
-            Creador =  usuario_creador;
-            Responsable = usuario_responsable;
-            RecursoReservado = recurso_reservado;
+        }
+
+        public Reserva (Usuario usuarioCreador, Usuario usuarioResponsable, Recurso recursoReservado, DateTime inicio, DateTime fin, string descripcion)
+        {
+            Creador =  usuarioCreador;
+            Responsable = usuarioResponsable;
+            RecursoReservado = recursoReservado;
             Inicio = inicio;
             Fin = fin;
             Descripcion = descripcion;
             Estado = EstadoReserva.Activo;
             FechaCreacion = DateTime.Now;
-
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Dominio;
+﻿using System;
+using System.Net;
 using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
@@ -244,6 +245,9 @@ namespace Presentacion.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Buscar(BusquedaRecursoVM busquedaRecursoVM)
         {
+            if (busquedaRecursoVM == null) 
+                return HttpNotFound();
+
             var recursosDisponibles = MultipleTypeQueries.RecursosDisponibles(
                 busquedaRecursoVM.Nombre,
                 busquedaRecursoVM.Codigo,

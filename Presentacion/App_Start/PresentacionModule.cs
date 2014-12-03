@@ -9,6 +9,8 @@ namespace Presentacion.App_Start
         public override void Load()
         {
             Bind<IConversorRecurso>().To<ConversorRecurso>().InRequestScope();
+
+            Bind<IConversorReservaMV>().To<ConversorReservaMV>().InRequestScope();
         }
     }
 }

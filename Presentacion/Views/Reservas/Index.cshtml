@@ -1,14 +1,13 @@
-﻿@using Dominio
-@using Dominio.Entidades
+﻿@using Dominio.Entidades
 @model IEnumerable<Presentacion.Models.ReservaVM>
 
 @{
     ViewBag.Title = "Mis reservas";
 }
-<legend>Mis reservas</legend>
 
 <div class="row">
     <div class="col-md-12">
+        <h3 class="text-center">Mis reservas</h3><hr />
         <p>
             @Html.BootstrapActionButton("Crear reserva", "Create", new { @class = "btn-primary"})
             @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))

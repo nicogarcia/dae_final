@@ -1,12 +1,11 @@
-﻿@using Dominio
-@using Dominio.Entidades
+﻿@using Dominio.Entidades
 @model Presentacion.Models.ReservaVM
 @{
     ViewBag.Title = "Crear reserva";
 }
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <h2 class="text-center">Crear reserva</h2>
+        <h3 class="text-center">Crear reserva</h3>
         <hr />
     </div>
     @using (Html.BeginForm("Create", "Reservas", FormMethod.Post))
@@ -20,10 +19,11 @@
             {
                 <div class="form-group">
                     <label class="control-label">Usuario responsable</label>
-                    @Html.BootstrapTextBoxFor(model => model.Responsable)
+                    @Html.DropDownListFor(model => model.Responsable, Model.SelectUsuarioResponsable)
                     @Html.BootstrapValidationMessageFor(model => model.Responsable)
                 </div>
             }
+            
             <!-- Codigo del recurso -->
             <div class="form-group">
                 <label class="control-label"> Codigo del recurso</label>
@@ -33,7 +33,7 @@
                         @Html.BootstrapValidationMessageFor(model => model.RecursoReservado)
                     </div>
                     <div class="col-md-5">
-                        @Html.BootstrapActionButton("Buscar recurso", "Buscar", "Recursos", null, new { @class = "btn-info" })
+                        @Html.BootstrapActionButton("Buscar recurso", "Buscar", "Recursos", new { ReturnUrl = Url.Action("CreateForResource") }, new { @class = "btn-info" })
                     </div>
                 </div>
             </div>

@@ -1,68 +1,23 @@
 ﻿@model Presentacion.Models.UsuarioVM
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar usuario";
 }
 
-<h2>Delete</h2>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h3 class="text-center">Eliminación de usuario</h3><hr />
 
-<h3>Are you sure you want to delete this?</h3>
-<fieldset>
-    <legend>Usuario</legend>
+        <h4 class="text-center">¿Está seguro de que quiere eliminar el usuario <strong>@Model.NombreUsuario</strong>?</h4>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.NombreUsuario)
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <br />
+            <p class="text-center">
+                <button class="btn btn-danger" type="submit">Eliminar</button>
+                @Html.BootstrapActionButton("Cancelar", "Index", new { @class = "btn-default" })
+            </p>
+        }
     </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.NombreUsuario)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Nombre)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Nombre)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Apellido)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Apellido)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.DNI)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.DNI)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Legajo)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Legajo)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Email)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Email)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Telefono)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Telefono)
-    </div>
-</fieldset>
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
+</div>

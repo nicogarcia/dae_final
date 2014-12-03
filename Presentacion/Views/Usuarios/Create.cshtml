@@ -5,7 +5,7 @@
 }
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <h2 class="text-center">Crear usuario</h2>
+        <h3 class="text-center">Crear usuario</h3>
         <hr />
     </div>
     @using (Html.BeginForm())
@@ -48,17 +48,17 @@
 
         <div class="col-md-3">
             <div class="form-group">
-                @Html.BootstrapLabelFor(model => model.Legajo)
-                @Html.BootstrapTextBoxFor(model => model.Legajo)
-                @Html.BootstrapValidationMessageFor(model => model.Legajo)
-            </div>
-
-            <div class="form-group">
                 @Html.BootstrapLabelFor(model => model.DNI)
                 @Html.BootstrapTextBoxFor(model => model.DNI)
                 @Html.BootstrapValidationMessageFor(model => model.DNI)
             </div>
 
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Legajo)
+                @Html.BootstrapTextBoxFor(model => model.Legajo)
+                @Html.BootstrapValidationMessageFor(model => model.Legajo)
+            </div>
+            
             <div class="form-group">
                 @Html.BootstrapLabelFor(model => model.Telefono)
                 @Html.BootstrapTextBoxFor(model => model.Telefono)

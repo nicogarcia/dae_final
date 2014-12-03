@@ -2,6 +2,7 @@
 using Dominio;
 using Dominio.Entidades;
 using Dominio.Repos;
+using Presentacion.Models;
 using WebMatrix.WebData;
 
 namespace Presentacion.Filters
@@ -23,7 +24,12 @@ namespace Presentacion.Filters
 
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string id = filterContext.ActionParameters["id"].ToString();
+            string id;
+
+            if (filterContext.ActionParameters.ContainsKey("id"))
+                id = filterContext.ActionParameters["id"].ToString();
+            else
+                id = ((ReservaVM) filterContext.ActionParameters["reservaVM"]).Id.ToString();
 
             var reserva = ReservasRepo.ObtenerPorId(int.Parse(id));
 

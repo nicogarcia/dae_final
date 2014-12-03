@@ -1,43 +1,72 @@
 ﻿@model Presentacion.Models.ReservaVM
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalle de reserva";
 }
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <legend class="text-center">Detalles de la reserva</legend>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <dl class="dl-horizontal">
 
-<h2>Details</h2>
+                    <!-- Creador -->
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Responsable)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Responsable)
+                    </dd>
 
-<fieldset>
-    <legend>Reserva</legend>
+                    <!-- Recurso reservado -->
+                    <dt>
+                        @Html.DisplayName("Recurso reservado")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.RecursoReservado)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Inicio)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Inicio)
-    </div>
+                    <!-- Inicio -->
+                    <dt>
+                        @Html.DisplayName("Inicio de reserva")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Inicio)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Fin)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Fin)
-    </div>
+                    <!-- Fin -->
+                    <dt>
+                        @Html.DisplayName("Fin de reserva")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Fin)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.FechaCreacion)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.FechaCreacion)
-    </div>
+                    <!-- Tipo -->
+                    <dt>
+                        @Html.DisplayName("Fecha de creación")
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.FechaCreacion)
+                    </dd>
 
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Descripcion)
+                    <!-- Descripcion -->
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Descripcion)
+                    </dd>
+                </dl>
+                <hr />
+            </div>
+
+        </div>
+        <div class="row">
+            <p class="text-center">
+                @Html.BootstrapActionButton("Volver", "Index", null, new { @class = "btn-default" })
+                @Html.BootstrapActionButton("Editar", "Edit", new { id = Model.Id }, new { @class = "btn-info" })
+            </p>
+        </div>
     </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Descripcion)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>

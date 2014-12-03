@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dominio.Repos;
+using Ninject.Infrastructure.Language;
 
 namespace Dominio.Validacion
 {
-    public class ValidadorDeReserva
+    public class ValidadorDeReserva : IValidadorDeReserva
     {
         IReservasRepo ReservasRepo;
         IUsuariosRepo UsuariosRepo;
@@ -19,6 +21,11 @@ namespace Dominio.Validacion
             RecursosRepo = recursosRepo;
         }
 
+        public IDictionary<string, string> ObtenerErrores()
+        {
+            return Errores;
+        } 
+
         public bool Validar(string usuarioResponsable, string codigoRecurso, DateTime inicio, DateTime fin)
         {
             bool valido = true;
@@ -26,7 +33,7 @@ namespace Dominio.Validacion
             
             if (inicio > fin)
             {
-                Errores.Add("FechasIF", "La fecha de inicio es mayor que la fecha del fin");
+                Errores.Add("Inicio", "La fecha de inicio es mayor que la fecha del fin");
                 valido = false;
             }
                 

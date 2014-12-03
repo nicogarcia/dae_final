@@ -1,13 +1,56 @@
-﻿using Dominio;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using Dominio.Entidades;
+using Dominio.Repos;
+using DotNetOpenAuth.Messaging;
+using Presentacion.Soporte;
 
 namespace Presentacion.Models.Conversores
 {
-    public class ConversorReservaMV
+    public class ConversorReservaMV : IConversorReservaMV
     {
-        public static ReservaVM convertirReserva(Reserva reserva)
+        private IUsuariosRepo UsuariosRepo;
+        private IRecursosRepo RecursosRepo;
+        
+        public ConversorReservaMV(IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo)
         {
-            ReservaVM reservaVM = new ReservaVM();
+            UsuariosRepo = usuariosRepo;
+            RecursosRepo = recursosRepo;
+        }
+
+        public ReservaVM CrearReservaVM()
+        {
+            var reservaVM = new ReservaVM();
+            
+            PoblarSelectUsuario(reservaVM);
+
+            return reservaVM;
+        }
+
+        public ReservaVM CrearReservaVM(string codigoRecurso)
+        {
+            var reservaVM = CrearReservaVM();
+
+            reservaVM.RecursoReservado = codigoRecurso;
+
+            return reservaVM;
+        }
+
+        public BusquedaReservasVM CrearBusquedaReservasVM()
+        {
+            var busquedaReservasVM = new BusquedaReservasVM();
+
+            PoblarSelectUsuarios(busquedaReservasVM);
+            PoblarSelectRecursos(busquedaReservasVM);
+            PoblarSelectEstadosDeReserva(busquedaReservasVM);
+
+            return busquedaReservasVM;
+        }
+
+        public ReservaVM ConvertirReserva(Reserva reserva)
+        {
+            var reservaVM = new ReservaVM();
 
             reservaVM.Id = reserva.Id;
             reservaVM.Creador = reserva.Creador.NombreUsuario;
@@ -20,18 +63,85 @@ namespace Presentacion.Models.Conversores
             reservaVM.Responsable = reserva.Responsable.NombreUsuario;
             reservaVM.Descripcion = reserva.Descripcion;
 
+            PoblarSelectUsuario(reservaVM);
+
             return reservaVM;
         }
-        public static Reserva convertirReserva(ReservaVM reservaVM)
+
+        public void PoblarSelectUsuario(ReservaVM reservaVM)
         {
-            Reserva reserva = new Reserva();
+            var selectList = new List<SelectListItem>();
 
-            reserva.FechaCreacion = reservaVM.FechaCreacion;
-            reserva.Fin = reservaVM.Fin;
-            reserva.Inicio = reservaVM.Inicio;
-            reserva.Descripcion = reservaVM.Descripcion;
+            selectList.Add(new SelectListItem { Selected = true, Text = "Usuario actual", Value = "" });
+            selectList.AddRange(
+                UsuariosRepo.Todos()
+                    .Select(
+                        usuario =>
+                            new SelectListItem
+                            {
+                                Selected = false,
+                                Text = usuario.NombreUsuario,
+                                Value = usuario.NombreUsuario
+                            })
+                );
 
-            return reserva;
+
+            reservaVM.SelectUsuarioResponsable = selectList;
+        }
+
+        public void PoblarSelectRecursos(BusquedaReservasVM busquedaReservasVM)
+        {
+            IList<SelectListItem> listItems = new List<SelectListItem>();
+
+            listItems.Add(new SelectListItem { Text = "", Value = "", Selected = true });
+
+            listItems.AddRange(
+                RecursosRepo
+                    .Todos()
+                    .Select(
+                        recurso =>
+                            new SelectListItem
+                            {
+                                Text = recurso.Nombre,
+                                Value = recurso.Codigo
+                            }
+                    )
+                );
+
+            busquedaReservasVM.SelectRecursos = listItems;
+        }
+
+        public void PoblarSelectUsuarios(BusquedaReservasVM busquedaReservasVM)
+        {
+            IList<SelectListItem> listItems = new List<SelectListItem>();
+
+            listItems.Add(new SelectListItem { Text = "", Value = "", Selected = true });
+
+            listItems.AddRange(
+                UsuariosRepo
+                    .Todos()
+                    .Select(
+                        usuario =>
+                            new SelectListItem
+                            {
+                                Text = usuario.NombreUsuario,
+                                Value = usuario.NombreUsuario
+                            }
+                    )
+                );
+
+            busquedaReservasVM.SelectUsuarios = listItems;
+        }
+
+        public void PoblarSelectEstadosDeReserva(BusquedaReservasVM busquedaReservasVM)
+        {
+            IList<SelectListItem> listItems = new List<SelectListItem>();
+
+            listItems.Add(new SelectListItem { Text = "", Value = "", Selected = true });
+
+            listItems.AddRange(typeof(EstadoReserva).ToSelectList());
+
+            busquedaReservasVM.SelectEstadoReserva = listItems;
         }
     }
 }
