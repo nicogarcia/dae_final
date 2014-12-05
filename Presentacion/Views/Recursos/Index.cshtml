@@ -46,7 +46,7 @@
                     </td>
                     <td>
                         @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info" })
-                        @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
+                        @Html.BootstrapActionButton("Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
                         @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
                     </td>
                 </tr>
@@ -66,7 +66,7 @@
 
             <div class="form-group">
                 <div><label>Tipo</label></div>
-                @Html.DropDownList("filtroTipo", Model.SelectTiposDeRecursos)
+                @Html.DropDownList("filtroTipo", Model.SelectTiposDeRecursos, new {@class="form-control"})
             </div>
 
             <div class="form-group">

@@ -35,7 +35,7 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
                     @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
                     {
                         <li>@Html.ActionLink("Reservas", "Index", "Reservas")</li>

@@ -1,69 +1,74 @@
 ﻿@model Presentacion.Models.ReservaVM
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar reserva";
 }
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3 class="text-center">Editar reserva</h3>
+        <hr />
+    </div>
+    @using (Html.BeginForm("Edit", "Reservas"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="col-md-4 col-md-offset-4">
+            @Html.HiddenFor(model => model.Id)
 
-<h2>Edit</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Reserva</legend>
-
-        @Html.HiddenFor(model => model.Id)
-
-        <!-- Codigo del recurso -->
-        <div class="form-group">
-            <label class="control-label"> Codigo del recurso</label>
-            <div class="row">
-                <div class="col-md-7">
-                    @Html.BootstrapTextBoxFor(model => model.RecursoReservado)
-                    @Html.BootstrapValidationMessageFor(model => model.RecursoReservado)
-                </div>
-                <div class="col-md-5">
-                    @Html.BootstrapActionButton("Buscar recurso", "Buscar", "Recursos", new { ReturnUrl = Url.Action("EditForResource") }, new { @class = "btn-info" })
+            <!-- Codigo del recurso -->
+            <div class="form-group">
+                <label class="control-label">Código del recurso</label>
+                <div class="row">
+                    <div class="col-md-7">
+                        @Html.BootstrapTextBoxFor(model => model.RecursoReservado)
+                        @Html.BootstrapValidationMessageFor(model => model.RecursoReservado)
+                    </div>
+                    <div class="col-md-5">
+                        @Html.BootstrapActionButton("Buscar recurso", "Buscar", "Recursos", new { ReturnUrl = Url.Action("EditForResource") }, new { @class = "btn-info" })
+                    </div>
                 </div>
             </div>
+
+            <!-- Inicio reserva -->
+            <div class="form-group">
+                @Html.Label("Inicio de la reserva", new { @class = "control-label" })
+                @Html.BootstrapTextBoxFor(model => model.Inicio)
+                @Html.BootstrapValidationMessageFor(model => model.Inicio)
+            </div>
+
+            <!-- Fin reserva-->
+            <div class="form-group">
+                @Html.Label("Fin de la reserva", new { @class = "control-label" })
+                @Html.BootstrapTextBoxFor(model => model.Fin)
+                @Html.BootstrapValidationMessageFor(model => model.Fin)
+            </div>
+
+            <!-- Descripcion -->
+            <div class="form-group">
+                @Html.BootstrapLabelFor(model => model.Descripcion)
+                @Html.BootstrapTextBoxFor(model => model.Descripcion)
+                @Html.BootstrapValidationMessageFor(model => model.Descripcion)
+            </div>
+            <!-- Submit -->
+            <div class="col-md-12">
+                <p class="pull-right">
+                    @Html.BootstrapActionButton("Volver al listado", "Index", new { @class = "btn-default" })
+                    <button class="btn btn-success" type="submit">Guardar</button>
+                </p>
+            </div>
         </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Inicio)
-            @Html.EditorFor(model => model.Inicio)
-            @Html.ValidationMessageFor(model => model.Inicio)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Fin)
-            @Html.EditorFor(model => model.Fin)
-            @Html.ValidationMessageFor(model => model.Fin)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.FechaCreacion)
-            @Html.EditorFor(model => model.FechaCreacion)
-            @Html.ValidationMessageFor(model => model.FechaCreacion)
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Descripcion)
-            @Html.EditorFor(model => model.Descripcion)
-            @Html.ValidationMessageFor(model => model.Descripcion)
-        </div>
-
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    }
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script type="text/javascript">
+        $(function () {
+            $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+            $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+        });
+    </script>
 }

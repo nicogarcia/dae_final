@@ -24,6 +24,7 @@ namespace Presentacion.Models.Conversores
             var reservaVM = new ReservaVM();
             
             PoblarSelectUsuario(reservaVM);
+            PoblarSelectRecursos(reservaVM);
 
             return reservaVM;
         }
@@ -72,6 +73,7 @@ namespace Presentacion.Models.Conversores
         {
             var selectList = new List<SelectListItem>();
 
+            selectList.Add(new SelectListItem { Selected = false, Text = "", Value = "" });
             selectList.Add(new SelectListItem { Selected = true, Text = "Usuario actual", Value = "" });
             selectList.AddRange(
                 UsuariosRepo.Todos()
@@ -91,6 +93,16 @@ namespace Presentacion.Models.Conversores
 
         public void PoblarSelectRecursos(BusquedaReservasVM busquedaReservasVM)
         {
+            busquedaReservasVM.SelectRecursos = SelectRecursos();
+        }
+
+        public void PoblarSelectRecursos(ReservaVM reservaVM)
+        {
+             reservaVM.SelectRecursos = SelectRecursos();
+        }
+
+        private IList<SelectListItem> SelectRecursos()
+        {
             IList<SelectListItem> listItems = new List<SelectListItem>();
 
             listItems.Add(new SelectListItem { Text = "", Value = "", Selected = true });
@@ -108,8 +120,8 @@ namespace Presentacion.Models.Conversores
                     )
                 );
 
-            busquedaReservasVM.SelectRecursos = listItems;
-        }
+            return listItems;
+        } 
 
         public void PoblarSelectUsuarios(BusquedaReservasVM busquedaReservasVM)
         {

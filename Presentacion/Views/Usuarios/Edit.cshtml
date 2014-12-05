@@ -1,76 +1,73 @@
 ﻿@model Presentacion.Models.UsuarioVM
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Editar usuario";
 }
 
-<h2>Edit</h2>
-
-@using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>Usuario</legend>
-
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <h3 class="text-center">Editar usuario</h3>
+        <hr />
+    </div>
+    @using (Html.BeginForm())
+{
+    <div class="col-md-3 col-md-offset-3">
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Nombre)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Nombre)
-            @Html.ValidationMessageFor(model => model.Nombre)
+            @Html.BootstrapLabelFor(model => model.Nombre)
+            @Html.BootstrapTextBoxFor(model => model.Nombre)
+            @Html.BootstrapValidationMessageFor(model => model.Nombre)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Apellido)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Apellido)
-            @Html.ValidationMessageFor(model => model.Apellido)
+            @Html.BootstrapLabelFor(model => model.Apellido)
+            @Html.BootstrapTextBoxFor(model => model.Apellido)
+            @Html.BootstrapValidationMessageFor(model => model.Apellido)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DNI)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.DNI)
-            @Html.ValidationMessageFor(model => model.DNI)
+            @Html.BootstrapLabelFor(model => model.Email)
+            @Html.BootstrapTextBoxFor(model => model.Email)
+            @Html.BootstrapValidationMessageFor(model => model.Email)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Legajo)
+            @Html.BootstrapLabelFor(model => model.DNI)
+            @Html.BootstrapTextBoxFor(model => model.DNI)
+            @Html.BootstrapValidationMessageFor(model => model.DNI)
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Legajo)
-            @Html.ValidationMessageFor(model => model.Legajo)
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="form-group">
+            @Html.BootstrapLabelFor(model => model.Legajo)
+            @Html.BootstrapTextBoxFor(model => model.Legajo)
+            @Html.BootstrapValidationMessageFor(model => model.Legajo)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Email)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Email)
-            @Html.ValidationMessageFor(model => model.Email)
+            @Html.BootstrapLabelFor(model => model.Telefono)
+            @Html.BootstrapTextBoxFor(model => model.Telefono)
+            @Html.BootstrapValidationMessageFor(model => model.Telefono)
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Telefono)
+            @Html.Label("Tipo")
+            @Html.BootstrapDropdownListFor(model => model.Tipo, Model.SelectoTipoDeUsuario)
         </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Telefono)
-            @Html.ValidationMessageFor(model => model.Telefono)
+    </div>
+
+        <div class="col-md-6 col-md-offset-3">
+            <p class="pull-right">
+                @Html.BootstrapActionButton("Volver al listado", "Index", new { @class = "btn-default" })
+                <button class="btn btn-success" type="submit">Guardar</button>
+            </p>
         </div>
-
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    }
 </div>
 
 @section Scripts {

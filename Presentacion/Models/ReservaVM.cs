@@ -32,7 +32,8 @@ namespace Presentacion.Models
 
         public string Estado { get; set; }
 
-        public List<SelectListItem> SelectUsuarioResponsable { get; set; }
+        public IList<SelectListItem> SelectUsuarioResponsable { get; set; }
+        public IList<SelectListItem> SelectRecursos { get; set; }
 
         public ReservaVM()
         {

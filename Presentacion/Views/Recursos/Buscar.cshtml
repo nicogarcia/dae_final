@@ -39,7 +39,7 @@
                     <!-- Tipo -->
                     <div class="form-group">
                         @Html.Label("Tipo")
-                        @Html.DropDownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
+                        @Html.BootstrapDropdownListFor(model => model.TipoId, Model.SelectTiposDeRecursos)
                     </div>
 
                     <!-- Fecha Inicio -->
@@ -63,16 +63,20 @@
                     <label>Características</label>
                     <div id="characteristics-container"></div>
 
-                    <div class="col-md-12">
-                        <!-- Boton de busqueda-->
-                        <p><a class="btn btn-success pull-right" onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a></p>
-                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <!-- Boton de busqueda-->
+                    <p class="text-center"><a id="default-button" class="btn btn-success" onclick="javascript: ObtenerRecursos('@Url.Action("Buscar")');">Buscar</a></p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-7">
             <legend class="text-center">Resultados</legend>
+            <p id="no-result-message" class="text-center" style="display:none;">
+                <strong>No hay resultados que coincidan con los criterios seleccionados</strong>
+            </p>
             <table id="resultadoBusqueda" class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>Código</th>
@@ -113,7 +117,18 @@
         <td>{{NombreRecurso}}</td>
         <td>{{DescripcionRecurso}}</td>
         <td>
-            <a class="btn btn-info" href="@(ViewContext.HttpContext.Request.QueryString["ReturnUrl"])/{{Id}}">Reservar</a>
+            <p>
+                @if (ViewContext.HttpContext.Request.QueryString.AllKeys.Contains("ReturnUrl"))
+                {
+                    <a class="btn btn-primary" href="@(ViewContext.HttpContext.Request.QueryString["ReturnUrl"])/{{Id}}">Reservar</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary" href="@(Url.Action("CreateForResource","Reservas"))/{{Id}}">Reservar</a>
+                }
+
+                <a class="btn btn-success" href="@(Url.Action("Details","Recursos"))/{{Id}}">Detalles</a>
+            </p>
         </td>
     </tr>
 </script>
@@ -129,7 +144,7 @@
 
         // Obtener todas las caracteristicas y registrar los eventos para habilitarlas y deshabilitarlas
         $(document).ready(
-            function () {
+            function() {
 
                 // Initialize datetime pickers
                 $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
@@ -139,13 +154,26 @@
                 ObtenerTodasCaracteristicas('@Url.Action("ObtenerTodasCaracteristicas")');
 
                 // Generate characteristics form components
-                $.each(tiposDeCaracteristicas, function (i, value) {
+                $.each(tiposDeCaracteristicas, function(i, value) {
                     AddNewCharacteristic(value['Id'], value['Nombre']);
                 });
 
-                $("input:checkbox").each(function () {
-                    $(this).on('click', function () {
+                $("input:checkbox").each(function() {
+                    $(this).on('click', function() {
                         $('#CaracteristicaValor_' + this.value).toggleDisabled();
+                    });
+                });
+
+                // Load all resources at first
+                ObtenerRecursos('@Url.Action("Buscar")');
+
+                $(function() {
+                    $("form input").keypress(function(e) {
+                        if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                            $('#default-button').click();
+                            return false;
+                        }
+                        return true;
                     });
                 });
             }

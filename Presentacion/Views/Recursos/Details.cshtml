@@ -58,7 +58,7 @@
         </div>
         <div class="row">
             <p class="text-center">
-                @Html.BootstrapActionButton("Volver", "Index", null, new { @class = "btn-default" })
+                <button class = "btn btn-default" onclick="javascript:window.history.back();">Atrás</button>
                 @Html.BootstrapActionButton("Editar", "Edit", new { id = Model.Id }, new { @class = "btn-info" })
             </p>
         </div>

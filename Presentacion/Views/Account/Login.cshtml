@@ -1,41 +1,46 @@
 ﻿@model Presentacion.Models.LoginModel
 
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Iniciar sesión";
 }
 
-<hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
-</hgroup>
-
-<section id="loginForm">
-<h2>Use a local account to log in.</h2>
-@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Iniciar sesión</h3>
+        <hr />
+    </div>
+</div>
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+{
     @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            @Html.ValidationSummary(true)
+            <div class="form-group">
+                <label class="control-label">Nombre de usuario</label>
+                @Html.BootstrapTextBoxFor(m => m.UserName)
+                @Html.BootstrapValidationMessageFor(m => m.UserName)
+            </div>
 
-    <fieldset>
-        <legend>Log in Form</legend>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Password)
-                @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
-            </li>
-            <li>
-                @Html.CheckBoxFor(m => m.RememberMe)
-                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
-            </li>
-        </ol>
-        <input type="submit" value="Log in" />
-    </fieldset>
+            <div class="form-group">
+                <label class="control-label">Contraseña</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.BootstrapValidationMessageFor(m => m.Password)
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.RememberMe) Recordarme
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <p class="pull-right"><button class="btn btn-success" type="submit">Iniciar sesión</button></p>
+        </div>
+    </div>
 }
-</section>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

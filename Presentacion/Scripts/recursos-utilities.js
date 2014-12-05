@@ -90,14 +90,22 @@ function UpdateCaracteristicasNames() {
 function MostrarResultados(result) {
     $('#resultadoBusqueda tr:gt(0)').remove();
 
-    $.each(result, function () {
-        var template = $('#resource-template').html();
+    if (result.length == 0) {
+        $('#resultadoBusqueda').hide();
+        $('#no-result-message').show();
+    } else {
+        $.each(result, function() {
+            var template = $('#resource-template').html();
 
-        template = replaceAll('{{Id}}', this['Id'], template);
-        template = replaceAll('{{CodigoRecurso}}', this['Codigo'], template);
-        template = replaceAll('{{NombreRecurso}}', this['Nombre'], template);
-        template = replaceAll('{{DescripcionRecurso}}', this['Descripcion'], template);
+            template = replaceAll('{{Id}}', this['Id'], template);
+            template = replaceAll('{{CodigoRecurso}}', this['Codigo'], template);
+            template = replaceAll('{{NombreRecurso}}', this['Nombre'], template);
+            template = replaceAll('{{DescripcionRecurso}}', this['Descripcion'], template);
 
-        $('#resultadoBusqueda tbody').append(template);
-    });
+            $('#resultadoBusqueda tbody').append(template);
+        });
+
+        $('#no-result-message').hide();
+        $('#resultadoBusqueda').show();
+    }
 }

@@ -64,7 +64,7 @@
             </table>
         }
         else
-        {           
+        {
             <br /><h4>Aún no hay reservas</h4>
         }
     </div>
@@ -83,15 +83,17 @@
             </div>
             <div class="form-group">
                 <label>Recurso</label>
-                @Html.DropDownList("codigoRecurso", Model.SelectDeRecursos())
+                <div class="ui-widget">
+                    @Html.DropDownList("codigoRecurso", Model.SelectRecursos, new { id = "selectRecursos", @class = "form-control" })
+                </div>
             </div>
             <div class="form-group">
                 <label>Usuario responsable</label>
-                @Html.DropDownList("usuarioResponsable", Model.SelectDeUsuarios())
+                @Html.DropDownList("usuarioResponsable", Model.SelectUsuarios, new { id="selectUsuarios", @class = "form-control" })
             </div>
             <div class="form-group">
                 <label>Estado de reserva</label>
-                @Html.DropDownList("estadoReserva", Model.SelectEstadosDeReserva())
+                @Html.DropDownList("estadoReserva", Model.SelectEstadoReserva, new { @class = "form-control" })
             </div>
             <button class="btn btn-default" type="submit">Filtrar</button>
         }
@@ -103,9 +105,23 @@
     @Scripts.Render("~/bundles/jqueryui")
 
     <script type="text/javascript">
+
         $(function () {
             $("[name='fechaDesde']").datetimepicker({ format: 'd/m/Y H:i', inline: false });
             $("[name='fechaHasta']").datetimepicker({ format: 'd/m/Y H:i', inline: false });
+            
+        });
+
+        $('#selectRecursos').selectize({
+            sortField: 'text',
+            create: true,
+            createOnBlur: true
+        });
+
+        $('#selectUsuarios').selectize({
+            sortField: 'text',
+            create: true,
+            createOnBlur: true
         });
     </script>
 }

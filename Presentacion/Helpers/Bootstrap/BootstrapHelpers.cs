@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
@@ -42,7 +43,7 @@ namespace Presentacion.Helpers.Bootstrap
         {
             return helper.ActionLink(text, action, null, AddBtnClass(htmlAttributes));
         }
-        
+
         public static MvcHtmlString BootstrapActionButton(this HtmlHelper helper, string text, string action,
             string controller, object routeValues, object htmlAttributes)
         {
@@ -65,6 +66,25 @@ namespace Presentacion.Helpers.Bootstrap
                 newAttributes.Add("class", "btn ");
 
             return newAttributes;
+        }
+
+        public static MvcHtmlString BootstrapDropdownListFor<TModel, TProperty>(
+            this HtmlHelper<TModel> helper,
+            Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> model
+            )
+        {
+            return helper.DropDownListFor(expression, model, new { @class = "form-control" });
+        }
+
+        public static MvcHtmlString BootstrapDropdownListFor<TModel, TProperty>(
+            this HtmlHelper<TModel> helper,
+            Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> model,
+            string htmlId
+            )
+        {
+            return helper.DropDownListFor(expression, model, new { id= htmlId, @class = "form-control" });
         }
     }
 }
