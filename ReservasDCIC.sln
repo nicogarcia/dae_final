@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominio", "Dominio\Dominio.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccesoDatos", "AccesoDatos\AccesoDatos.csproj", "{29A05758-AB61-4751-95A4-2C4017D97970}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReservasDCICTest", "ReservasDCICTest\ReservasDCICTest.csproj", "{BB50506C-504C-496B-AE6A-A8EA3D644936}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{29A05758-AB61-4751-95A4-2C4017D97970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29A05758-AB61-4751-95A4-2C4017D97970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29A05758-AB61-4751-95A4-2C4017D97970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB50506C-504C-496B-AE6A-A8EA3D644936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB50506C-504C-496B-AE6A-A8EA3D644936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB50506C-504C-496B-AE6A-A8EA3D644936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB50506C-504C-496B-AE6A-A8EA3D644936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
