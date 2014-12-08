@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>jquery.validate.unobtrusive.bootstrap3</id>
+    <version>1.0.0</version>
+    <title>jQuery Unobtrusive Validation for Bootstrap 3</title>
+    <authors>David Haney</authors>
+    <owners>David Haney</owners>
+    <projectUrl>http://www.imperativebytes.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package enables jQuery unobtrusive validation for Bootstrap 3. The errors appear as tooltips and the form elements turn red when invalid, green when valid. You can customize all aspects of the validation.</description>
+    <summary>Fully functional jQuery unobtrusive validation for Bootstrap 3.</summary>
+    <releaseNotes>To use, include the jquery.validate.unobtrusive.bootstrap.js file in your bundle config or master page *AFTER* including all other Bootstrap and jquery validate js files.</releaseNotes>
+    <copyright>2014 Imperative Bytes, LLC</copyright>
+    <language>en-US</language>
+    <tags>jquery validate validation unobtrusive bootstrap bootstrap3</tags>
+  </metadata>
+</package>
