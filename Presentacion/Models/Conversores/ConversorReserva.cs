@@ -68,6 +68,7 @@ namespace Presentacion.Models.Conversores
             reservaVM.Descripcion = reserva.Descripcion;
 
             PoblarSelectUsuario(reservaVM);
+            PoblarSelectRecursos(reservaVM);
 
             return reservaVM;
         }

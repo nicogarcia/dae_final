@@ -20,7 +20,7 @@
                 <label class="control-label">Código del recurso</label>
                 <div class="row">
                     <div class="col-md-7">
-                        @Html.BootstrapTextBoxFor(model => model.RecursoReservado)
+                        @Html.BootstrapDropdownListFor(model => model.RecursoReservado, Model.SelectRecursos, "selectRecursos")
                         @Html.BootstrapValidationMessageFor(model => model.RecursoReservado)
                     </div>
                     <div class="col-md-5">
@@ -69,6 +69,12 @@
         $(function () {
             $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
             $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+            
+            $('#selectRecursos').selectize({
+                sortField: 'text',
+                create: true,
+                createOnBlur: true
+            });
         });
     </script>
 }
