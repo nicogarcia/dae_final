@@ -79,6 +79,10 @@ namespace Presentacion.Models.Conversores
 
             // Modificaciones implicitas
             reserva.Creador = UsuariosRepo.BuscarUsuario(currentUser);
+
+            // TODO: Without this, it fails.
+            reserva.Responsable = reserva.Responsable;
+
             reserva.FechaCreacion = DateTime.Now;
 
             // Modificaciones explicitas
