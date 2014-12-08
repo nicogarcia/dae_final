@@ -17,11 +17,9 @@ namespace Presentacion
         {
             using (var context = new SecurityContext())
             {
-                if (!context.Database.Exists())
-                {
-                    // Create the SimpleMembership database without Entity Framework migration schema
-                    ((IObjectContextAdapter)context).ObjectContext.CreateDatabase();
-                }
+                // Create the SimpleMembership database without Entity Framework migration schema
+                context.Database.CreateIfNotExists();
+
                 context.Database.Initialize(true);
             }
 
