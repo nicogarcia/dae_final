@@ -130,6 +130,7 @@ namespace Presentacion.Controllers
                 ModelStateHelper.CopyErrors(ValidadorReserva.ObtenerErrores(), ModelState);
 
                 ConversorReserva.PoblarSelectUsuario(reservaVM);
+                ConversorReserva.PoblarSelectRecursos(reservaVM);
 
                 return View(reservaVM);
             }
@@ -216,6 +217,7 @@ namespace Presentacion.Controllers
                 ModelStateHelper.CopyErrors(ValidadorReserva.ObtenerErrores(), ModelState);
 
                 ConversorReserva.PoblarSelectUsuario(reservaVM);
+                ConversorReserva.PoblarSelectRecursos(reservaVM);
 
                 return View(reservaVM);
             }

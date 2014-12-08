@@ -13,5 +13,6 @@ namespace Presentacion.Models.Conversores
         void PoblarSelectUsuarios(BusquedaReservasVM busquedaReservasVM);
         void PoblarSelectEstadosDeReserva(BusquedaReservasVM busquedaReservasVM);
         Reserva EditarReserva(ReservaVM reservaVM, string currentUser);
+        void PoblarSelectRecursos(ReservaVM reservaVM);
     }
 }
