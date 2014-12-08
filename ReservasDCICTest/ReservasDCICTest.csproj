@@ -114,7 +114,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="TestsModule.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="RecursosControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

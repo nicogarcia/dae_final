@@ -206,13 +206,14 @@
     </Compile>
     <Compile Include="Helpers\Bootstrap\BootstrapHelpers.cs" />
     <Compile Include="Models\BusquedaRecursoVM.cs" />
-    <Compile Include="Models\Conversores\ConversorReservaMV.cs" />
+    <Compile Include="Models\Conversores\ConversorReserva.cs" />
     <Compile Include="Models\Conversores\ConversorUsuario.cs" />
     <Compile Include="Filters\AutorizarReserva.cs" />
     <Compile Include="Models\Conversores\ConversorRecurso.cs" />
     <Compile Include="Models\Conversores\IConversorRecurso.cs" />
-    <Compile Include="Models\Conversores\IConversorReservaMV.cs" />
+    <Compile Include="Models\Conversores\IConversorReserva.cs" />
     <Compile Include="Models\BusquedaReservasVM.cs" />
+    <Compile Include="Models\Conversores\IConversorUsuario.cs" />
     <Compile Include="Models\ReservaVM.cs" />
     <Compile Include="Soporte\EnumExtensions.cs" />
     <Compile Include="Soporte\ModelStateHelper.cs" />

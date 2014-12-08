@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 @Html.BootstrapLabelFor(model => model.Password)
-                @Html.BootstrapTextBoxFor(model => model.Password)
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control"})
                 @Html.BootstrapValidationMessageFor(model => model.Password)
             </div>
 

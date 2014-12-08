@@ -26,7 +26,7 @@ namespace Presentacion.Controllers
         private IReservasQueriesTS ReservasQueriesTS;
 
         // Utilidades
-        private IConversorReservaMV ConversorReserva;
+        private IConversorReserva ConversorReserva;
         private IValidadorDeReserva ValidadorReserva;
 
         // UoW
@@ -38,7 +38,7 @@ namespace Presentacion.Controllers
             IRecursosRepo recursosRepo,
             IUsuariosRepo usuariosRepo,
             IReservasQueriesTS reservasQueriesTs,
-            IConversorReservaMV conversorReserva,
+            IConversorReserva conversorReserva,
             IValidadorDeReserva validadorDeReserva)
         {
             UowFactory = uow;
@@ -204,7 +204,7 @@ namespace Presentacion.Controllers
 
                 if (ModelState.IsValid && ValidarReservaAuxiliar(reservaVM))
                 {
-                    var reserva = EditarReservaAuxiliar(reservaVM);
+                    var reserva = ConversorReserva.EditarReserva(reservaVM, User.Identity.Name);
 
                     ReservasRepo.Actualizar(reserva);
 
@@ -219,23 +219,6 @@ namespace Presentacion.Controllers
 
                 return View(reservaVM);
             }
-        }
-
-        private Reserva EditarReservaAuxiliar(ReservaVM reservaVM)
-        {
-            Reserva reserva = ReservasRepo.ObtenerPorId(reservaVM.Id);
-
-            // Modificaciones implicitas
-            reserva.Creador = UsuariosRepo.BuscarUsuario(User.Identity.Name);
-            reserva.FechaCreacion = DateTime.Now;
-
-            // Modificaciones explicitas
-            reserva.RecursoReservado = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
-            reserva.Inicio = reservaVM.Inicio;
-            reserva.Fin = reservaVM.Fin;
-            reserva.Descripcion = reservaVM.Descripcion;
-
-            return reserva;
         }
 
         //

@@ -10,7 +10,9 @@ namespace Presentacion.App_Start
         {
             Bind<IConversorRecurso>().To<ConversorRecurso>().InRequestScope();
 
-            Bind<IConversorReservaMV>().To<ConversorReservaMV>().InRequestScope();
+            Bind<IConversorReserva>().To<ConversorReserva>().InRequestScope();
+
+            Bind<IConversorUsuario>().To<ConversorUsuario>().InRequestScope();
         }
     }
 }

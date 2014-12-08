@@ -6,29 +6,23 @@ namespace Dominio.Repos
 {
     public interface IUsuariosRepo
     {
-        bool ExisteNombreUsuario(string nombreUsuario);
+        Usuario ObtenerUsuario(int id);
 
-        Usuario getUsuario(int id);
+        Usuario BuscarUsuario(string nombreUsuario);
 
-        bool ExisteEmail(string email);
+        bool ExisteNombreUsuario(string nombreUsuario, int id = -1);
 
-        bool ExisteDNI(string dni);
+        bool ExisteEmail(string email, int id = -1);
 
-        bool ExisteLegajo(string legajo);
+        bool ExisteDNI(string dni, int id = -1);
+
+        bool ExisteLegajo(string legajo, int id = -1);
         
         IList<Usuario> Todos();
 
         void Agregar(Usuario usuario);
 
         void Actualizar(Usuario usuario);
-        
-        bool ChequearExistenciaEmail(string email, int id);
-
-        bool ChequearExistenciaDNI(string dni, int id);
-
-        bool ChequearExistenciaLegajo(string legajo, int id);
-
-        Usuario BuscarUsuario(string usuarioResponsable);
 
         IQueryable<Usuario> AsQueryable();
     }

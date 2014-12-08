@@ -17,27 +17,44 @@ namespace Presentacion.Controllers
     [Autorizar(TipoDeUsuario.Administrador)]
     public class UsuariosController : Controller
     {
+        // Repos
         private IUsuariosRepo UsuariosRepo;
-        private IUnitOfWorkFactory UowFactory;
+
+        // Queries
         private IUsuariosQueriesTS UsuariosQueriesTS;
+
+        // UoW
+        private IUnitOfWorkFactory UowFactory;
+
+        // Util
+        private IValidadorDeUsuarios ValidadorDeUsuarios;
+        private IConversorUsuario ConversorUsuario;
 
         //
         // GET: /Usuario/
 
         public UsuariosController(
-            IUsuariosRepo usuariosRepo, 
+            IUsuariosRepo usuariosRepo,
             IUnitOfWorkFactory uowFactory,
-            IUsuariosQueriesTS usuariosQueriesTs)
+            IUsuariosQueriesTS usuariosQueriesTs,
+            IValidadorDeUsuarios validadorDeUsuarios,
+            IConversorUsuario conversorUsuario)
         {
             UsuariosRepo = usuariosRepo;
             UowFactory = uowFactory;
             UsuariosQueriesTS = usuariosQueriesTs;
+            ValidadorDeUsuarios = validadorDeUsuarios;
+            ConversorUsuario = conversorUsuario;
         }
 
         public ActionResult Index(ListaUsuariosVM busquedaVM)
         {
-            var listado = UsuariosQueriesTS.ListarUsuarios(busquedaVM.Nombre, busquedaVM.Apellido, busquedaVM.Legajo);
-            busquedaVM.ListaUsuario = listado;
+            busquedaVM.ListaUsuario = UsuariosQueriesTS.ListarUsuarios(
+                busquedaVM.Nombre,
+                busquedaVM.Apellido,
+                busquedaVM.Legajo
+                );
+
             return View(busquedaVM);
         }
 
@@ -46,12 +63,13 @@ namespace Presentacion.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            var usuario = UsuariosRepo.getUsuario(id);
+            var usuario = UsuariosRepo.ObtenerUsuario(id);
 
             if (usuario == null)
                 return HttpNotFound();
 
-            UsuarioVM usuarioVM = ConversorUsuario.getInstance(usuario);
+            UsuarioVM usuarioVM = ConversorUsuario.CrearViewModel(usuario);
+
             return View(usuarioVM);
         }
 
@@ -71,36 +89,25 @@ namespace Presentacion.Controllers
         {
             using (var uow = UowFactory.Actual)
             {
-                var validador = new ValidadorDeUsuarios(UsuariosRepo);
-
-                if (ModelState.IsValid && CrearUsuarioController(usuarioVM, validador))
+                if (ModelState.IsValid && ValidarUsuarioAuxiliar(usuarioVM))
                 {
+                    var usuario = ConversorUsuario.CrearUsuario(usuarioVM);
+
+                    UsuariosRepo.Agregar(usuario);
+
                     uow.Commit();
+
                     return RedirectToAction("Index");
                 }
 
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
+                ModelStateHelper.CopyErrors(ValidadorDeUsuarios.ObtenerErrores(), ModelState);
                 return View(usuarioVM);
             }
         }
 
-        //Valida y crea un usuario.
-        private bool CrearUsuarioController(UsuarioVM usuarioVM, ValidadorDeUsuarios validador)
+        public bool ValidarUsuarioAuxiliar(UsuarioVM usuarioVM)
         {
-            var usuario = new Usuario(usuarioVM.NombreUsuario, usuarioVM.Nombre, usuarioVM.Apellido, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Email, usuarioVM.Telefono, usuarioVM.Tipo);
-            if (validador.Validar(usuario))
-            {
-                WebSecurity.CreateUserAndAccount(usuarioVM.NombreUsuario, usuarioVM.Password);
-
-                UsuariosRepo.Agregar(usuario);
-
-                // Le asocio el rol correspondiente.
-                var roles = (SimpleRoleProvider)Roles.Provider;
-                roles.AddUsersToRoles(new[] { usuarioVM.NombreUsuario }, new[] { usuarioVM.Tipo.ToString() });
-
-                return true;
-            }
-            return false;
+            return ValidadorDeUsuarios.Validar(usuarioVM.NombreUsuario, usuarioVM.Email, usuarioVM.DNI, usuarioVM.Legajo);
         }
 
         //
@@ -108,13 +115,13 @@ namespace Presentacion.Controllers
 
         public ActionResult Edit(int id = 0)
         {
-            var usuario = UsuariosRepo.getUsuario(id);
+            var usuario = UsuariosRepo.ObtenerUsuario(id);
 
             if (usuario == null)
                 return HttpNotFound();
 
             if (usuario.IsActive())
-                return View(ConversorUsuario.getInstance(usuario));
+                return View(ConversorUsuario.CrearViewModel(usuario));
 
             return RedirectToAction("Edit");
         }
@@ -124,30 +131,33 @@ namespace Presentacion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(UsuarioVM usuario)
+        public ActionResult Edit(UsuarioVM usuarioVM)
         {
             using (var uow = UowFactory.Actual)
             {
-                var validador = new ValidadorDeUsuarios(UsuariosRepo);
-                Usuario user = ConversorUsuario.getInstance(new Usuario(), usuario);
-                if (validador.validarUsuario(user, usuario.id))
+                if (CustomModelValidation() && 
+                    ValidadorDeUsuarios.Validar(usuarioVM.NombreUsuario, usuarioVM.Email, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.id))
                 {
-                    user = UsuariosRepo.getUsuario(usuario.id);
-                    var roles = (SimpleRoleProvider)Roles.Provider;
-                    if (usuario.Tipo != user.Tipo)
-                    {
-                        roles.RemoveUsersFromRoles(new[] { user.NombreUsuario }, new[] { user.Tipo.ToString() });
-                        roles.AddUsersToRoles(new[] { user.NombreUsuario }, new[] { usuario.Tipo.ToString() });
-                    }
-                    user = ConversorUsuario.getInstance(user, usuario);
-                    UsuariosRepo.Actualizar(user);
+                    var usuario = ConversorUsuario.ActualizarUsuario(usuarioVM);
+
+                    UsuariosRepo.Actualizar(usuario);
+
                     uow.Commit();
+
                     return RedirectToAction("Index");
                 }
-                
-                ModelStateHelper.CopyErrors(validador.Errores, ModelState);
-                return View(usuario);
+
+                ModelStateHelper.CopyErrors(ValidadorDeUsuarios.ObtenerErrores(), ModelState);
+                return View(usuarioVM);
             }
+        }
+
+        public bool CustomModelValidation()
+        {
+            return
+                ModelState.IsValidField("Legajo") &&
+                ModelState.IsValidField("Email") &&
+                ModelState.IsValidField("DNI");
         }
 
         //bloquear usuario
@@ -155,7 +165,7 @@ namespace Presentacion.Controllers
         {
             using (var uow = UowFactory.Actual)
             {
-                var usuario = UsuariosRepo.getUsuario(id);
+                var usuario = UsuariosRepo.ObtenerUsuario(id);
 
                 if (usuario == null)
                     return HttpNotFound();
@@ -176,12 +186,12 @@ namespace Presentacion.Controllers
 
         public ActionResult Delete(int id = 0)
         {
-            Usuario usuario = UsuariosRepo.getUsuario(id);
+            Usuario usuario = UsuariosRepo.ObtenerUsuario(id);
 
             if (usuario == null)
                 return HttpNotFound();
 
-            return View(ConversorUsuario.getInstance(usuario));
+            return View(ConversorUsuario.CrearViewModel(usuario));
         }
 
         //
@@ -193,19 +203,19 @@ namespace Presentacion.Controllers
         {
             using (var uow = UowFactory.Actual)
             {
-                var usuario = UsuariosRepo.getUsuario(id);
+                var usuario = UsuariosRepo.ObtenerUsuario(id);
 
                 if (usuario == null)
                     return HttpNotFound();
 
                 usuario.SetStateInactive();
-                
+
                 //codigo sacado de http://stackoverflow.com/questions/13391166/how-to-delete-a-simplemembership-user
                 if (Roles.GetRolesForUser(usuario.NombreUsuario).Length > 0)
                     Roles.RemoveUserFromRoles(usuario.NombreUsuario, Roles.GetRolesForUser(usuario.NombreUsuario));
 
                 // deletes record from webpages_Membership table
-                ((SimpleMembershipProvider) Membership.Provider).DeleteAccount(usuario.NombreUsuario);
+                ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(usuario.NombreUsuario);
 
                 // deletes record from UserProfile table
                 Membership.Provider.DeleteUser(usuario.NombreUsuario, true);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Dominio.Entidades;
@@ -8,15 +9,17 @@ using Presentacion.Soporte;
 
 namespace Presentacion.Models.Conversores
 {
-    public class ConversorReservaMV : IConversorReservaMV
+    public class ConversorReserva : IConversorReserva
     {
         private IUsuariosRepo UsuariosRepo;
         private IRecursosRepo RecursosRepo;
+        private IReservasRepo ReservasRepo;
         
-        public ConversorReservaMV(IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo)
+        public ConversorReserva(IUsuariosRepo usuariosRepo, IRecursosRepo recursosRepo, IReservasRepo reservasRepo)
         {
             UsuariosRepo = usuariosRepo;
             RecursosRepo = recursosRepo;
+            ReservasRepo = reservasRepo;
         }
 
         public ReservaVM CrearReservaVM()
@@ -67,6 +70,23 @@ namespace Presentacion.Models.Conversores
             PoblarSelectUsuario(reservaVM);
 
             return reservaVM;
+        }
+        
+        public Reserva EditarReserva(ReservaVM reservaVM, string currentUser)
+        {
+            Reserva reserva = ReservasRepo.ObtenerPorId(reservaVM.Id);
+
+            // Modificaciones implicitas
+            reserva.Creador = UsuariosRepo.BuscarUsuario(currentUser);
+            reserva.FechaCreacion = DateTime.Now;
+
+            // Modificaciones explicitas
+            reserva.RecursoReservado = RecursosRepo.ObtenerPorCodigo(reservaVM.RecursoReservado);
+            reserva.Inicio = reservaVM.Inicio;
+            reserva.Fin = reservaVM.Fin;
+            reserva.Descripcion = reservaVM.Descripcion;
+
+            return reserva;
         }
 
         public void PoblarSelectUsuario(ReservaVM reservaVM)

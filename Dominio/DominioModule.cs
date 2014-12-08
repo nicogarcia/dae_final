@@ -14,7 +14,8 @@ namespace Dominio
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>().InSingletonScope();
 
             Bind<IValidadorDeRecursos>().To<ValidadorDeRecursos>().InRequestScope();
-            Bind<IValidadorDeReserva>().To<ValidadorDeReserva>();
+            Bind<IValidadorDeUsuarios>().To<ValidadorDeUsuarios>().InRequestScope();
+            Bind<IValidadorDeReserva>().To<ValidadorDeReserva>().InRequestScope();
             
             Bind<IRecursosQueriesTS>().To<RecursosQueriesTS>();
             Bind<IUsuariosQueriesTS>().To<UsuariosQueriesTS>();

@@ -2,7 +2,7 @@
 
 namespace Presentacion.Models.Conversores
 {
-    public interface IConversorReservaMV
+    public interface IConversorReserva
     {
         ReservaVM ConvertirReserva(Reserva reserva);
         ReservaVM CrearReservaVM();
@@ -12,5 +12,6 @@ namespace Presentacion.Models.Conversores
         void PoblarSelectRecursos(BusquedaReservasVM busquedaReservasVM);
         void PoblarSelectUsuarios(BusquedaReservasVM busquedaReservasVM);
         void PoblarSelectEstadosDeReserva(BusquedaReservasVM busquedaReservasVM);
+        Reserva EditarReserva(ReservaVM reservaVM, string currentUser);
     }
 }

@@ -32,7 +32,7 @@ namespace Presentacion.Models.Conversores
             return recursoVM;
         }
 
-        public RecursoVM CrearViewModel(Recurso recurso)
+        public virtual RecursoVM CrearViewModel(Recurso recurso)
         {
             var recursoVM = new RecursoVM(
                 recurso.Id.ToString(),

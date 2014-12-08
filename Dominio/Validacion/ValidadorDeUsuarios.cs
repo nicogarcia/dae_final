@@ -4,40 +4,41 @@ using Dominio.Repos;
 
 namespace Dominio.Validacion
 {
-    public class ValidadorDeUsuarios
+    public class ValidadorDeUsuarios : IValidadorDeUsuarios
     {
-        public IDictionary<string, string> Errores { get; private set; }
-        IUsuariosRepo usuariorepo;
+        IUsuariosRepo UsuariosRepo;
 
-        public ValidadorDeUsuarios (IUsuariosRepo usuariorepo)
+        private IDictionary<string, string> Errores { get; set; }
+
+        public ValidadorDeUsuarios(IUsuariosRepo usuariorepo)
         {
-            this.usuariorepo = usuariorepo;
+            UsuariosRepo = usuariorepo;
         }
 
-        public bool Validar (Usuario usuario)
+        public bool Validar(string username, string email, string dni, string legajo, int usuarioId = -1)
         {
             bool valido = true;
             Errores = new Dictionary<string, string>();
-            
-            if (usuariorepo.ExisteNombreUsuario(usuario.NombreUsuario))
+
+            if (UsuariosRepo.ExisteNombreUsuario(username, usuarioId))
             {
                 Errores.Add("NombreUsuario", "Este nombre de usuario ya existe.");
                 valido = false;
             }
 
-            if (usuariorepo.ExisteEmail(usuario.Email))
+            if (UsuariosRepo.ExisteEmail(email, usuarioId))
             {
                 Errores.Add("Email", "Este email ya se encuentra registrado en otro usuario.");
                 valido = false;
             }
 
-            if (usuariorepo.ExisteDNI(usuario.DNI))
+            if (UsuariosRepo.ExisteDNI(dni, usuarioId))
             {
                 Errores.Add("DNI", "Este DNI ya se encuentra registrado en otro usuario.");
                 valido = false;
             }
 
-            if (usuariorepo.ExisteLegajo(usuario.Legajo))
+            if (UsuariosRepo.ExisteLegajo(legajo, usuarioId))
             {
                 Errores.Add("Legajo", "Este Legajo ya se encuentra registrado en otro usuario.");
                 valido = false;
@@ -45,29 +46,12 @@ namespace Dominio.Validacion
 
             return valido;
         }
-        public bool validarUsuario(Usuario u, int id)
+
+        public IDictionary<string, string> ObtenerErrores()
         {
-            bool valido = true;
-            Errores = new Dictionary<string, string>();
-            if (usuariorepo.ChequearExistenciaEmail(u.Email,id))
-            {
-                Errores.Add("Email", "Este email ya se encuentra registrado en otro usuario.");
-                valido = false;
-            }
+            return Errores;
+        } 
 
-            if (usuariorepo.ChequearExistenciaDNI(u.DNI, id))
-            {
-                Errores.Add("DNI", "Este DNI ya se encuentra registrado en otro usuario.");
-                valido = false;
-            }
-
-            if (usuariorepo.ChequearExistenciaLegajo(u.Legajo, id))
-            {
-                Errores.Add("Legajo", "Este Legajo ya se encuentra registrado en otro usuario.");
-                valido = false;
-            }
-            return valido;
-        }
         
     }
 }

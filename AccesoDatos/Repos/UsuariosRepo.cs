@@ -8,49 +8,33 @@ namespace AccesoDatos.Repos
 {
     public class UsuariosRepo : RepoBase<Usuario>, IUsuariosRepo
     {
-
         public UsuariosRepo(ReservasContext reservasContext): base(reservasContext)
         {
-
         }
-        public Usuario getUsuario(int id = 0)
+
+        public Usuario ObtenerUsuario(int id = 0)
         {
             return Ctx.Usuarios.FirstOrDefault(usuario => usuario.Id == id);
         }
 
-        public bool ExisteNombreUsuario(string nombreUsuario)
+        public bool ExisteNombreUsuario(string nombreUsuario, int id = -1)
         {
-            return Ctx.Usuarios.Any(usuario => usuario.NombreUsuario == nombreUsuario);
+            return Ctx.Usuarios.Any(usuario => usuario.Id != id && usuario.NombreUsuario == nombreUsuario);
         }
 
-        public bool ExisteEmail(string email)
+        public bool ExisteEmail(string email, int id = -1)
         {
-            return Ctx.Usuarios.Any(usuario => usuario.Email == email);
+            return Ctx.Usuarios.Any(usuario => (usuario.Id != id && usuario.Email == email));
         }
 
-        public bool ExisteDNI(string dni)
+        public bool ExisteDNI(string dni, int id = -1)
         {
-            return Ctx.Usuarios.Any(usuario => usuario.DNI == dni);
+            return Ctx.Usuarios.Any(usuario => (usuario.Id != id && usuario.DNI == dni));
         }
 
-        public bool ExisteLegajo(string legajo)
+        public bool ExisteLegajo(string legajo, int id = -1)
         {
-            return Ctx.Usuarios.Any(usuario => usuario.Legajo == legajo);
-        }
-
-        public bool ChequearExistenciaEmail(string email, int id)
-        {
-            return Ctx.Usuarios.Any(usuario => (usuario.Id != id & usuario.Email == email));
-        }
-
-        public bool ChequearExistenciaDNI(string dni, int id)
-        {
-            return Ctx.Usuarios.Any(usuario => (usuario.Id != id & usuario.DNI == dni));
-        }
-
-        public bool ChequearExistenciaLegajo(string legajo, int id)
-        {
-            return Ctx.Usuarios.Any(usuario => (usuario.Id != id & usuario.Legajo == legajo));
+            return Ctx.Usuarios.Any(usuario => (usuario.Id != id && usuario.Legajo == legajo));
         }
 
         public Usuario BuscarUsuario (string username)
