@@ -1,7 +1,7 @@
 ﻿@using Dominio
 @using Dominio.Entidades
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-AR">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +13,7 @@
 
     @Styles.Render("~/Content/css/bootstrap")
     @Styles.Render("~/Content/css/site")
+    @Styles.Render("~/Content/themes/base/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -59,7 +60,6 @@
         @RenderBody()
 
     </div><!-- /.container -->
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

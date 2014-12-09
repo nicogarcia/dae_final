@@ -72,25 +72,27 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Styles.Render("~/Content/themes/base/css")
     @Scripts.Render("~/bundles/jqueryui")
 
     <script type="text/javascript">
         $(function () {
             $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false, lang: 'es' });
             $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+
+            Globalize.culture("es-AR");
+
+            $('#selectRecursos').selectize({
+                sortField: 'text',
+                create: true,
+                createOnBlur: true
+            });
+
+            $('#selectUsuarios').selectize({
+                sortField: 'text',
+                create: true,
+                createOnBlur: true
+            });
         });
 
-        $('#selectRecursos').selectize({
-            sortField: 'text',
-            create: true,
-            createOnBlur: true
-        });
-
-        $('#selectUsuarios').selectize({
-            sortField: 'text',
-            create: true,
-            createOnBlur: true
-        });
     </script>
 }

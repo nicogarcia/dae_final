@@ -1,4 +1,6 @@
-﻿using System.Web.Optimization;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Web.Optimization;
 
 namespace Presentacion
 {
@@ -18,10 +20,16 @@ namespace Presentacion
                         "~/Scripts/jquery.datetimepicker.js",
                         "~/Scripts/selectize.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+            var validationBundle = new ScriptBundle("~/bundles/jqueryval").Include(
+                "~/Scripts/globalize/globalize.js",
+                "~/Scripts/globalize/cultures/globalize.culture.es-AR.js",
                 "~/Scripts/jquery.validate.js",
-                "~/Scripts/jquery.unobtrusive*",
-                "~/Scripts/jquery.validate.unobtrusive.min.js"));
+                "~/Scripts/jquery.unobtrusive-ajax.min.js",
+                "~/Scripts/jquery.validate.unobtrusive.min.js",
+                "~/Scripts/jquery.validate.globalize.min.js");
+            validationBundle.Orderer = new NonOrderingBundleOrderer();
+            
+            bundles.Add(validationBundle);
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -38,6 +46,14 @@ namespace Presentacion
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/all.css",
                         "~/Content/jquery.datetimepicker.css"));
+        }
+    }
+
+    class NonOrderingBundleOrderer : IBundleOrderer
+    {
+        public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
+        {
+            return files;
         }
     }
 }

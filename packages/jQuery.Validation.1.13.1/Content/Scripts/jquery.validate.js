@@ -245,7 +245,7 @@ $.extend( $.validator, {
 		messages: {},
 		groups: {},
 		rules: {},
-		errorClass: "control-label",
+		errorClass: "error",
 		validClass: "valid",
 		errorElement: "label",
 		focusCleanup: false,
@@ -288,19 +288,14 @@ $.extend( $.validator, {
 				this.element( element.parentNode );
 			}
 		},
-		highlight: function (element, errorClass, validClass) {
-
-		    $(element).closest('.form-group').addClass('has-error');
-
+		highlight: function( element, errorClass, validClass ) {
 			if ( element.type === "radio" ) {
 				this.findByName( element.name ).addClass( errorClass ).removeClass( validClass );
 			} else {
 				$( element ).addClass( errorClass ).removeClass( validClass );
 			}
 		},
-		unhighlight: function (element, errorClass, validClass) {
-
-		    $(element).closest('.form-group').removeClass('has-error');
+		unhighlight: function( element, errorClass, validClass ) {
 			if ( element.type === "radio" ) {
 				this.findByName( element.name ).removeClass( errorClass ).addClass( validClass );
 			} else {
