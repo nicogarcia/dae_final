@@ -69,6 +69,8 @@
         $(function () {
             $('#Inicio').datetimepicker({ format: 'd/m/Y H:i', inline: false });
             $('#Fin').datetimepicker({ format: 'd/m/Y H:i', inline: false });
+
+            Globalize.culture("es-AR");
             
             $('#selectRecursos').selectize({
                 sortField: 'text',
