@@ -204,6 +204,7 @@
     <Compile Include="Controllers\ReservasController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Filters\ExtendedHandleErrorAttribute.cs" />
     <Compile Include="Helpers\Bootstrap\BootstrapHelpers.cs" />
     <Compile Include="Models\BusquedaRecursoVM.cs" />
     <Compile Include="Models\Conversores\ConversorReserva.cs" />
@@ -375,9 +376,11 @@
     <Content Include="Views\Reservas\FullList.cshtml" />
     <Content Include="Views\Recursos\Buscar.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
+    <Content Include="Views\Shared\Exception.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Errores\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

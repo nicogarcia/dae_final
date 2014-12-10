@@ -11,6 +11,7 @@ using Presentacion.Soporte;
 
 namespace Presentacion.Controllers
 {
+    [ExtendedHandleError(View = "Exception")]
     public class RecursosController : Controller
     {
         // Repos
@@ -62,6 +63,9 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Index(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)
         {
+            var x = 0;
+
+            x /= x;
             // Obtener orden
             ViewBag.OrdenNombre = string.IsNullOrEmpty(orden) ? "nombre_desc" : "";
             ViewBag.OrdenCodigo = orden == "codigo" ? "codigo_desc" : "codigo";

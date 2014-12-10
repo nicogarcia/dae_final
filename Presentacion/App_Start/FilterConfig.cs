@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Presentacion.Filters;
 
 namespace Presentacion
 {
@@ -6,7 +7,7 @@ namespace Presentacion
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new ExtendedHandleErrorAttribute());
         }
     }
 }
