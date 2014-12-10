@@ -1,14 +1,14 @@
-﻿using System.Diagnostics;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using Ninject;
+using Ninject.Extensions.Logging;
 
 namespace Presentacion.Filters
 {
     public class ExtendedHandleErrorAttribute : HandleErrorAttribute
     {
-        private bool IsAjax(ExceptionContext filterContext)
-        {
-            return filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
-        }
+        [Inject]
+        public ILogger Logger { get; set; }
+
         public override void OnException(ExceptionContext filterContext)
         {
             if (filterContext.ExceptionHandled || !filterContext.HttpContext.IsCustomErrorEnabled)
@@ -44,15 +44,20 @@ namespace Presentacion.Filters
 
             }
 
-            // Write error logging code here if you wish.
-
+            // Error logging
+            Logger.ErrorException("", filterContext.Exception);
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();
             filterContext.HttpContext.Response.StatusCode = 500;
 
-            filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;  
+            filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
         }
- 
+
+        private bool IsAjax(ExceptionContext filterContext)
+        {
+            return filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+        }
+
     }
 }

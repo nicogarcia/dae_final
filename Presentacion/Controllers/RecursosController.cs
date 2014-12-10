@@ -1,4 +1,5 @@
-﻿using Dominio.Entidades;
+﻿using System.Diagnostics;
+using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
 using Dominio.UnitOfWork;
@@ -63,9 +64,6 @@ namespace Presentacion.Controllers
         [Autorizar(TipoDeUsuario.Administrador)]
         public ActionResult Index(string orden, string filtroCodigo, string filtroTipo, string filtroNombre)
         {
-            var x = 0;
-
-            x /= x;
             // Obtener orden
             ViewBag.OrdenNombre = string.IsNullOrEmpty(orden) ? "nombre_desc" : "";
             ViewBag.OrdenCodigo = orden == "codigo" ? "codigo_desc" : "codigo";

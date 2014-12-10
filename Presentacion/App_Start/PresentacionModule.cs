@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using Ninject.Web.Common;
+using Presentacion.Filters;
 using Presentacion.Models.Conversores;
 
 namespace Presentacion.App_Start

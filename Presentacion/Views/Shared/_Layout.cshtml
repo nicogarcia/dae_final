@@ -1,5 +1,4 @@
-﻿@using Dominio
-@using Dominio.Entidades
+﻿@using Dominio.Entidades
 <!DOCTYPE html>
 <html lang="es-AR">
 <head>
@@ -47,6 +46,7 @@
                     {
                         <li>@Html.ActionLink("Mis reservas", "Index", "Reservas")</li>
                     }
+                    <li>@Html.ActionLink("Lanzar excepción", "IntentionalException", "Home")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")
