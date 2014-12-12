@@ -18,7 +18,10 @@ namespace Presentacion
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js",
                         "~/Scripts/jquery.datetimepicker.js",
-                        "~/Scripts/selectize.min.js"));
+                        "~/Scripts/selectize.min.js",
+                        "~/Scripts/moment.min.js",
+                        "~/Scripts/fullcalendar.min.js",
+                        "~/Scripts/fullcalendar.lang.es.js"));
 
             var validationBundle = new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/globalize/globalize.js",
@@ -45,7 +48,8 @@ namespace Presentacion
             
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/all.css",
-                        "~/Content/jquery.datetimepicker.css"));
+                        "~/Content/jquery.datetimepicker.css",
+                        "~/Content/fullcalendar.min.css"));
         }
     }
 

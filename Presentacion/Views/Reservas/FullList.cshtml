@@ -1,4 +1,5 @@
-﻿@model Presentacion.Models.BusquedaReservasVM
+﻿@using System.Web.Script.Serialization
+@model Presentacion.Models.BusquedaReservasVM
 @{
     ViewBag.Title = "Todas las reservas";
 }
@@ -10,7 +11,7 @@
     <div class="col-md-9">
         @if (Model.ListaDeReservas.Any())
         {
-            <table class="table table-hover table-bordered table-striped">
+            <table id="vistaTabla" class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>
                         @Html.DisplayName("Inicio reserva")
@@ -67,9 +68,15 @@
         {
             <br /><h4>Aún no hay reservas</h4>
         }
+        <div id="calendar" style="visibility:hidden;"></div>
     </div>
 
     <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <p><button id="toggleViewButton" class="btn btn-success">Cambiar visualización</button></p>
+            </div>
+        </div>
         <legend>Filtros</legend>
         @using (Html.BeginForm())
         {
@@ -89,7 +96,7 @@
             </div>
             <div class="form-group">
                 <label>Usuario responsable</label>
-                @Html.DropDownList("usuarioResponsable", Model.SelectUsuarios, new { id="selectUsuarios", @class = "form-control" })
+                @Html.DropDownList("usuarioResponsable", Model.SelectUsuarios, new { id = "selectUsuarios", @class = "form-control" })
             </div>
             <div class="form-group">
                 <label>Estado de reserva</label>
@@ -106,22 +113,73 @@
 
     <script type="text/javascript">
 
-        $(function () {
+        $(function() {
             $("[name='fechaDesde']").datetimepicker({ format: 'd/m/Y H:i', inline: false });
             $("[name='fechaHasta']").datetimepicker({ format: 'd/m/Y H:i', inline: false });
-            
+
+
+            $('#selectRecursos').selectize({
+                sortField: 'text',
+                create: true,
+                createOnBlur: true
+            });
+
+            $('#selectUsuarios').selectize({
+                sortField: 'text',
+                create: true,
+                createOnBlur: true
+            });
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,basicWeek,basicDay'
+                },
+                height: 500,
+                timeFormat: 'H:mm',
+                fixedWeekCount: false,
+                hiddenDays: [0],
+                editable: true,
+                eventLimit: true, // allow "more" link when too many events
+                events:
+                    @Html.Raw(new JavaScriptSerializer().Serialize(Model.ListaDeReservas.Select(reserva =>
+                        new{
+                            title = reserva.RecursoReservado + " - " + reserva.Responsable,
+                            start = reserva.Inicio,
+                            fin = reserva.Fin,
+                            url = Url.Action("Details", "Reservas", new {id = reserva.Id})
+                        }
+                    )))
+                });
+
+            $('#toggleViewButton').click(ToggleReservasView);
+
+            LoadCurrentView();
         });
 
-        $('#selectRecursos').selectize({
-            sortField: 'text',
-            create: true,
-            createOnBlur: true
-        });
+        function LoadCurrentView() {
+            if (localStorage.getItem("vistaTabla")) {
+                $("#vistaTabla").css('visibility', localStorage.getItem("vistaTabla"));
+                $("#vistaTabla").css('display', localStorage.getItem("vistaTabla") == 'hidden' ? 'none' : 'visible');
+                $("#calendar").css('visibility', localStorage.getItem("calendar"));
+            }
+        }
 
-        $('#selectUsuarios').selectize({
-            sortField: 'text',
-            create: true,
-            createOnBlur: true
-        });
+        function ToggleReservasView() {
+            ToggleVisibility($('#vistaTabla'));
+            $('#vistaTabla').toggle();
+            ToggleVisibility($('#calendar'));
+        }
+
+        function ToggleVisibility(object) {
+            if ($(object).css('visibility')=='hidden'){
+                $(object).css('visibility', 'visible');
+                localStorage.setItem(object.selector.slice(1), 'visible');
+            } else {
+                $(object).css('visibility', 'hidden');
+                localStorage.setItem(object.selector.slice(1), 'hidden');
+            }
+        }
     </script>
 }
