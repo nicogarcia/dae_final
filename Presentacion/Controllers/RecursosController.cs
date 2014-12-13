@@ -243,6 +243,7 @@ namespace Presentacion.Controllers
         [Autorizar]
         [HttpPost, ActionName("Buscar")]
         [ValidateAntiForgeryToken]
+        [PerformanceMeasure]
         public ActionResult Buscar(BusquedaRecursoVM busquedaRecursoVM)
         {
             if (busquedaRecursoVM == null) 

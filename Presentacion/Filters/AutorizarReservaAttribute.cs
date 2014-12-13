@@ -7,7 +7,7 @@ using WebMatrix.WebData;
 
 namespace Presentacion.Filters
 {
-    public class AutorizarReserva : ActionFilterAttribute
+    public class AutorizarReservaAttribute : ActionFilterAttribute
     {
     }
 

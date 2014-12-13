@@ -70,7 +70,7 @@ namespace Presentacion.Controllers
         // GET: /Reservas/Details/5
 
         [Autorizar]
-        [AutorizarReserva]
+        [AutorizarReservaAttribute]
         public ActionResult Details(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -163,7 +163,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Edit/5
 
-        [AutorizarReserva]
+        [AutorizarReservaAttribute]
         public ActionResult Edit(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -196,7 +196,7 @@ namespace Presentacion.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Autorizar]
-        [AutorizarReserva]
+        [AutorizarReservaAttribute]
         public ActionResult Edit(ReservaVM reservaVM)
         {
             using (var uow = UowFactory.Actual)
@@ -226,7 +226,7 @@ namespace Presentacion.Controllers
         //
         // GET: /Reservas/Delete/5
 
-        [AutorizarReserva]
+        [AutorizarReservaAttribute]
         public ActionResult Delete(int id = 0)
         {
             Reserva reserva = ReservasRepo.ObtenerPorId(id);
@@ -243,7 +243,7 @@ namespace Presentacion.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Autorizar]
-        [AutorizarReserva]
+        [AutorizarReservaAttribute]
         public ActionResult DeleteConfirmed(int id)
         {
             using (var uow = UowFactory.Actual)

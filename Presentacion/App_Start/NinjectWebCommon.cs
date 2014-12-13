@@ -81,7 +81,10 @@ namespace Presentacion.App_Start
             });
 
             kernel.BindFilter<FiltroAutorizar>(FilterScope.Action, 0)
-                .WhenActionMethodHas<AutorizarReserva>();
+                .WhenActionMethodHas<AutorizarReservaAttribute>();
+
+            kernel.BindFilter<PerformanceMeasureFilter>(FilterScope.Action, 0)
+                .WhenActionMethodHas<PerformanceMeasureAttribute>();
         }        
     }
 }

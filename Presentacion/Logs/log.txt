@@ -71,3 +71,10 @@ System.DivideByZeroException: Intento de dividir por cero.
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+INFO  2014-12-12 23:25:51,445  8660ms rformanceMeasureFilter Info               - Buscar response time: 52
+INFO  2014-12-12 23:26:25,644 42859ms rformanceMeasureFilter Info               - Buscar response time: 30
+INFO  2014-12-12 23:29:08,160  3869ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 619ms
+INFO  2014-12-12 23:29:31,545 27253ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 495ms
+INFO  2014-12-12 23:29:53,439 49148ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 41ms
+INFO  2014-12-12 23:30:01,169 56878ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 208ms
+INFO  2014-12-12 23:30:10,852 66561ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 265ms

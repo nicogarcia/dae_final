@@ -84,7 +84,7 @@ namespace ReservasDCICTest.App_Start
             });
 
             kernel.BindFilter<FiltroAutorizar>(FilterScope.Action, 0)
-                .WhenActionMethodHas<AutorizarReserva>();
+                .WhenActionMethodHas<AutorizarReservaAttribute>();
         }        
     }
 }
