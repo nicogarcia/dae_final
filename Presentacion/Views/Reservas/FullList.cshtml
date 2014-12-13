@@ -57,7 +57,7 @@
                         </td>
                         <td>
                             @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info btn-xs" })
-                            @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success btn-xs" })
+                            @Html.BootstrapActionButton("Detalle", "Details", new { id = item.Id }, new { @class = "btn-success btn-xs" })
                             @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger btn-xs" })
                         </td>
                     </tr>
@@ -110,6 +110,7 @@
 @section Scripts {
     @Styles.Render("~/Content/themes/base/css")
     @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/calendar")
 
     <script type="text/javascript">
 
@@ -130,56 +131,20 @@
                 createOnBlur: true
             });
 
-            $('#calendar').fullCalendar({
-                header: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'month,basicWeek,basicDay'
-                },
-                height: 500,
-                timeFormat: 'H:mm',
-                fixedWeekCount: false,
-                hiddenDays: [0],
-                editable: true,
-                eventLimit: true, // allow "more" link when too many events
-                events:
-                    @Html.Raw(new JavaScriptSerializer().Serialize(Model.ListaDeReservas.Select(reserva =>
+            var data = @Html.Raw(new JavaScriptSerializer().Serialize(Model.ListaDeReservas.Select(reserva =>
                         new{
                             title = reserva.RecursoReservado + " - " + reserva.Responsable,
                             start = reserva.Inicio,
                             fin = reserva.Fin,
                             url = Url.Action("Details", "Reservas", new {id = reserva.Id})
                         }
-                    )))
-                });
+                    )));
+
+            $('#calendar').fullCalendar('addEventSource', data);
 
             $('#toggleViewButton').click(ToggleReservasView);
 
             LoadCurrentView();
         });
-
-        function LoadCurrentView() {
-            if (localStorage.getItem("vistaTabla")) {
-                $("#vistaTabla").css('visibility', localStorage.getItem("vistaTabla"));
-                $("#vistaTabla").css('display', localStorage.getItem("vistaTabla") == 'hidden' ? 'none' : 'visible');
-                $("#calendar").css('visibility', localStorage.getItem("calendar"));
-            }
-        }
-
-        function ToggleReservasView() {
-            ToggleVisibility($('#vistaTabla'));
-            $('#vistaTabla').toggle();
-            ToggleVisibility($('#calendar'));
-        }
-
-        function ToggleVisibility(object) {
-            if ($(object).css('visibility')=='hidden'){
-                $(object).css('visibility', 'visible');
-                localStorage.setItem(object.selector.slice(1), 'visible');
-            } else {
-                $(object).css('visibility', 'hidden');
-                localStorage.setItem(object.selector.slice(1), 'hidden');
-            }
-        }
     </script>
 }

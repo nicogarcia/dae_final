@@ -304,6 +304,7 @@
     <Content Include="Logs\log.txt" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\calendar.config.js" />
     <Content Include="Scripts\fullcalendar.lang.es.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.es-AR.js" />

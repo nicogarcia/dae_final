@@ -18,10 +18,13 @@ namespace Presentacion
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js",
                         "~/Scripts/jquery.datetimepicker.js",
-                        "~/Scripts/selectize.min.js",
+                        "~/Scripts/selectize.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/calendar").Include(
                         "~/Scripts/moment.min.js",
                         "~/Scripts/fullcalendar.min.js",
-                        "~/Scripts/fullcalendar.lang.es.js"));
+                        "~/Scripts/fullcalendar.lang.es.js",
+                        "~/Scripts/calendar.config.js"));
 
             var validationBundle = new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/globalize/globalize.js",

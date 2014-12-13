@@ -1,4 +1,5 @@
-﻿@using Dominio.Entidades
+﻿@using System.Web.Script.Serialization
+@using Dominio.Entidades
 @model IEnumerable<Presentacion.Models.ReservaVM>
 
 @{
@@ -9,18 +10,19 @@
     <div class="col-md-12">
         <h3 class="text-center">Mis reservas</h3><hr />
         <p>
-            @Html.BootstrapActionButton("Crear reserva", "Create", new { @class = "btn-primary"})
+            @Html.BootstrapActionButton("Crear reserva", "Create", new { @class = "btn-primary" })
             @if (User.IsInRole(TipoDeUsuario.Administrador.ToString()))
             {
-                @Html.BootstrapActionButton("Ver todas las reservas", "FullList", new {@class = "btn-success"})
+                @Html.BootstrapActionButton("Ver todas las reservas", "FullList", new { @class = "btn-info" })
             }
+            <button id="toggleViewButton" class="btn btn-success pull-right">Cambiar visualización</button>
         </p>
     </div>
-    
+
     <div class="col-md-12">
         @if (Model.Any())
         {
-            <table class="table table-hover table-bordered table-striped">
+            <table id="vistaTabla" class="table table-hover table-bordered table-striped">
                 <tr>
                     <th>
                         Inicio de reserva
@@ -58,8 +60,8 @@
                             @Html.DisplayFor(modelItem => item.Descripcion)
                         </td>
                         <td>
-                            @Html.BootstrapActionButton("Editar", "Edit", new {id = item.Id}, new {@class = "btn-info"})
-                            @Html.BootstrapActionButton("Ver Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
+                            @Html.BootstrapActionButton("Editar", "Edit", new { id = item.Id }, new { @class = "btn-info" })
+                            @Html.BootstrapActionButton("Detalle", "Details", new { id = item.Id }, new { @class = "btn-success" })
                             @Html.BootstrapActionButton("Eliminar", "Delete", new { id = item.Id }, new { @class = "btn-danger" })
                         </td>
                     </tr>
@@ -68,8 +70,36 @@
         }
         else
         {
-            <br/><h4>Aún no hay reservas</h4>
+            <br /><h4>Aún no hay reservas</h4>
         }
+        <div id="calendar" style="visibility:hidden;"></div>
     </div>
 </div>
 
+@section Scripts {
+    @Styles.Render("~/Content/themes/base/css")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/calendar")
+
+    <script type="text/javascript">
+
+        $(function() {
+
+
+            var data = @Html.Raw(new JavaScriptSerializer().Serialize(Model.Select(reserva =>
+                        new{
+                            title = reserva.RecursoReservado + " - " + reserva.Responsable,
+                            start = reserva.Inicio,
+                            fin = reserva.Fin,
+                            url = Url.Action("Details", "Reservas", new {id = reserva.Id})
+                        }
+                    )));
+
+            $('#calendar').fullCalendar('addEventSource', data);
+
+            $('#toggleViewButton').click(ToggleReservasView);
+
+            LoadCurrentView();
+        });
+    </script>
+}
