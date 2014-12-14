@@ -1,5 +1,4 @@
 ﻿using System.Data.Entity;
-using Dominio;
 using Dominio.Entidades;
 
 namespace AccesoDatos

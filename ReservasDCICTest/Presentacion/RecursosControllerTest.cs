@@ -31,25 +31,9 @@ namespace ReservasDCICTest
         {
             _kernel.Reset();
         }
-
+        
         [TestMethod]
-        public void RecursosRepoTest()
-        {
-            var recurso = new Recurso("lab1", new TipoRecurso("Laboratorio"), "Laboratorio 1", "Descripcion lab1");
-
-            var recursosRepo = _kernel.GetMock<IRecursosRepo>();
-            recursosRepo.Setup(mock => mock.ObtenerPorId(It.IsAny<int>())).Returns(recurso);
-
-            var controller = _kernel.Get<RecursosController>();
-
-            ActionResult result = controller.Details(1);
-
-            Assert.AreEqual("lab1", ((Recurso) ((ViewResult) result).Model).Codigo);
-
-        }
-
-        [TestMethod]
-        public void Recursos_controller_editar_caracteristica_recurso()
+        public void RecursosController_Editar_Caracteristica_Recurso()
         {
             var recurso = new Recurso("lab1", new TipoRecurso("Laboratorio"), "Laboratorio 1", "Descripcion lab1");
 
@@ -57,9 +41,11 @@ namespace ReservasDCICTest
             recursosRepo.Setup(mock => mock.ObtenerPorId(It.IsAny<int>())).Returns(recurso);
             recursosRepo.Setup(mock => mock.Actualizar(It.IsAny<Recurso>()));
 
-            var conversorRecurso = _kernel.GetMock<IConversorRecurso>();
-            conversorRecurso.CallBase = true;
+            var recursoVMMock = new RecursoVM("1", "lab1", "Laboratorio 1", "Descripcion lab1", "1");
 
+            var conversorRecurso = _kernel.GetMock<IConversorRecurso>();
+            conversorRecurso.Setup(mock => mock.CrearViewModel(It.IsAny<Recurso>())).Returns(recursoVMMock);
+            
             var controller = _kernel.Get<RecursosController>();
 
             ActionResult result = controller.Edit(1);
@@ -68,7 +54,7 @@ namespace ReservasDCICTest
             
             recursoVM.Descripcion = "Mock description";
 
-            ActionResult postResult = controller.Edit(recursoVM);
+            controller.Edit(recursoVM);
             
             recursosRepo.Verify(mock => mock.Actualizar(It.IsAny<Recurso>()), Times.Once());
         }
