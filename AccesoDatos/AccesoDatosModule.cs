@@ -11,15 +11,18 @@ namespace AccesoDatos
     {
         public override void Load()
         {
-            Bind<IUsuariosRepo>().To<UsuariosRepo>().InRequestScope(); 
-            Bind<ReservasContext>().ToSelf().InRequestScope();
+            // Contexto de base de datos
+            Bind<IReservasContext>().To<ReservasContext>().InRequestScope();
 
+            // Repositorios
+            Bind<IUsuariosRepo>().To<UsuariosRepo>().InRequestScope(); 
             Bind<IRecursosRepo>().To<RecursosRepo>().InRequestScope();
+            Bind<IReservasRepo>().To<ReservasRepo>().InRequestScope();
             Bind<ITiposDeCaracteristicasRepo>().To<TiposDeCaracteristicasRepo>().InRequestScope();
             Bind<ITiposDeRecursosRepo>().To<TiposDeRecursosRepo>().InRequestScope();
 
+            // Unit of Work
             Bind<IUnitOfWork>().To<EFUnitOfWork>().InRequestScope();
-            Bind<IReservasRepo>().To<ReservasRepo>().InRequestScope();
         }
     }
 }

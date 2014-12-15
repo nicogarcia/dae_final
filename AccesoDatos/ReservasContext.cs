@@ -7,7 +7,7 @@ namespace AccesoDatos
     /// <summary>
     /// Entity Framework DB Context
     /// </summary>
-    public class ReservasContext : DbContext
+    public class ReservasContext : DbContext, IReservasContext
     {
         public ReservasContext()
             : base("Name=ReservasDB")
@@ -15,13 +15,13 @@ namespace AccesoDatos
             Database.SetInitializer(new ReservasDbInitializer()); 
         }
 
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Reserva> Reservas { get; set; }
+        public IDbSet<Usuario> Usuarios { get; set; }
+        public IDbSet<Reserva> Reservas { get; set; }
 
-        public DbSet<Recurso> Recursos { get; set; }
-        public DbSet<TipoRecurso> TiposDeRecursos { get; set; }
-        public DbSet<TipoCaracteristica> TiposDeCaracteristicas { get; set; }
-        public DbSet<Caracteristica> Caracteristicas { get; set; }
+        public IDbSet<Recurso> Recursos { get; set; }
+        public IDbSet<TipoRecurso> TiposDeRecursos { get; set; }
+        public IDbSet<TipoCaracteristica> TiposDeCaracteristicas { get; set; }
+        public IDbSet<Caracteristica> Caracteristicas { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder builder)
         {

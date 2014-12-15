@@ -6,7 +6,7 @@ namespace AccesoDatos.Repos
 {
     public class TiposDeRecursosRepo : RepoBase<TipoRecurso>, ITiposDeRecursosRepo
     {
-        public TiposDeRecursosRepo(ReservasContext ctx) : base(ctx)
+        public TiposDeRecursosRepo(IReservasContext ctx) : base(ctx)
         {
         }
 

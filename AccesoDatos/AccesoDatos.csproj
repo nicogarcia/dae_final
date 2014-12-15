@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccesoDatosModule.cs" />
+    <Compile Include="IReservasContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repos\RecursosRepo.cs" />
     <Compile Include="Repos\RepoBase.cs" />

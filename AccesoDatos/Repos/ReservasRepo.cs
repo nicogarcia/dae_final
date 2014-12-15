@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace AccesoDatos.Repos
 {
-    class ReservasRepo : RepoBase<Reserva>, IReservasRepo
+    public class ReservasRepo : RepoBase<Reserva>, IReservasRepo
     {
 
-        public ReservasRepo(ReservasContext reservasContext)
+        public ReservasRepo(IReservasContext reservasContext)
             : base(reservasContext)
         {
         }

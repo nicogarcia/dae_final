@@ -6,9 +6,9 @@ namespace AccesoDatos.Repos
 {
     public abstract class RepoBase<TTipo> where TTipo : class
     {
-        protected ReservasContext Ctx { get; private set; }
+        protected IReservasContext Ctx { get; private set; }
 
-        protected RepoBase(ReservasContext ctx)
+        protected RepoBase(IReservasContext ctx)
         {
             Ctx = ctx;
         }

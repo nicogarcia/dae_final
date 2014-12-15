@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Dominio;
 using Dominio.Entidades;
 using Dominio.Repos;
 
@@ -7,7 +6,7 @@ namespace AccesoDatos.Repos
 {
     public class RecursosRepo : RepoBase<Recurso>, IRecursosRepo
     {
-        public RecursosRepo(ReservasContext ctx)
+        public RecursosRepo(IReservasContext ctx)
             : base(ctx)
         {
 

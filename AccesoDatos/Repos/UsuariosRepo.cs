@@ -8,7 +8,7 @@ namespace AccesoDatos.Repos
 {
     public class UsuariosRepo : RepoBase<Usuario>, IUsuariosRepo
     {
-        public UsuariosRepo(ReservasContext reservasContext): base(reservasContext)
+        public UsuariosRepo(IReservasContext reservasContext): base(reservasContext)
         {
         }
 
