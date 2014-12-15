@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dominio;
+﻿using System.Linq;
 using Dominio.Entidades;
 using Dominio.Repos;
 

@@ -1,7 +1,5 @@
 ﻿using System.Web.Security;
-using Dominio;
 using Dominio.Entidades;
-using Dominio.Queries;
 using Dominio.Repos;
 using WebMatrix.WebData;
 

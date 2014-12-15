@@ -45,10 +45,10 @@ namespace Dominio.Validacion
         {
             Errores = new Dictionary<string, string>();
 
-            if (RecursosRepo.Todos().Any(rec => (rec.Codigo == recurso.Codigo) && (rec.Id != recurso.Id)))
+            if (RecursosRepo.ExisteCodigoEnOtroRecurso(recurso.Codigo, recurso.Id))
                 Errores.Add("Codigo", "El código de recurso ya existe.");
 
-            if (RecursosRepo.Todos().Any(rec => (rec.Nombre == recurso.Nombre) && (rec.Id != recurso.Id)))
+            if (RecursosRepo.ExisteNombreEnOtroRecurso(recurso.Codigo, recurso.Id))
                 Errores.Add("Nombre", "El nombre de recurso ya existe.");
 
             if (!TiposDeRecursosRepo.ExisteId(recurso.Tipo.Id))

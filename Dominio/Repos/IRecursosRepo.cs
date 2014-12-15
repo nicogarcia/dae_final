@@ -20,6 +20,10 @@ namespace Dominio.Repos
 
         bool ExisteNombre(string nombre);
 
+        bool ExisteCodigoEnOtroRecurso(string codigo, int id);
+
+        bool ExisteNombreEnOtroRecurso(string nombre, int id);
+
         Recurso ObtenerPorCodigo(string codigoRecurso);
 
         IQueryable<Recurso> AsQueryable();

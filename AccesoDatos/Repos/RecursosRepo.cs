@@ -27,5 +27,14 @@ namespace AccesoDatos.Repos
             return Ctx.Recursos.FirstOrDefault(recurso => recurso.Codigo == codigo);
         }
         
+        public bool ExisteCodigoEnOtroRecurso(string codigo, int id)
+        {
+            return Ctx.Recursos.Any(recurso => recurso.Codigo == codigo && recurso.Id != id);
+        }
+
+        public bool ExisteNombreEnOtroRecurso(string nombre, int id)
+        {
+            return Ctx.Recursos.Any(recurso => recurso.Nombre == nombre && recurso.Id != id);
+        }
     }
 }
