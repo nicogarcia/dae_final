@@ -16,15 +16,19 @@ namespace ReservasDCICTest.AccesoDatos
         Mock<IReservasContext> dbContextMock;
         IRecursosRepo recursosRepoSUT;
 
+        IList<Recurso> recursosAlmacenados;
+        
         [TestInitialize]
         public void Setup()
         {
-            var data = new List<Recurso>
+            recursosAlmacenados = new List<Recurso>
             {
                 new Recurso("lab1", new TipoRecurso("Laboratorio"), "Laboratorio 1", "Descripcion lab1"),
                 new Recurso("lab2", new TipoRecurso("Laboratorio"), "Laboratorio 2", "Descripcion lab2")
-            }.AsQueryable();
-
+            };
+            
+            var data = recursosAlmacenados.AsQueryable();
+            
             // Mock the DbSet
             var recursosDbSetMock = new Mock<IDbSet<Recurso>>();
             recursosDbSetMock.Setup(mock => mock.Provider).Returns(data.Provider);
@@ -49,20 +53,51 @@ namespace ReservasDCICTest.AccesoDatos
         }
 
         [TestMethod]
-        public void RecursosRepo_Existe_Codigo_Retorna_Verdadero()
+        public void RecursosRepo_ExisteCodigo_Codigo_Existente_Retorna_Verdadero()
         {
+            // Arrange
+
+            //Act
             bool resultado = recursosRepoSUT.ExisteCodigo("lab1");
 
+            // Assert
             Assert.IsTrue(resultado);
         }
 
         [TestMethod]
-        public void RecursosRepo_Existe_Codigo_Retorna_Falso()
+        public void RecursosRepo_ExisteCodigo_Codigo_Inexistente_Retorna_Falso()
         {
-            bool resultado = recursosRepoSUT.ExisteCodigo("laboratorio1");
+            // Arrange
 
+            //Act
+            bool resultado = recursosRepoSUT.ExisteCodigo("laboratorio1");
+            
+            // Assert
             Assert.IsFalse(resultado);
         }
 
+        [TestMethod]
+        public void RecursosRepo_ExisteNombre_Nombre_Existente_Retorna_Verdadero()
+        {
+            // Arrange
+
+            //Act
+            bool resultado = recursosRepoSUT.ExisteNombre("Laboratorio 1");
+
+            // Assert
+            Assert.IsTrue(resultado);
+        }
+
+        [TestMethod]
+        public void RecursosRepo_ExisteNombre_Nombre_Inexistente_Retorna_Falso()
+        {
+            // Arrange
+
+            //Act
+            bool resultado = recursosRepoSUT.ExisteNombre("oirotarobal 1");
+
+            // Assert
+            Assert.IsFalse(resultado);
+        }
     }
 }
