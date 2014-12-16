@@ -1,11 +1,5 @@
-﻿using Dominio;
-using Dominio.Entidades;
-using Dominio.Repos;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using DotNetOpenAuth.Messaging;
-using Presentacion.Soporte;
 
 namespace Presentacion.Models
 {

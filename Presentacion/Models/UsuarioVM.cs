@@ -1,5 +1,4 @@
-﻿using Dominio;
-using Dominio.Entidades;
+﻿using Dominio.Entidades;
 using Presentacion.Soporte;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +8,7 @@ namespace Presentacion.Models
 {
     public class UsuarioVM
     {
-        public int id { get;  set; }
+        public int Id { get;  set; }
 
         [Required]
         public TipoDeUsuario Tipo { get; set; } //Tipo de usuario Administrador/Miembro
@@ -57,7 +56,7 @@ namespace Presentacion.Models
 
         public UsuarioVM(int id)
         {
-            this.id = id;
+            Id = id;
         }
 
         public IEnumerable<SelectListItem> SelectoTipoDeUsuario
@@ -66,8 +65,6 @@ namespace Presentacion.Models
             {
                 return typeof(TipoDeUsuario).ToSelectList();
             }
-
-            private set { }
         }
     }
 }

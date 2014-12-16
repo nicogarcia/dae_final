@@ -31,14 +31,16 @@ namespace Dominio.Queries.Implementation
             IQueryable<Recurso> noDisponibles =
                 ReservasRepo.AsQueryable()
                 .Where(reserva =>
-                    (reserva.Inicio >= inicio && reserva.Inicio <= fin) || (reserva.Fin >= inicio && reserva.Fin <= fin)
+                    (reserva.Inicio >= inicio && reserva.Inicio <= fin) || 
+                    (reserva.Fin >= inicio && reserva.Fin <= fin) ||
+                    (reserva.Inicio <= inicio && reserva.Fin >= fin)
                 )
                 .Select(reserva => reserva.RecursoReservado);
 
             return recursosQuery.Except(noDisponibles).ToList();
         }
 
-        private List<Recurso> Buscar(
+        private IEnumerable<Recurso> Buscar(
             string nombre,
             string codigo,
             string tipo,

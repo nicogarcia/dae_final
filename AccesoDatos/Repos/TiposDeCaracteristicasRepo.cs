@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Dominio;
 using Dominio.Entidades;
 using Dominio.Repos;
 

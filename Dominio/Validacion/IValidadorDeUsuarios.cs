@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Dominio.Entidades;
 
 namespace Dominio.Validacion
 {

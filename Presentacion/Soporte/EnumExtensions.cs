@@ -6,7 +6,7 @@ using System.Web.Mvc;
 namespace Presentacion.Soporte
 {
     /// <summary>
-    /// Métodos de extensión sobre lo enumerados
+    /// Métodos de extensión sobre los enumerados
     /// </summary>
     public static class EnumExtensions
     {
@@ -19,7 +19,8 @@ namespace Presentacion.Soporte
         public static IEnumerable<SelectListItem> ToSelectList(this Type tipoEnum)
         {
             return from Enum e in Enum.GetValues(tipoEnum)
-                            select new SelectListItem() { Value = e.GetHashCode().ToString(), 
+                            select new SelectListItem
+                            { Value = e.GetHashCode().ToString(), 
                                                           Text = e.ToString() };
         }
 

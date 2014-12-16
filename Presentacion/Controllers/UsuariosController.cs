@@ -1,5 +1,4 @@
-﻿using Dominio;
-using Dominio.Entidades;
+﻿using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
 using Dominio.Validacion;
@@ -14,6 +13,7 @@ using Dominio.UnitOfWork;
 
 namespace Presentacion.Controllers
 {
+    [ExtendedHandleError(View = "Exception")]
     [Autorizar(TipoDeUsuario.Administrador)]
     public class UsuariosController : Controller
     {
@@ -136,7 +136,7 @@ namespace Presentacion.Controllers
             using (var uow = UowFactory.Actual)
             {
                 if (CustomModelValidation() && 
-                    ValidadorDeUsuarios.Validar(usuarioVM.NombreUsuario, usuarioVM.Email, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.id))
+                    ValidadorDeUsuarios.Validar(usuarioVM.NombreUsuario, usuarioVM.Email, usuarioVM.DNI, usuarioVM.Legajo, usuarioVM.Id))
                 {
                     var usuario = ConversorUsuario.ActualizarUsuario(usuarioVM);
 

@@ -54,7 +54,7 @@ namespace Presentacion.Models.Conversores
         
         public Usuario ActualizarUsuario(UsuarioVM usuarioVM)
         {
-            var usuario = UsuariosRepo.ObtenerUsuario(usuarioVM.id);
+            var usuario = UsuariosRepo.ObtenerUsuario(usuarioVM.Id);
 
             usuario.Apellido = usuarioVM.Apellido;
             usuario.DNI = usuarioVM.DNI;

@@ -101,3 +101,64 @@ System.DivideByZeroException: Intento de dividir por cero.
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
    en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+ERROR 2014-12-16 16:44:53,325 47525ms edHandleErrorAttribute ErrorException     - 
+System.DivideByZeroException: Intento de dividir por cero.
+   en Presentacion.Controllers.HomeController.IntentionalException() en c:\Users\garci_000\Source\Repos\ReservasDCIC\Presentacion\Controllers\HomeController.cs:línea 19
+   en lambda_method(Closure , ControllerBase , Object[] )
+   en System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   en System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   en System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   en System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   en System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+ERROR 2014-12-16 16:51:36,478 450678ms edHandleErrorAttribute ErrorException     - 
+System.DivideByZeroException: Intento de dividir por cero.
+   en Presentacion.Controllers.HomeController.IntentionalException() en c:\Users\garci_000\Source\Repos\ReservasDCIC\Presentacion\Controllers\HomeController.cs:línea 19
+   en lambda_method(Closure , ControllerBase , Object[] )
+   en System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   en System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   en System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass42.<BeginInvokeSynchronousActionMethod>b__41()
+   en System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass8`1.<BeginSynchronous>b__7(IAsyncResult _)
+   en System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<>c__DisplayClass39.<BeginInvokeActionMethodWithFilters>b__33()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass4f.<InvokeActionMethodFilterAsynchronously>b__49()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass37.<BeginInvokeActionMethodWithFilters>b__36(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   en System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+INFO  2014-12-16 16:55:33,102 687302ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 163ms
+INFO  2014-12-16 16:55:44,339 698538ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 266ms
+INFO  2014-12-16 16:55:47,099 701299ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 180ms
+INFO  2014-12-16 16:55:49,911 704110ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 169ms
+INFO  2014-12-16 16:55:56,146 710346ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 699ms
+INFO  2014-12-16 16:55:58,742 712942ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 263ms
+INFO  2014-12-16 16:56:02,914 717113ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 264ms
+INFO  2014-12-16 16:56:06,259 720459ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 625ms
+INFO  2014-12-16 16:56:10,840 725040ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 187ms
+INFO  2014-12-16 16:56:16,695 730895ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 322ms
+INFO  2014-12-16 16:56:20,088 734288ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 371ms
+INFO  2014-12-16 16:56:28,654 742854ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 626ms
+INFO  2014-12-16 16:56:33,306 747506ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 364ms
+INFO  2014-12-16 16:56:40,358 754558ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 351ms
+INFO  2014-12-16 16:56:42,660 756860ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 356ms
+INFO  2014-12-16 16:56:48,013 762213ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 355ms
+INFO  2014-12-16 16:56:50,326 764526ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 199ms
+INFO  2014-12-16 16:56:53,061 767261ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 239ms
+INFO  2014-12-16 17:24:16,124 947137ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 48ms
+INFO  2014-12-16 17:26:12,309 1063323ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 15ms
+INFO  2014-12-16 17:26:17,285 1068299ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 494ms
+INFO  2014-12-16 17:26:35,331 1086345ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 233ms
+INFO  2014-12-16 17:26:42,127 1093140ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 471ms
+INFO  2014-12-16 17:30:05,076 1296090ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 299ms
+INFO  2014-12-16 17:37:27,781  4727ms rformanceMeasureFilter Info               - Action Buscar from Presentacion.Controllers.RecursosController response time: 708ms

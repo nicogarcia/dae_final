@@ -58,4 +58,8 @@
   <ItemGroup>
     <Folder Include="Properties" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ReservasDB.bak" />
+    <None Include="SecurityDB.bak" />
+  </ItemGroup>
 </Project>

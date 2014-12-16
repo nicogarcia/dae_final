@@ -5,7 +5,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using log4net.Config;
 
-[assembly: log4net.Config.XmlConfigurator(ConfigFile = "Web.config", Watch = true)]
+[assembly: XmlConfigurator(ConfigFile = "Web.config", Watch = true)]
 namespace Presentacion
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 

@@ -18,8 +18,9 @@ $(function() {
 function LoadCurrentView() {
     if (localStorage.getItem("vistaTabla")) {
         $("#vistaTabla").css('visibility', localStorage.getItem("vistaTabla"));
-        $("#vistaTabla").css('display', localStorage.getItem("vistaTabla") == 'hidden' ? 'none' : 'visible');
-        $("#calendar").css('visibility', localStorage.getItem("calendar"));
+        var tablaDisplay = localStorage.getItem("vistaTabla") == 'hidden' ? 'none' : 'visible';
+        $("#vistaTabla").css('display', tablaDisplay);
+        $("#calendar").css('visibility', tablaDisplay == 'none' ? 'visible' : 'hidden');
     }
 }
 

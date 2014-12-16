@@ -1,8 +1,6 @@
-﻿using Dominio;
-using Dominio.Entidades;
+﻿using Dominio.Entidades;
 using Dominio.Repos;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AccesoDatos.Repos

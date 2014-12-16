@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using Dominio;
 using Dominio.Entidades;
 using Dominio.Repos;
 
@@ -116,7 +115,7 @@ namespace Presentacion.Models.Conversores
         {
             var listaTiposRecursos = new List<SelectListItem>();
 
-            listaTiposRecursos.Add(new SelectListItem() { Text = "", Value = "", Selected = true });
+            listaTiposRecursos.Add(new SelectListItem { Text = "", Value = "", Selected = true });
 
             listaTiposRecursos.AddRange(TiposDeRecursosRepo.Todos()
                 .Select(tipo => new SelectListItem { Text = tipo.Nombre, Value = tipo.Id.ToString() }));

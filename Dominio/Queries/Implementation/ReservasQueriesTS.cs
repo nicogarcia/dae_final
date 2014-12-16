@@ -28,7 +28,8 @@ namespace Dominio.Queries.Implementation
                 var fin = DateTime.Parse(fechaHasta);
 
                 queryReservas = queryReservas
-                    .Where(r => (r.Inicio >= inicio) && (r.Fin <= fin));
+                    .Where(r => (r.Inicio >= inicio) && (r.Inicio <= fin) ||
+                        (r.Fin >= inicio) && (r.Fin <= fin));
             }
 
             if (!string.IsNullOrEmpty(codigoRecurso))
@@ -52,5 +53,9 @@ namespace Dominio.Queries.Implementation
             return ReservasRepo.AsQueryable().Where(reserva => reserva.Creador.NombreUsuario == username).ToList();
         }
 
+        private bool DateIsBetween(DateTime date, DateTime start, DateTime end)
+        {
+            return (date >= start) && (date <= end);
+        }
     }
 }

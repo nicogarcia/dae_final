@@ -1,25 +1,24 @@
+using System;
+using System.Web;
 using System.Web.Mvc;
+using AccesoDatos;
+using CommonServiceLocator.NinjectAdapter.Unofficial;
+using Dominio;
+using Microsoft.Practices.ServiceLocation;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ninject;
+using Ninject.Modules;
+using Ninject.Web.Common;
 using Ninject.Web.Mvc.FilterBindingSyntax;
-using Presentacion.App_Start;
+using Presentacion;
 using Presentacion.Filters;
 using WebActivatorEx;
 
-[assembly: PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
-namespace Presentacion.App_Start
+namespace Presentacion
 {
-    using AccesoDatos;
-    using CommonServiceLocator.NinjectAdapter.Unofficial;
-    using Dominio;
-    using Microsoft.Practices.ServiceLocation;
-    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-    using Ninject;
-    using Ninject.Modules;
-    using Ninject.Web.Common;
-    using System;
-    using System.Web;
-
     public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();

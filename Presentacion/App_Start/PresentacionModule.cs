@@ -3,7 +3,7 @@ using Ninject.Web.Common;
 using Presentacion.Filters;
 using Presentacion.Models.Conversores;
 
-namespace Presentacion.App_Start
+namespace Presentacion
 {
     public class PresentacionModule : NinjectModule
     {

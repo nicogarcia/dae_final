@@ -1,4 +1,5 @@
 ﻿using Microsoft.Web.WebPages.OAuth;
+using Presentacion.Filters;
 using Presentacion.Models;
 using System;
 using System.Web.Mvc;
@@ -6,6 +7,7 @@ using WebMatrix.WebData;
 using Dominio.Repos;
 namespace Presentacion.Controllers
 {
+    [ExtendedHandleError(View = "Exception")]
     public class AccountController : Controller
     {
         //
@@ -100,10 +102,8 @@ namespace Presentacion.Controllers
                     {
                         return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                    }
+
+                    ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
                 }
             }
             else
@@ -141,10 +141,8 @@ namespace Presentacion.Controllers
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         public enum ManageMessageId

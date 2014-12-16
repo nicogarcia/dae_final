@@ -21,7 +21,7 @@ namespace Presentacion.Filters
             {
                 //Because its a exception raised after ajax invocation
                 //Lets return Json
-                filterContext.Result = new JsonResult()
+                filterContext.Result = new JsonResult
                 {
                     Data = filterContext.Exception.Message,
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet

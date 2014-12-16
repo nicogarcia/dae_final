@@ -1,5 +1,4 @@
-﻿using Dominio;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Dominio.Entidades;
 
 namespace Presentacion.Filters

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Dominio.Entidades;
+﻿using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
 using Dominio.UnitOfWork;

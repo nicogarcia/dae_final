@@ -89,8 +89,8 @@
             var data = @Html.Raw(new JavaScriptSerializer().Serialize(Model.Select(reserva =>
                         new{
                             title = reserva.RecursoReservado + " - " + reserva.Responsable,
-                            start = reserva.Inicio,
-                            fin = reserva.Fin,
+                            start = reserva.Inicio.ToString("yyyy-MM-ddTHH:mm"),
+                            fin = reserva.Fin.ToString("yyyy-MM-ddTHH:mm"),
                             url = Url.Action("Details", "Reservas", new {id = reserva.Id})
                         }
                     )));

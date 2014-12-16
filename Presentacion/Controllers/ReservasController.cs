@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Dominio.Entidades;
@@ -15,6 +14,7 @@ using WebMatrix.WebData;
 
 namespace Presentacion.Controllers
 {
+    [ExtendedHandleError(View = "Exception")]
     public class ReservasController : Controller
     {
         // Repos
@@ -269,9 +269,7 @@ namespace Presentacion.Controllers
         {
             var searchVm = ConversorReserva.CrearBusquedaReservasVM();
 
-            IList<ReservaVM> lista;
-
-            lista = ReservasQueriesTS.BuscarReservas(
+            IList<ReservaVM> lista = ReservasQueriesTS.BuscarReservas(
                 fechaDesde,
                 fechaHasta,
                 codigoRecurso,
