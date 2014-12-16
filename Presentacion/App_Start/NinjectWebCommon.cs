@@ -80,7 +80,7 @@ namespace Presentacion.App_Start
                 new PresentacionModule() 
             });
 
-            kernel.BindFilter<FiltroAutorizar>(FilterScope.Action, 0)
+            kernel.BindFilter<FiltroAutorizarReserva>(FilterScope.Action, 0)
                 .WhenActionMethodHas<AutorizarReservaAttribute>();
 
             kernel.BindFilter<PerformanceMeasureFilter>(FilterScope.Action, 0)

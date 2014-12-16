@@ -32,7 +32,7 @@ namespace Dominio.Queries.Implementation
             }
 
             if (!string.IsNullOrEmpty(codigoRecurso))
-                queryReservas = queryReservas.Where(r => r.RecursoReservado.Codigo.ToUpper().Contains(codigoRecurso));
+                queryReservas = queryReservas.Where(r => r.RecursoReservado.Codigo.ToUpper().Contains(codigoRecurso.ToUpper()));
 
             if (!string.IsNullOrEmpty(usuarioResponsable))
                 queryReservas = queryReservas.Where(

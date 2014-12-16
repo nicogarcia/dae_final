@@ -24,7 +24,6 @@ namespace ReservasDCICTest.AccesoDatos
             {
                 new Usuario("messi", "Lionel", "Messi", "23424", "4365",
                     "messi@messi.com", "434545", TipoDeUsuario.Administrador)
-
             };
 
             var data = usuariosAlmacenados.AsQueryable();
@@ -50,6 +49,7 @@ namespace ReservasDCICTest.AccesoDatos
         {
             dbContextMock = null;
             usuariosRepoSUT = null;
+            usuariosAlmacenados = null;
         }
 
         [TestMethod]

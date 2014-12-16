@@ -14,6 +14,8 @@ namespace Presentacion.App_Start
             Bind<IConversorReserva>().To<ConversorReserva>().InRequestScope();
 
             Bind<IConversorUsuario>().To<ConversorUsuario>().InRequestScope();
+
+            Bind<IWebSecuritySimpleWrapper>().To<WebSecuritySimpleWrapper>().InRequestScope();
         }
     }
 }

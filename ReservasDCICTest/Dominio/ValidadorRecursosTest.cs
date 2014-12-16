@@ -51,6 +51,7 @@ namespace ReservasDCICTest.Dominio
         {
             recursosRepoMock = null;
             tiposDeRecursosRepoMock = null;
+            validadorDeRecursosSUT = null;
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dominio.Entidades;
 using Dominio.Queries;
 using Dominio.Repos;
@@ -61,6 +62,20 @@ namespace ReservasDCICTest
                 recursosQueriesMock.Object,
                 multipleQueriesMock.Object
             );
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            recursosRepoMock = null;
+            recursosQueriesMock = null;
+            recursosControllerSUT = null;
+            multipleQueriesMock = null;
+            validadorRecursosMock = null;
+            conversorRecursoMock = null;
+            uowFactoryMock = null;
+            tiposDeRecursosRepoMock = null;
+            tiposDeCaracteristicasRepoMock = null;
         }
 
         private void CrearUoWMockFactory()

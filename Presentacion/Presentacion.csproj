@@ -214,6 +214,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Filters\ExtendedHandleErrorAttribute.cs" />
+    <Compile Include="Filters\FiltroAutorizarReserva.cs" />
+    <Compile Include="Filters\IWebSecuritySimpleWrapper.cs" />
+    <Compile Include="Filters\WebSecuritySimpleWrapper.cs" />
     <Compile Include="Filters\PerformanceMeasure.cs" />
     <Compile Include="Helpers\Bootstrap\BootstrapHelpers.cs" />
     <Compile Include="Models\BusquedaRecursoVM.cs" />
