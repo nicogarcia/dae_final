@@ -1,12 +1,14 @@
 ﻿body {
-  padding-top: 50px;
+    padding-top: 50px;
 }
+
 .starter-template {
-  padding: 40px 15px;
-  text-align: center;
+    padding: 40px 15px;
+    text-align: center;
 }
 
 p.login-greeting {
     color: white;
     margin-right: 10px;
 }
+
